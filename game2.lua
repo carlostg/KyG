@@ -38,7 +38,7 @@ function scene:createScene( event )
     local background = display.newRect(0, 20, 320, 460)
     background:setFillColor(255, 128, 64)
     
-    obj1 = display.newText("Game 1", 0, 0, native.systemFont, 32)
+    obj1 = display.newText("Game 2", 0, 0, native.systemFont, 32)
     obj1:setTextColor(255)
     obj1.x = _W*.5; obj1.y = _H*.25
     

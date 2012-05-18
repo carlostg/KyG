@@ -35,10 +35,6 @@ local selectedCharacter = 1
 local background
 local btnGame1, btnGame2, btnGame3, btnGame4
 
--- display groups
---local starsGroup = display.newGroup()
---local charactersGroup = display.newGroup()
-
 -- physics to make stars chase the character
 local function ChaseCharacter(objCharacter,objStar)
     local xDist = objCharacter.x - objStar.x
@@ -108,14 +104,41 @@ end
 -- Menu Options
 local function btnGameTouch(event)
     local t = event.target
-    if (t.name == "btnGame1") then
-        local options =
-        {
-        effect = "flipFadeOutIn",
-        time = 500,
-        params = { var1 = "custom", var2 = "another" }
-        }
-        storyboard.gotoScene( "game1", options )
+    local phase = event.phase
+    if "began" == phase then
+        if (t.name == "btnGame1") then
+            local options =
+            {
+            effect = "flipFadeOutIn",
+            time = 300,
+            params = { var1 = "custom", var2 = "another" }
+            }
+            storyboard.gotoScene( "game1", options )
+        elseif (t.name == "btnGame2") then
+            local options =
+            {
+            effect = "flipFadeOutIn",
+            time = 300,
+            params = { var1 = "custom", var2 = "another" }
+            }
+            storyboard.gotoScene( "game2", options )
+        elseif (t.name == "btnGame3") then
+            local options =
+            {
+            effect = "flipFadeOutIn",
+            time = 300,
+            params = { var1 = "custom", var2 = "another" }
+            }
+            storyboard.gotoScene( "game3", options )
+        elseif (t.name == "btnGame4") then
+            local options =
+            {
+            effect = "flipFadeOutIn",
+            time = 300,
+            params = { var1 = "custom", var2 = "another" }
+            }
+            storyboard.gotoScene( "game4", options )
+        end
     end
 end
 
@@ -125,15 +148,21 @@ function scene:createScene( event )
     local charactersGroup = display.newGroup()
     local starsGroup = display.newGroup()
     
-    background = display.newRect(0, 20, 320, 460)
-    background:setFillColor(64, 128, 128)
+    background = display.newImageRect("mapper_bg.png", 320, 480)
+    background:setReferencePoint( display.TopLeftReferencePoint )
+    background.x = 0; background.y = 0
+    
+    local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino", 22)
+    title_txt:setReferencePoint( display.CenterReferencePoint )
+    title_txt.x = _W*.50; title_txt.y = _H*.10
+    title_txt:setTextColor(200,100,50)
     
     -- create character objects
     for i=1, 2, 1 do
         characters[i] = display.newImageRect("character_"..i..".png", 70, 70)
         characters[i].x = Ox + ((Ox*i)*(i-1)) ; characters[i].y = Oy
         characters[i].id = i
-        characters[i]:addEventListener("touch",ActivateCharacter)
+        characters[i]:addEventListener( "touch",ActivateCharacter )
         charactersGroup:insert(characters[i])
     end
     
@@ -158,11 +187,29 @@ function scene:createScene( event )
     CreateStars(characters[selectedCharacter])
     
     -- create game menu buttons
-    local btnGame1 = display.newCircle(_W*.25, _H*.25, 35)
+    local btnGame1 = display.newCircle( _W*.30, _H*.30, 50 )
     btnGame1.name = "btnGame1"
-    btnGame1:setFillColor(128,128,128)
+    btnGame1:setFillColor(200,100,50)
+    btnGame1.alpha = .30
     btnGame1:addEventListener("touch", btnGameTouch)
     
+    local btnGame2 = display.newCircle( _W*.70, _H*.30, 50 )
+    btnGame2.name = "btnGame2"
+    btnGame2:setFillColor(200,100,50)
+    btnGame2.alpha = .30
+    btnGame2:addEventListener("touch", btnGameTouch)
+    
+    local btnGame3 = display.newCircle( _W*.30, _H*.55, 50 )
+    btnGame3.name = "btnGame3"
+    btnGame3:setFillColor(200,100,50)
+    btnGame3.alpha = .30
+    btnGame3:addEventListener("touch", btnGameTouch)
+    
+    local btnGame4 = display.newCircle( _W*.70, _H*.55, 50 )
+    btnGame4.name = "btnGame4"
+    btnGame4:setFillColor(200,100,50)
+    btnGame4.alpha = .30
+    btnGame4:addEventListener("touch", btnGameTouch)
     -----------------------------------------------------------------------------
     
     --	CREATE display objects and add them to 'group' here.
@@ -171,7 +218,11 @@ function scene:createScene( event )
     -----------------------------------------------------------------------------
     
     group:insert(background)
+    group:insert(title_txt)
     group:insert(btnGame1)
+    group:insert(btnGame2)
+    group:insert(btnGame3)
+    group:insert(btnGame4)
     group:insert(charactersGroup)
     group:insert(starsGroup)
 end
@@ -180,7 +231,10 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     -- remove previous scene's view
-    storyboard.purgeScene( "game1" )
+    storyboard.purgeScene("game1")
+    storyboard.purgeScene("game2")
+    storyboard.purgeScene("game3")
+    storyboard.purgeScene("game4")
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)

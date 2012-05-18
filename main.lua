@@ -3,6 +3,7 @@ CiderRunMode = {};CiderRunMode.runmode = true;CiderRunMode.assertImage = true;re
 -- main.lua
 --
 -----------------------------------------------------------------------------------------
+display.setStatusBar( display.HiddenStatusBar )
 
 local storyboard = require "storyboard"
 
