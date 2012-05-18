@@ -152,7 +152,8 @@ function scene:createScene( event )
     background:setReferencePoint( display.TopLeftReferencePoint )
     background.x = 0; background.y = 0
     
-    local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino", 22)
+    --local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino", 22)
+    local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino Linotype One", 42)
     title_txt:setReferencePoint( display.CenterReferencePoint )
     title_txt.x = _W*.50; title_txt.y = _H*.10
     title_txt:setTextColor(200,100,50)
@@ -169,7 +170,7 @@ function scene:createScene( event )
     -- create star objects
     local function CreateStars(objCharacter)
         for i=1, 13, 1 do
-            stars[i] = display.newImageRect("star.png", 15, 15)
+            stars[i] = display.newImageRect("red-heart.png", 15, 14)
             stars[i].angle = .1 + (i/2.07)
             stars[i].x = (length_x * math.cos(stars[i].angle)) + objCharacter.x
             stars[i].y = (length_y * math.sin(stars[i].angle)) + objCharacter.y
@@ -193,11 +194,21 @@ function scene:createScene( event )
     btnGame1.alpha = .30
     btnGame1:addEventListener("touch", btnGameTouch)
     
+    local btnGame1Txt = display.newText("Game 1", 0, 0, "Zapfino Linotype One", 32)
+    btnGame1Txt:setReferencePoint( display.CenterReferencePoint )
+    btnGame1Txt.x = btnGame1.x; btnGame1Txt.y = btnGame1.y
+    btnGame1Txt:setTextColor(200,100,50)
+    
     local btnGame2 = display.newCircle( _W*.70, _H*.30, 50 )
     btnGame2.name = "btnGame2"
     btnGame2:setFillColor(200,100,50)
     btnGame2.alpha = .30
     btnGame2:addEventListener("touch", btnGameTouch)
+    
+    local btnGame2Txt = display.newText("Game 2", 0, 0, "Zapfino Linotype One", 32)
+    btnGame2Txt:setReferencePoint( display.CenterReferencePoint )
+    btnGame2Txt.x = btnGame2.x; btnGame2Txt.y = btnGame2.y 
+    btnGame2Txt:setTextColor(200,100,50)
     
     local btnGame3 = display.newCircle( _W*.30, _H*.55, 50 )
     btnGame3.name = "btnGame3"
@@ -205,11 +216,22 @@ function scene:createScene( event )
     btnGame3.alpha = .30
     btnGame3:addEventListener("touch", btnGameTouch)
     
+    local btnGame3Txt = display.newText("Game 3", 0, 0, "Zapfino Linotype One", 32)
+    btnGame3Txt:setReferencePoint( display.CenterReferencePoint )
+    btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y 
+    btnGame3Txt:setTextColor(200,100,50)
+    
     local btnGame4 = display.newCircle( _W*.70, _H*.55, 50 )
     btnGame4.name = "btnGame4"
     btnGame4:setFillColor(200,100,50)
     btnGame4.alpha = .30
     btnGame4:addEventListener("touch", btnGameTouch)
+    
+    local btnGame4Txt = display.newText("Game 4", 0, 0, "Zapfino Linotype One", 32)
+    btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
+    btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
+    btnGame4Txt:setTextColor(200,100,50)
+    
     -----------------------------------------------------------------------------
     
     --	CREATE display objects and add them to 'group' here.
@@ -220,9 +242,13 @@ function scene:createScene( event )
     group:insert(background)
     group:insert(title_txt)
     group:insert(btnGame1)
+    group:insert(btnGame1Txt)
     group:insert(btnGame2)
+    group:insert(btnGame2Txt)
     group:insert(btnGame3)
+    group:insert(btnGame3Txt)
     group:insert(btnGame4)
+    group:insert(btnGame4Txt)
     group:insert(charactersGroup)
     group:insert(starsGroup)
 end

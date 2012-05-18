@@ -13,6 +13,10 @@ settings = {
 			UIStatusBarHidden = true,
 			UIPrerenderedIcon = true, -- set to false for "shine" overlay
 			--UIApplicationExitsOnSuspend = true, -- uncomment to quit app on suspend
+                        UIAppFonts = 
+			{
+				"Zapfino Linotype One.ttf",
+			},
 
             --[[
             -- iOS app URL schemes:

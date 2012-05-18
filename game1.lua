@@ -35,7 +35,7 @@ end
 function scene:createScene( event )
     local group = self.view
     
-    local background = display.newRect(0, 20, 320, 460)
+    local background = display.newRect(0, 0, 320, 480)
     background:setFillColor(255, 128, 64)
     
     obj1 = display.newText("Game 1", 0, 0, native.systemFont, 32)
