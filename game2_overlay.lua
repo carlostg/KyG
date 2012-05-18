@@ -1,6 +1,6 @@
 ----------------------------------------------------------------------------------
 --
--- game2.lua
+-- game2_overlay.lua
 --
 ----------------------------------------------------------------------------------
 
@@ -19,62 +19,53 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
-local obj1, obj2
+local backArrow, forwardArrow, overlayGroup
 
-local function objTouch( event )
-    local options =
-    {
-    effect = "flipFadeOutIn",
-    time = 300,
-    params = { var1 = "custom", var2 = "another" }
-    }
-    storyboard.gotoScene( "menu", options )
+local function slideRight(event)
+    local t = event.target
+    local phase = event.phase
+    local function changeArrowListener(event)
+        forwardArrow.isVisible = false
+        backArrow.isVisible = true
+    end
+    if "began" == phase then
+        transition.to(overlayGroup, {time=250, x=(overlayGroup.x+70), onComplete=changeArrowListener})
+    end
+end
+
+local function slideLeft(event)
+    local t = event.target
+    local phase = event.phase
+    local function changeArrowListener(event)
+        backArrow.isVisible = false
+        forwardArrow.isVisible = true
+    end
+    if "began" == phase then
+        transition.to(overlayGroup, {time=250, x=(overlayGroup.x-70), onComplete=changeArrowListener})
+    end
 end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
     local group = self.view
-    local characterGroup = display.newGroup()
+    overlayGroup = display.newGroup()
     
-    local background = display.newRect(0, 0, 320, 480)
-    background:setFillColor(255, 128, 64)
+    local bgOverlay = display.newRoundedRect(290, 40, 120, 400, 10)
+    bgOverlay:setFillColor(0, 0, 0)
+    bgOverlay.alpha = .50
+    overlayGroup:insert(bgOverlay)
     
-    local character = display.newImageRect("k_plain.png", 280, 350)
-    character.x = _W*.50; character.y = _H*.50
-    characterGroup:insert(character)
-    local character_top = display.newImageRect("k_shirt_pink.png", 280, 350)
-    character_top.x = _W*.50; character_top.y = _H*.50
-    characterGroup:insert(character_top)
-    local character_hair = display.newImageRect("k_hair_long.png", 280, 350)
-    character_hair.x = _W*.50; character_hair.y = _H*.50
-    characterGroup:insert(character_hair)
-    local character_bottom = display.newImageRect("k_bermudas_blue.png", 280, 350)
-    character_bottom.x = _W*.50; character_bottom.y = _H*.50
-    characterGroup:insert(character_bottom)
-    local character_socks = display.newImageRect("k_socks_white.png", 280, 350)
-    character_socks.x = _W*.50; character_socks.y = _H*.50
-    characterGroup:insert(character_socks)
-    local character_shoes = display.newImageRect("k_snickers_pink.png", 280, 350)
-    character_shoes.x = _W*.50; character_shoes.y = _H*.50
-    characterGroup:insert(character_shoes)
+    backArrow = display.newImageRect("backArrow.png", 30, 30)
+    backArrow.x = 310; backArrow.y = 55
+    overlayGroup:insert(backArrow)
+    backArrow:addEventListener( "touch", slideLeft )
     
-    obj1 = display.newText("Game 2", 0, 0, native.systemFont, 32)
-    obj1:setTextColor(255)
-    obj1.x = _W*.5; obj1.y = _H*.08
-    
-    obj2 = display.newText("Back", 0, 0, native.systemFont, 32)
-    obj2:setTextColor(255)
-    obj2.x = _W*.5; obj2.y = _H*.95
-    obj2:addEventListener( "touch", objTouch )
-    
-    -- create overlay scence to control objects selection
-    local options_overlay =
-    {
-    effect = "slideLeft",
-    time = 300,
-    params = { var1 = "custom", var2 = "another" }
-    }
-    storyboard.showOverlay( "game2_overlay", options_overlay )
+    forwardArrow = display.newImageRect("backArrow.png", 30, 30)
+    forwardArrow.x = 303; forwardArrow.y = 55
+    forwardArrow:rotate(180)
+    forwardArrow.isVisible = false
+    overlayGroup:insert(forwardArrow)
+    forwardArrow:addEventListener( "touch", slideRight )
     
     -----------------------------------------------------------------------------
     
@@ -83,10 +74,8 @@ function scene:createScene( event )
     
     -----------------------------------------------------------------------------
     
-    group:insert(background)
-    group:insert(characterGroup)
-    group:insert(obj1)
-    group:insert(obj2)
+    group:insert(overlayGroup)
+--    group:insert(obj1)
 end
 
 
@@ -95,7 +84,7 @@ function scene:enterScene( event )
     local group = self.view
     
     -- remove previous scene's view
-    storyboard.purgeScene( "menu" )
+--    storyboard.purgeScene( "menu" )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)
@@ -110,7 +99,7 @@ function scene:exitScene( event )
     local group = self.view
     
     -- remove touch listener for obj
-    obj2:removeEventListener( "touch", objTouch )
+--    obj2:removeEventListener( "touch", objTouch )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
