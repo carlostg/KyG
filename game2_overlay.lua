@@ -19,17 +19,38 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
-local backArrow, forwardArrow, overlayGroup
+local forwardArrow, overlayGroup
+local iconsTable = {}
+
+local tbl_shirts = {
+    {smallImage="k_shirt_pink_small.png", fullImage="k_shirt_pink.png"}
+}
+
+local tbl_pants = {
+    {smallImage="k_bermudas_blue_small.png", fullImage="k_bermudas_blue.png"}
+}
+
+local tbl_socks = {
+    {smallImage="k_socks_white_small.png", fullImage="k_socks_white.png"}
+}
+
+local tbl_icons = {
+    {icon="icon_shirt.png", iconX=300, iconY=100, iconW=35, iconH=35, objects=tbl_shirts},
+    {icon="icon_pants.png", iconX=300, iconY=160, iconW=35, iconH=48, objects=tbl_pants},
+    {icon="icon_socks.png", iconX=300, iconY=220, iconW=35, iconH=46, objects=tbl_socks}
+}
 
 local function slideRight(event)
     local t = event.target
     local phase = event.phase
     local function changeArrowListener(event)
         forwardArrow.isVisible = false
-        backArrow.isVisible = true
+        for i=1, #iconsTable do
+            iconsTable[i].isVisible = true
+        end
     end
     if "began" == phase then
-        transition.to(overlayGroup, {time=250, x=(overlayGroup.x+70), onComplete=changeArrowListener})
+        transition.to(overlayGroup, {time=250, x=(overlayGroup.x+60), onComplete=changeArrowListener})
     end
 end
 
@@ -37,11 +58,13 @@ local function slideLeft(event)
     local t = event.target
     local phase = event.phase
     local function changeArrowListener(event)
-        backArrow.isVisible = false
+        for i=1, #iconsTable do
+            iconsTable[i].isVisible = false
+        end
         forwardArrow.isVisible = true
     end
     if "began" == phase then
-        transition.to(overlayGroup, {time=250, x=(overlayGroup.x-70), onComplete=changeArrowListener})
+        transition.to(overlayGroup, {time=250, x=(overlayGroup.x-60), onComplete=changeArrowListener})
     end
 end
 
@@ -50,18 +73,21 @@ function scene:createScene( event )
     local group = self.view
     overlayGroup = display.newGroup()
     
-    local bgOverlay = display.newRoundedRect(290, 40, 120, 400, 10)
+    local bgOverlay = display.newRoundedRect(275, 40, 120, 400, 10)
     bgOverlay:setFillColor(0, 0, 0)
     bgOverlay.alpha = .50
     overlayGroup:insert(bgOverlay)
-    
-    backArrow = display.newImageRect("backArrow.png", 30, 30)
-    backArrow.x = 310; backArrow.y = 55
-    overlayGroup:insert(backArrow)
-    backArrow:addEventListener( "touch", slideLeft )
+
+    for i=1, #tbl_icons do
+        iconsTable[i] = display.newImageRect(tbl_icons[i].icon, tbl_icons[i].iconW, tbl_icons[i].iconH)
+        iconsTable[i].x = tbl_icons[i].iconX; iconsTable[i].y = tbl_icons[i].iconY
+        overlayGroup:insert(iconsTable[i])
+        iconsTable[i]:addEventListener( "touch", slideLeft )
+        
+    end
     
     forwardArrow = display.newImageRect("backArrow.png", 30, 30)
-    forwardArrow.x = 303; forwardArrow.y = 55
+    forwardArrow.x = 288; forwardArrow.y = 55
     forwardArrow:rotate(180)
     forwardArrow.isVisible = false
     overlayGroup:insert(forwardArrow)

@@ -257,10 +257,10 @@ end
 -- Called immediately after scene has moved onscreen:
 function scene:enterScene( event )
     -- remove previous scene's view
-    storyboard.purgeScene("game1")
-    storyboard.purgeScene("game2")
-    storyboard.purgeScene("game3")
-    storyboard.purgeScene("game4")
+    storyboard.removeScene("game1")
+    storyboard.removeScene("game2")
+    storyboard.removeScene("game3")
+    storyboard.removeScene("game4")
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)
