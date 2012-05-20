@@ -20,52 +20,59 @@ local scene = storyboard.newScene()
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 local obj1, obj2
-local forwardArrow, overlayGroup, characterGroup
+local forwardArrow, overlayGroup, characterGroup, messageGroup
+local messageButton
 local iconsTable = {}
 local shirtsTable = {}
 local pantsTable = {}
 local socksTable = {}
-local wigsTable = {}
+local hairTable = {}
 local shoesTable = {}
 local characterObjOnTable = {}
+local textLabel = {}
+local secondsText = 30
+local gameTimer
+
+textLabel.englishTitle = "Challenge!"
+textLabel.englishText = "You have 30 seconds to guess the outfit I would choose for this occasion."
 
 local tbl_shirts = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=400, smallImageW=35, smallImageH=35},
+    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
-     fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.50, fullImageW=280, fullImageH=350}
+    fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_pants = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=400, smallImageW=35, smallImageH=35},
+    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.50, fullImageW=280, fullImageH=350}
+     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_socks = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=400, smallImageW=35, smallImageH=35},
+    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.50, fullImageW=280, fullImageH=350}
+     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
-local tbl_wigs = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=400, smallImageW=35, smallImageH=35},
+local tbl_hair = {
+    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_hair_long_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
-     fullImage="k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.50, fullImageW=280, fullImageH=350}
+     fullImage="k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_shoes = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=400, smallImageW=35, smallImageH=35},
+    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.50, fullImageW=280, fullImageH=350}
+     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_icons = {
-    {name="shirt",   icon="icon_shirt.png", iconX=300, iconY=100, iconW=35, iconH=35, objects=tbl_shirts},
-    {name="pants",   icon="icon_pants.png", iconX=300, iconY=160, iconW=35, iconH=48, objects=tbl_pants},
-    {name="socks",   icon="icon_socks.png", iconX=300, iconY=220, iconW=35, iconH=46, objects=tbl_socks},
-    {name="wig",     icon="icon_wig.png",   iconX=300, iconY=280, iconW=35, iconH=39, objects=tbl_wigs},
-    {name="shoes",   icon="icon_shoes.png", iconX=300, iconY=330, iconW=35, iconH=23, objects=tbl_shoes},
-    {name="no-sign", icon="no-sign.png",    iconX=300, iconY=400, iconW=35, iconH=35}
+    {name="shirt",   icon="icon_shirt.png", iconX=300, iconY=90, iconW=35, iconH=35, objects=tbl_shirts},
+    {name="pants",   icon="icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48, objects=tbl_pants},
+    {name="socks",   icon="icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46, objects=tbl_socks},
+    {name="hair",     icon="icon_hair.png",   iconX=300, iconY=270, iconW=35, iconH=39, objects=tbl_hair},
+    {name="shoes",   icon="icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23, objects=tbl_shoes},
+    {name="no-sign", icon="no-sign.png",    iconX=300, iconY=380, iconW=35, iconH=35}
 }
 
 local function resetCharacter(event)
@@ -81,9 +88,9 @@ local function resetCharacter(event)
         characterGroup:remove(characterObjOnTable.socks)
         characterObjOnTable.socks = nil
     end
-    if (characterObjOnTable.wig) then
-        characterGroup:remove(characterObjOnTable.wig)
-        characterObjOnTable.wig = nil
+    if (characterObjOnTable.hair) then
+        characterGroup:remove(characterObjOnTable.hair)
+        characterObjOnTable.hair = nil
     end
     if (characterObjOnTable.shoes) then
         characterGroup:remove(characterObjOnTable.shoes)
@@ -105,8 +112,8 @@ local function slideRight(event)
         for i=1, #socksTable do
             socksTable[i].isVisible = false
         end
-        for i=1, #wigsTable do
-            wigsTable[i].isVisible = false
+        for i=1, #hairTable do
+            hairTable[i].isVisible = false
         end  
         for i=1, #shoesTable do
             shoesTable[i].isVisible = false
@@ -115,7 +122,7 @@ local function slideRight(event)
             iconsTable[i].isVisible = true
         end
     end
-    if "began" == phase then
+    if ("began" == phase) then
         transition.to(overlayGroup, {time=250, x=(overlayGroup.x+60), onComplete=changeArrowListener})
     end
 end
@@ -124,7 +131,7 @@ local function slideLeft(event)
     local t = event.target
     local phase = event.phase
     
-    if "began" == phase then
+    if ("began" == phase) then
         if (t.name == "no-sign") then
             for i=1, #shoesTable do
                 resetCharacter()
@@ -147,9 +154,9 @@ local function slideLeft(event)
                     for i=1, #socksTable do
                         socksTable[i].isVisible = true
                     end
-                elseif (t.name == "wig") then
-                    for i=1, #wigsTable do
-                        wigsTable[i].isVisible = true
+                elseif (t.name == "hair") then
+                    for i=1, #hairTable do
+                        hairTable[i].isVisible = true
                     end
                 elseif (t.name == "shoes") then
                     for i=1, #shoesTable do
@@ -165,7 +172,7 @@ end
 local function ShirtTouch(event)
     local t = event.target
     local phase = event.phase
-    if "began" == phase then
+    if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.shirt) then
                 characterGroup:remove(characterObjOnTable.shirt)
@@ -184,7 +191,7 @@ end
 local function PantsTouch(event)
     local t = event.target
     local phase = event.phase
-    if "began" == phase then
+    if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.pants) then
                 characterGroup:remove(characterObjOnTable.pants)
@@ -203,7 +210,7 @@ end
 local function SocksTouch(event)
     local t = event.target
     local phase = event.phase
-    if "began" == phase then
+    if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.socks) then
                 characterGroup:remove(characterObjOnTable.socks)
@@ -219,20 +226,20 @@ local function SocksTouch(event)
     end
 end
 
-local function WigTouch(event)
+local function HairTouch(event)
     local t = event.target
     local phase = event.phase
-    if "began" == phase then
+    if ("began" == phase) then
         if (t.id == 1) then
-            if (characterObjOnTable.wig) then
-                characterGroup:remove(characterObjOnTable.wig)
-                characterObjOnTable.wig = nil
+            if (characterObjOnTable.hair) then
+                characterGroup:remove(characterObjOnTable.hair)
+                characterObjOnTable.hair = nil
             end
         else
-            if (not characterObjOnTable.wig) then
-                characterObjOnTable.wig = display.newImageRect(tbl_wigs[t.id].fullImage, tbl_wigs[t.id].fullImageW, tbl_wigs[t.id].fullImageH)
-                characterObjOnTable.wig.x = tbl_wigs[t.id].fullImageX; characterObjOnTable.wig.y = tbl_wigs[t.id].fullImageY
-                characterGroup:insert(characterObjOnTable.wig)
+            if (not characterObjOnTable.hair) then
+                characterObjOnTable.hair = display.newImageRect(tbl_hair[t.id].fullImage, tbl_hair[t.id].fullImageW, tbl_hair[t.id].fullImageH)
+                characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
+                characterGroup:insert(characterObjOnTable.hair)
             end
         end
     end
@@ -241,7 +248,7 @@ end
 local function ShoesTouch(event)
     local t = event.target
     local phase = event.phase
-    if "began" == phase then
+    if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.shoes) then
                 characterGroup:remove(characterObjOnTable.shoes)
@@ -257,14 +264,42 @@ local function ShoesTouch(event)
     end
 end
 
-local function objTouch( event )
+local function objTouch(event)
     local options =
     {
     effect = "flipFadeOutIn",
     time = 300,
-    params = { var1 = "custom", var2 = "another" }
+    params = {var1 = "custom", var2 = "another"}
     }
-    storyboard.gotoScene( "menu", options )
+    storyboard.gotoScene("menu", options)
+end
+
+local function updateTimer(event)
+    secondsText = secondsText - 1
+    if (secondsText < 10) then
+        secondsText = "0"..secondsText
+    end
+    if (event.count == 30) then
+        timer.cancel(gameTimer)
+        --gameTimer = nil
+    end
+    timerText.text = "0:"..secondsText
+end
+
+local function MessageButtonTouch (event)
+    local t = event.target
+    local phase = event.phase
+    if ("began" == phase) then
+        messageButton:setFillColor( 175,238,238 )
+    elseif ("ended" == phase) or ("cancelled" == phase) then
+        messageButton:setFillColor( 255 )
+        for i=messageGroup.numChildren,1,-1 do
+            local child = messageGroup[i]
+            child:removeSelf()
+        end
+        timerText.isVisible = true
+        gameTimer = timer.performWithDelay(1000, updateTimer, 0)
+    end
 end
 
 -- Called when the scene's view does not exist:
@@ -272,26 +307,41 @@ function scene:createScene( event )
     local group = self.view
     characterGroup = display.newGroup()
     
-    local background = display.newRect(0, 0, 320, 480)
-    background:setFillColor(255, 128, 64)
+    local background = display.newImage("bg_beach.png")
     
     local character = display.newImageRect("k_plain.png", 280, 350)
-    character.x = _W*.50; character.y = _H*.50
+    character.x = _W*.50; character.y = _H*.63
     characterGroup:insert(character)
     
-    obj1 = display.newText("Karla", 0, 0, "Zapfino Linotype One", 36)
+    obj1 = display.newText("Karla", 0, 0, "Zapfino Linotype One", 40)
     obj1:setTextColor(255)
     obj1.x = _W*.5; obj1.y = _H*.08
     
-    obj2 = display.newText("Back", 0, 0, native.systemFont, 32)
-    obj2:setTextColor(255)
-    obj2.x = _W*.5; obj2.y = _H*.95
-    obj2:addEventListener( "touch", objTouch )
+--    obj2 = display.newText("Back", 0, 0, native.systemFont, 32)
+--    obj2:setTextColor(255)
+--    obj2.x = _W*.20; obj2.y = _H*.95
+--    obj2:addEventListener( "touch", objTouch )
+    
+    local btnBack = display.newRoundedRect( 0, 0, 100, 40, 10 )
+    btnBack:setReferencePoint(display.CenterReferencePoint)
+    btnBack.x = _W*.20; btnBack.y = _H*.95
+    
+    local btnBackText = display.newText("Back", 0, 0, native.systemFontBold, 20)
+    btnBackText:setReferencePoint(display.CenterReferencePoint)
+    btnBackText.x = _W*.0; btnBackText.y = _H*.45
+    btnBackText:setTextColor (0, 0, 0)
+    
+    btnBack:addEventListener("touch", MessageButtonTouch)
+    
+    timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
+    timerText:setTextColor(255)
+    timerText.x = 30; timerText.y = 20
+    timerText.isVisible = false
     
     -- create overlay scence to control objects selection
     overlayGroup = display.newGroup()
     
-    local bgOverlay = display.newRoundedRect(275, 40, 120, 400, 10)
+    local bgOverlay = display.newRoundedRect(275, 30, 120, 390, 10)
     bgOverlay:setFillColor(0, 0, 0)
     bgOverlay.alpha = .50
     overlayGroup:insert(bgOverlay)
@@ -332,13 +382,13 @@ function scene:createScene( event )
         socksTable[i]:addEventListener( "touch", SocksTouch )
     end
     
-    for i=1, #tbl_wigs do
-        wigsTable[i] = display.newImageRect(tbl_wigs[i].smallImage, tbl_wigs[i].smallImageW, tbl_wigs[i].smallImageH)
-        wigsTable[i].x = tbl_wigs[i].smallImageX; wigsTable[i].y = tbl_wigs[i].smallImageY
-        wigsTable[i].id = i
-        wigsTable[i].isVisible = false
-        overlayGroup:insert(wigsTable[i])
-        wigsTable[i]:addEventListener( "touch", WigTouch )
+    for i=1, #tbl_hair do
+        hairTable[i] = display.newImageRect(tbl_hair[i].smallImage, tbl_hair[i].smallImageW, tbl_hair[i].smallImageH)
+        hairTable[i].x = tbl_hair[i].smallImageX; hairTable[i].y = tbl_hair[i].smallImageY
+        hairTable[i].id = i
+        hairTable[i].isVisible = false
+        overlayGroup:insert(hairTable[i])
+        hairTable[i]:addEventListener( "touch", HairTouch )
     end
     
     for i=1, #tbl_shoes do
@@ -368,7 +418,9 @@ function scene:createScene( event )
     group:insert(characterGroup)
     group:insert(overlayGroup)
     group:insert(obj1)
-    group:insert(obj2)
+    group:insert(timerText)
+    group:insert(btnBack)
+    group:insert(btnBackText)
 end
 
 
@@ -378,12 +430,48 @@ function scene:enterScene( event )
     
     -- remove previous scene's view
     storyboard.purgeScene( "menu" )
+    
+    -- the following code is to manage the challenge message
+    messageGroup = display.newGroup()
+    
+    local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
+    messageOverlay:setFillColor(0, 0, 0)
+    messageOverlay.alpha = .75
+    messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
+    messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
+    messageGroup:insert(messageOverlay)
+    
+    local messageTitle = display.newText(textLabel.englishTitle, 0, 0, native.systemFontBold, 20)
+    messageTitle:setReferencePoint(display.CenterReferencePoint)
+    messageTitle.x = _W*.50; messageTitle.y = _H*.20
+    messageGroup:insert(messageTitle)
+    
+    local messageText = display.newText(textLabel.englishText, 0, 0, 200, 0, native.systemFont, 16)
+    messageText:setReferencePoint(display.CenterReferencePoint)
+    messageText.x = _W*.50; messageText.y = _H*.31
+    messageGroup:insert(messageText)
+    
+    messageButton = display.newRoundedRect( 0, 0, 100, 40, 10 )
+    messageButton:setReferencePoint(display.CenterReferencePoint)
+    messageButton.x = _W*.50; messageButton.y = _H*.45
+    messageGroup:insert(messageButton)
+    
+    local messageButtonText = display.newText("Ok!", 0, 0, native.systemFontBold, 20)
+    messageButtonText:setReferencePoint(display.CenterReferencePoint)
+    messageButtonText.x = _W*.50; messageButtonText.y = _H*.45
+    messageButtonText:setTextColor (0, 0, 0)
+    messageGroup:insert(messageButtonText)
+    
+    messageButton:addEventListener("touch", MessageButtonTouch)
+    -- end of the challenge message code
+    
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)
     
     -----------------------------------------------------------------------------
     
+    group:insert(messageGroup)
 end
 
 
@@ -394,6 +482,8 @@ function scene:exitScene( event )
     -- remove touch listener for obj
     obj2:removeEventListener( "touch", objTouch )
     
+    -- cancel game timer
+    timer.cancel(gameTimer)
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
