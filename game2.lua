@@ -21,6 +21,8 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 local obj1, obj2
 local forwardArrow, overlayGroup, characterGroup, messageGroup
+local btnBack
+local btnBackText
 local messageButton
 local iconsTable = {}
 local shirtsTable = {}
@@ -39,19 +41,31 @@ textLabel.englishText = "You have 30 seconds to guess the outfit I would choose 
 local tbl_shirts = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
-    fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+    fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_shirt_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=75,
+    fullImage="k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
+    fullImage="k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_pants = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_bermudas_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=77,
+     fullImage="k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
+     fullImage="k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_socks = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
+     fullImage="k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
+     fullImage="k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_hair = {
@@ -63,7 +77,11 @@ local tbl_hair = {
 local tbl_shoes = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     fullImage="k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+    {smallImage="k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
+     fullImage="k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
 }
 
 local tbl_icons = {
@@ -183,6 +201,12 @@ local function ShirtTouch(event)
                 characterObjOnTable.shirt = display.newImageRect(tbl_shirts[t.id].fullImage, tbl_shirts[t.id].fullImageW, tbl_shirts[t.id].fullImageH)
                 characterObjOnTable.shirt.x = tbl_shirts[t.id].fullImageX; characterObjOnTable.shirt.y = tbl_shirts[t.id].fullImageY
                 characterGroup:insert(characterObjOnTable.shirt)
+            else
+                characterGroup:remove(characterObjOnTable.shirt)
+                characterObjOnTable.shirt = nil
+                characterObjOnTable.shirt = display.newImageRect(tbl_shirts[t.id].fullImage, tbl_shirts[t.id].fullImageW, tbl_shirts[t.id].fullImageH)
+                characterObjOnTable.shirt.x = tbl_shirts[t.id].fullImageX; characterObjOnTable.shirt.y = tbl_shirts[t.id].fullImageY
+                characterGroup:insert(characterObjOnTable.shirt)
             end
         end
     end
@@ -199,6 +223,12 @@ local function PantsTouch(event)
             end
         else
             if (not characterObjOnTable.pants) then
+                characterObjOnTable.pants = display.newImageRect(tbl_pants[t.id].fullImage, tbl_pants[t.id].fullImageW, tbl_pants[t.id].fullImageH)
+                characterObjOnTable.pants.x = tbl_pants[t.id].fullImageX; characterObjOnTable.pants.y = tbl_pants[t.id].fullImageY
+                characterGroup:insert(characterObjOnTable.pants)
+            else
+                characterGroup:remove(characterObjOnTable.pants)
+                characterObjOnTable.pants = nil
                 characterObjOnTable.pants = display.newImageRect(tbl_pants[t.id].fullImage, tbl_pants[t.id].fullImageW, tbl_pants[t.id].fullImageH)
                 characterObjOnTable.pants.x = tbl_pants[t.id].fullImageX; characterObjOnTable.pants.y = tbl_pants[t.id].fullImageY
                 characterGroup:insert(characterObjOnTable.pants)
@@ -221,6 +251,12 @@ local function SocksTouch(event)
                 characterObjOnTable.socks = display.newImageRect(tbl_socks[t.id].fullImage, tbl_socks[t.id].fullImageW, tbl_socks[t.id].fullImageH)
                 characterObjOnTable.socks.x = tbl_socks[t.id].fullImageX; characterObjOnTable.socks.y = tbl_socks[t.id].fullImageY
                 characterGroup:insert(characterObjOnTable.socks)
+            else
+                characterGroup:remove(characterObjOnTable.socks)
+                characterObjOnTable.socks = nil
+                characterObjOnTable.socks = display.newImageRect(tbl_socks[t.id].fullImage, tbl_socks[t.id].fullImageW, tbl_socks[t.id].fullImageH)
+                characterObjOnTable.socks.x = tbl_socks[t.id].fullImageX; characterObjOnTable.socks.y = tbl_socks[t.id].fullImageY
+                characterGroup:insert(characterObjOnTable.socks)
             end
         end
     end
@@ -237,6 +273,12 @@ local function HairTouch(event)
             end
         else
             if (not characterObjOnTable.hair) then
+                characterObjOnTable.hair = display.newImageRect(tbl_hair[t.id].fullImage, tbl_hair[t.id].fullImageW, tbl_hair[t.id].fullImageH)
+                characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
+                characterGroup:insert(characterObjOnTable.hair)
+            else
+                characterGroup:remove(characterObjOnTable.hair)
+                characterObjOnTable.hair = nil
                 characterObjOnTable.hair = display.newImageRect(tbl_hair[t.id].fullImage, tbl_hair[t.id].fullImageW, tbl_hair[t.id].fullImageH)
                 characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
                 characterGroup:insert(characterObjOnTable.hair)
@@ -259,19 +301,32 @@ local function ShoesTouch(event)
                 characterObjOnTable.shoes = display.newImageRect(tbl_shoes[t.id].fullImage, tbl_shoes[t.id].fullImageW, tbl_shoes[t.id].fullImageH)
                 characterObjOnTable.shoes.x = tbl_shoes[t.id].fullImageX; characterObjOnTable.shoes.y = tbl_shoes[t.id].fullImageY
                 characterGroup:insert(characterObjOnTable.shoes)
+            else
+                characterGroup:remove(characterObjOnTable.shoes)
+                characterObjOnTable.shoes = nil
+                characterObjOnTable.shoes = display.newImageRect(tbl_shoes[t.id].fullImage, tbl_shoes[t.id].fullImageW, tbl_shoes[t.id].fullImageH)
+                characterObjOnTable.shoes.x = tbl_shoes[t.id].fullImageX; characterObjOnTable.shoes.y = tbl_shoes[t.id].fullImageY
+                characterGroup:insert(characterObjOnTable.shoes)
             end
         end
     end
 end
 
-local function objTouch(event)
-    local options =
-    {
-    effect = "flipFadeOutIn",
-    time = 300,
-    params = {var1 = "custom", var2 = "another"}
-    }
-    storyboard.gotoScene("menu", options)
+local function btnBackTouch(event)
+    local t = event.target
+    local phase = event.phase
+    if ("began" == phase) then
+        t:setFillColor( 175,238,238 )
+    elseif ("ended" == phase) or ("cancelled" == phase) then
+        t:setFillColor( 255 )
+        local options =
+        {
+        effect = "flipFadeOutIn",
+        time = 300,
+        params = {var1 = "custom", var2 = "another"}
+        }
+        storyboard.gotoScene("menu", options)
+    end
 end
 
 local function updateTimer(event)
@@ -281,7 +336,6 @@ local function updateTimer(event)
     end
     if (event.count == 30) then
         timer.cancel(gameTimer)
-        --gameTimer = nil
     end
     timerText.text = "0:"..secondsText
 end
@@ -317,21 +371,16 @@ function scene:createScene( event )
     obj1:setTextColor(255)
     obj1.x = _W*.5; obj1.y = _H*.08
     
---    obj2 = display.newText("Back", 0, 0, native.systemFont, 32)
---    obj2:setTextColor(255)
---    obj2.x = _W*.20; obj2.y = _H*.95
---    obj2:addEventListener( "touch", objTouch )
-    
-    local btnBack = display.newRoundedRect( 0, 0, 100, 40, 10 )
+    btnBack = display.newRoundedRect( 0, 0, 100, 40, 10 )
     btnBack:setReferencePoint(display.CenterReferencePoint)
     btnBack.x = _W*.20; btnBack.y = _H*.95
     
-    local btnBackText = display.newText("Back", 0, 0, native.systemFontBold, 20)
+    btnBackText = display.newText("Back", 0, 0, native.systemFontBold, 20)
     btnBackText:setReferencePoint(display.CenterReferencePoint)
-    btnBackText.x = _W*.0; btnBackText.y = _H*.45
+    btnBackText.x = _W*.20; btnBackText.y = _H*.95
     btnBackText:setTextColor (0, 0, 0)
     
-    btnBack:addEventListener("touch", MessageButtonTouch)
+    btnBack:addEventListener("touch", btnBackTouch)
     
     timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
     timerText:setTextColor(255)
@@ -479,8 +528,8 @@ end
 function scene:exitScene( event )
     local group = self.view
     
-    -- remove touch listener for obj
-    obj2:removeEventListener( "touch", objTouch )
+    -- remove touch listener for btnBack
+    btnBack:removeEventListener( "touch", btnBackTouch )
     
     -- cancel game timer
     timer.cancel(gameTimer)
