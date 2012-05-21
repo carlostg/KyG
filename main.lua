@@ -11,6 +11,9 @@ local storyboard = require "storyboard"
 _H = display.contentHeight
 _W = display.contentWidth
 _MR = math.random
+duo= {} -- DressUp Occasion Index
+duo.char1 = 1 -- for Character 1 (Karla)
+duo.char2 = 0 -- for Character 2 (Guillermo)
 
 -- load menu.lua
 storyboard.gotoScene("menu")

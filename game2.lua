@@ -33,6 +33,7 @@ local characterObjOnTable = {}
 local textLabel = {}
 local secondsText = 59
 local gameTimer
+local duo_idx -- DressUp Occasion Index
 
 textLabel.englishTitle = "Challenge!"
 textLabel.englishText = "You have 1 minute to guess the outfit I would choose for this occasion."
@@ -397,17 +398,22 @@ function scene:createScene( event )
     local params = event.params
     local group = self.view
     characterGroup = display.newGroup()
-    
+
     if (params.pCharacter == 1) then
-        st = 2
-        en = #tbl_occasions
+        duo.char1 = duo.char1 + 1
+        if (duo.char1 > 5) then
+            duo.char1 = 2
+        end
+        duo_idx = duo.char1
     else
-        st = 1
-        en = #tbl_occasions - 1
+        duo.char2 = duo.char2 + 1
+        if (duo.char2 > 4) then
+            duo.char2 = 1
+        end
+        duo_idx = duo.char2
     end
-    local mr = _MR(st,en)
     
-    local background = display.newImage(tbl_occasions[mr].fullImage)
+    local background = display.newImage(tbl_occasions[duo_idx].fullImage)
     
     local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage, 280, 350)
     character.x = _W*.50; character.y = _H*.63
@@ -463,9 +469,9 @@ function scene:createScene( event )
     
     for i=1, #tbl_shirts do
         if (i > 1) then
-            if (tbl_shirts[i].character == tbl_occasions[mr].character or 
-                (tbl_shirts[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
-                if (tbl_shirts[i].occasion == tbl_occasions[mr].occasion) then
+            if (tbl_shirts[i].character == tbl_occasions[duo_idx].character or 
+                (tbl_shirts[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                if (tbl_shirts[i].occasion == tbl_occasions[duo_idx].occasion) then
                     shirtsTable[#shirtsTable+1] = display.newImageRect(tbl_shirts[i].smallImage, tbl_shirts[i].smallImageW, tbl_shirts[i].smallImageH)
                     shirtsTable[#shirtsTable].x = tbl_shirts[i].smallImageX; shirtsTable[#shirtsTable].y = tbl_shirts[i].smallImageY
                     shirtsTable[#shirtsTable].id = i
@@ -486,15 +492,15 @@ function scene:createScene( event )
     
     for i=1, #tbl_pants do
         if (i > 1) then
-            if (tbl_pants[i].character == tbl_occasions[mr].character or 
-                (tbl_pants[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
-                if (tbl_pants[i].occasion == tbl_occasions[mr].occasion) then
+            if (tbl_pants[i].character == tbl_occasions[duo_idx].character or 
+                (tbl_pants[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                if (tbl_pants[i].occasion == tbl_occasions[duo_idx].occasion) then
                     pantsTable[#pantsTable+1] = display.newImageRect(tbl_pants[i].smallImage, tbl_pants[i].smallImageW, tbl_pants[i].smallImageH)
                     pantsTable[#pantsTable].x = tbl_pants[i].smallImageX; pantsTable[#pantsTable].y = tbl_pants[i].smallImageY
                     pantsTable[#pantsTable].id = i
                     pantsTable[#pantsTable].isVisible = false
                     overlayGroup:insert(pantsTable[#pantsTable])
-                    pantsTable[#pantsTable]:addEventListener( "touch", ShirtTouch )
+                    pantsTable[#pantsTable]:addEventListener( "touch", PantsTouch )
                 end
             end
         else
@@ -509,15 +515,15 @@ function scene:createScene( event )
     
     for i=1, #tbl_socks do
         if (i > 1) then
-            if (tbl_socks[i].character == tbl_occasions[mr].character or 
-                (tbl_socks[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
-                if (tbl_socks[i].occasion == tbl_occasions[mr].occasion) then
+            if (tbl_socks[i].character == tbl_occasions[duo_idx].character or 
+                (tbl_socks[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                if (tbl_socks[i].occasion == tbl_occasions[duo_idx].occasion) then
                     socksTable[#socksTable+1] = display.newImageRect(tbl_socks[i].smallImage, tbl_socks[i].smallImageW, tbl_socks[i].smallImageH)
                     socksTable[#socksTable].x = tbl_socks[i].smallImageX; socksTable[#socksTable].y = tbl_socks[i].smallImageY
                     socksTable[#socksTable].id = i
                     socksTable[#socksTable].isVisible = false
                     overlayGroup:insert(socksTable[#socksTable])
-                    socksTable[#socksTable]:addEventListener( "touch", ShirtTouch )
+                    socksTable[#socksTable]:addEventListener( "touch", SocksTouch )
                 end
             end
         else
@@ -532,15 +538,15 @@ function scene:createScene( event )
     
     for i=1, #tbl_hair do
         if (i > 1) then
-            if (tbl_hair[i].character == tbl_occasions[mr].character or 
-                (tbl_hair[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
-                if (tbl_hair[i].occasion == tbl_occasions[mr].occasion) then
+            if (tbl_hair[i].character == tbl_occasions[duo_idx].character or 
+                (tbl_hair[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                if (tbl_hair[i].occasion == tbl_occasions[duo_idx].occasion) then
                     hairTable[#hairTable+1] = display.newImageRect(tbl_hair[i].smallImage, tbl_hair[i].smallImageW, tbl_hair[i].smallImageH)
                     hairTable[#hairTable].x = tbl_hair[i].smallImageX; hairTable[#hairTable].y = tbl_hair[i].smallImageY
                     hairTable[#hairTable].id = i
                     hairTable[#hairTable].isVisible = false
                     overlayGroup:insert(hairTable[#hairTable])
-                    hairTable[#hairTable]:addEventListener( "touch", ShirtTouch )
+                    hairTable[#hairTable]:addEventListener( "touch", HairTouch )
                 end
             end
         else
@@ -555,15 +561,15 @@ function scene:createScene( event )
     
     for i=1, #tbl_shoes do
         if (i > 1) then
-            if (tbl_shoes[i].character == tbl_occasions[mr].character or 
-                (tbl_shoes[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
-                if (tbl_shoes[i].occasion == tbl_occasions[mr].occasion) then
+            if (tbl_shoes[i].character == tbl_occasions[duo_idx].character or 
+                (tbl_shoes[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                if (tbl_shoes[i].occasion == tbl_occasions[duo_idx].occasion) then
                     shoesTable[#shoesTable+1] = display.newImageRect(tbl_shoes[i].smallImage, tbl_shoes[i].smallImageW, tbl_shoes[i].smallImageH)
                     shoesTable[#shoesTable].x = tbl_shoes[i].smallImageX; shoesTable[#shoesTable].y = tbl_shoes[i].smallImageY
                     shoesTable[#shoesTable].id = i
                     shoesTable[#shoesTable].isVisible = false
                     overlayGroup:insert(shoesTable[#shoesTable])
-                    shoesTable[#shoesTable]:addEventListener( "touch", ShirtTouch )
+                    shoesTable[#shoesTable]:addEventListener( "touch", ShoesTouch )
                 end
             end
         else
