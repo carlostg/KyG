@@ -10,6 +10,7 @@ local storyboard = require "storyboard"
 --  global variables
 _H = display.contentHeight
 _W = display.contentWidth
+_MR = math.random
 
 -- load menu.lua
 storyboard.gotoScene("menu")

@@ -21,9 +21,8 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 local obj1, obj2
 local forwardArrow, overlayGroup, characterGroup, messageGroup
-local btnBack
-local btnBackText
-local messageButton
+local btnBack, btnBackText, messageButton
+local st, en
 local iconsTable = {}
 local shirtsTable = {}
 local pantsTable = {}
@@ -32,64 +31,90 @@ local hairTable = {}
 local shoesTable = {}
 local characterObjOnTable = {}
 local textLabel = {}
-local secondsText = 30
+local secondsText = 59
 local gameTimer
 
 textLabel.englishTitle = "Challenge!"
-textLabel.englishText = "You have 30 seconds to guess the outfit I would choose for this occasion."
+textLabel.englishText = "You have 1 minute to guess the outfit I would choose for this occasion."
+
+local tbl_occasions = {
+    {name="Work",   fullImage="bg_workGuillermo.png", character=2, occasion=1},
+    {name="Beach",  fullImage="bg_beach.png",         character=1, occasion=2},
+    {name="Home",   fullImage="bg_bedroom.png",       character=1, occasion=2},
+    {name="Formal", fullImage="bg_formal.png",        character=1, occasion=2},
+    {name="Work",   fullImage="bg_workKarla.png",     character=1, occasion=2},
+}
+
+local tbl_characters = {
+    {name="Karla Rebecca",    fullImage="k_plain.png", character=1},
+    {name="Guillermo Javier", fullImage="g_plain.png", character=2}
+}
 
 local tbl_shirts = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
-    fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_shirt_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=75,
-    fullImage="k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
-    fullImage="k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2}
 }
 
 local tbl_pants = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_bermudas_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2}
 }
 
 local tbl_socks = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2}
 }
 
 local tbl_hair = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_hair_long_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
-     fullImage="k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2}
 }
 
 local tbl_shoes = {
     {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350},
+     fullImage="k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
     {smallImage="k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350}
+     fullImage="k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2}
 }
 
 local tbl_icons = {
-    {name="shirt",   icon="icon_shirt.png", iconX=300, iconY=90, iconW=35, iconH=35, objects=tbl_shirts},
-    {name="pants",   icon="icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48, objects=tbl_pants},
-    {name="socks",   icon="icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46, objects=tbl_socks},
-    {name="hair",     icon="icon_hair.png",   iconX=300, iconY=270, iconW=35, iconH=39, objects=tbl_hair},
-    {name="shoes",   icon="icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23, objects=tbl_shoes},
+    {name="shirt",   icon="icon_shirt.png", iconX=300, iconY=90,  iconW=35, iconH=35},
+    {name="pants",   icon="icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48},
+    {name="socks",   icon="icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46},
+    {name="hair",    icon="icon_hair.png",  iconX=300, iconY=270, iconW=35, iconH=39},
+    {name="shoes",   icon="icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23},
     {name="no-sign", icon="no-sign.png",    iconX=300, iconY=380, iconW=35, iconH=35}
 }
 
@@ -329,12 +354,17 @@ local function btnBackTouch(event)
     end
 end
 
+local function btnSubmitTouch(event)
+    local t = event.target
+    local phase = event.phase
+end
+
 local function updateTimer(event)
     secondsText = secondsText - 1
     if (secondsText < 10) then
         secondsText = "0"..secondsText
     end
-    if (event.count == 30) then
+    if (event.count == 59) then
         timer.cancel(gameTimer)
     end
     timerText.text = "0:"..secondsText
@@ -358,29 +388,50 @@ end
 
 -- Called when the scene's view does not exist:
 function scene:createScene( event )
+    local params = event.params
     local group = self.view
     characterGroup = display.newGroup()
     
-    local background = display.newImage("bg_beach.png")
+    if (params.pCharacter == 1) then
+        st = 2
+        en = #tbl_occasions
+    else
+        st = 1
+        en = #tbl_occasions - 1
+    end
+    local mr = _MR(st,en)
     
-    local character = display.newImageRect("k_plain.png", 280, 350)
+    local background = display.newImage(tbl_occasions[mr].fullImage)
+    
+    local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage, 280, 350)
     character.x = _W*.50; character.y = _H*.63
     characterGroup:insert(character)
     
-    obj1 = display.newText("Karla", 0, 0, "Zapfino Linotype One", 40)
+    obj1 = display.newText(tbl_characters[params.pCharacter].name, 0, 0, "Zapfino Linotype One", 40)
     obj1:setTextColor(255)
     obj1.x = _W*.5; obj1.y = _H*.08
     
-    btnBack = display.newRoundedRect( 0, 0, 100, 40, 10 )
+    btnBack = display.newRoundedRect( 0, 0, 75, 30, 5 )
     btnBack:setReferencePoint(display.CenterReferencePoint)
-    btnBack.x = _W*.20; btnBack.y = _H*.95
+    btnBack.x = _W*.15; btnBack.y = _H*.95
     
-    btnBackText = display.newText("Back", 0, 0, native.systemFontBold, 20)
+    btnBackText = display.newText("Back", 0, 0, native.systemFontBold, 16)
     btnBackText:setReferencePoint(display.CenterReferencePoint)
-    btnBackText.x = _W*.20; btnBackText.y = _H*.95
+    btnBackText.x = _W*.15; btnBackText.y = _H*.95
     btnBackText:setTextColor (0, 0, 0)
     
     btnBack:addEventListener("touch", btnBackTouch)
+    
+    btnSubmit = display.newRoundedRect( 0, 0, 75, 30, 5 )
+    btnSubmit:setReferencePoint(display.CenterReferencePoint)
+    btnSubmit.x = _W*.85; btnSubmit.y = _H*.95
+    
+    btnSubmitText = display.newText("Submit", 0, 0, native.systemFontBold, 16)
+    btnSubmitText:setReferencePoint(display.CenterReferencePoint)
+    btnSubmitText.x = _W*.85; btnSubmitText.y = _H*.95
+    btnSubmitText:setTextColor (0, 0, 0)
+    
+    btnSubmit:addEventListener("touch", btnSubmitTouch)
     
     timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
     timerText:setTextColor(255)
@@ -405,12 +456,25 @@ function scene:createScene( event )
     end
     
     for i=1, #tbl_shirts do
-        shirtsTable[i] = display.newImageRect(tbl_shirts[i].smallImage, tbl_shirts[i].smallImageW, tbl_shirts[i].smallImageH)
-        shirtsTable[i].x = tbl_shirts[i].smallImageX; shirtsTable[i].y = tbl_shirts[i].smallImageY
-        shirtsTable[i].id = i
-        shirtsTable[i].isVisible = false
-        overlayGroup:insert(shirtsTable[i])
-        shirtsTable[i]:addEventListener( "touch", ShirtTouch )
+        if (i > 1) then
+            if (tbl_shirts[i].occasion == tbl_occasions[mr].occasion) then
+                if (tbl_shirts[i].character == tbl_occasions[mr].character) then
+                    shirtsTable[#shirtsTable+1] = display.newImageRect(tbl_shirts[i].smallImage, tbl_shirts[i].smallImageW, tbl_shirts[i].smallImageH)
+                    shirtsTable[#shirtsTable].x = tbl_shirts[i].smallImageX; shirtsTable[#shirtsTable].y = tbl_shirts[i].smallImageY
+                    shirtsTable[#shirtsTable].id = i
+                    shirtsTable[#shirtsTable].isVisible = false
+                    overlayGroup:insert(shirtsTable[#shirtsTable])
+                    shirtsTable[#shirtsTable]:addEventListener( "touch", ShirtTouch )
+                end
+            end
+        else
+            shirtsTable[i] = display.newImageRect(tbl_shirts[i].smallImage, tbl_shirts[i].smallImageW, tbl_shirts[i].smallImageH)
+            shirtsTable[i].x = tbl_shirts[i].smallImageX; shirtsTable[i].y = tbl_shirts[i].smallImageY
+            shirtsTable[i].id = i
+            shirtsTable[i].isVisible = false
+            overlayGroup:insert(shirtsTable[i])
+            shirtsTable[i]:addEventListener( "touch", ShirtTouch )
+        end
     end
     
     for i=1, #tbl_pants do
@@ -470,6 +534,8 @@ function scene:createScene( event )
     group:insert(timerText)
     group:insert(btnBack)
     group:insert(btnBackText)
+    group:insert(btnSubmit)
+    group:insert(btnSubmitText)
 end
 
 

@@ -99,8 +99,6 @@ local function ActivateCharacter(event)
     return true
 end
 
--- create stars
-
 -- Menu Options
 local function btnGameTouch(event)
     local t = event.target
@@ -111,7 +109,7 @@ local function btnGameTouch(event)
             {
             effect = "flipFadeOutIn",
             time = 300,
-            params = { var1 = "custom", var2 = "another" }
+            params = { var1="custom", var2="another" }
             }
             storyboard.gotoScene( "game1", options )
         elseif (t.name == "btnGame2") then
@@ -119,7 +117,7 @@ local function btnGameTouch(event)
             {
             effect = "flipFadeOutIn",
             time = 300,
-            params = { var1 = "custom", var2 = "another" }
+            params = { pCharacter=selectedCharacter, var2="another" }
             }
             storyboard.gotoScene( "game2", options )
         elseif (t.name == "btnGame3") then
@@ -127,7 +125,7 @@ local function btnGameTouch(event)
             {
             effect = "flipFadeOutIn",
             time = 300,
-            params = { var1 = "custom", var2 = "another" }
+            params = { var1="custom", var2="another" }
             }
             storyboard.gotoScene( "game3", options )
         elseif (t.name == "btnGame4") then
@@ -135,7 +133,7 @@ local function btnGameTouch(event)
             {
             effect = "flipFadeOutIn",
             time = 300,
-            params = { var1 = "custom", var2 = "another" }
+            params = { var1="custom", var2="another" }
             }
             storyboard.gotoScene( "game4", options )
         end
