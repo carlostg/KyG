@@ -485,41 +485,97 @@ function scene:createScene( event )
     end
     
     for i=1, #tbl_pants do
-        pantsTable[i] = display.newImageRect(tbl_pants[i].smallImage, tbl_pants[i].smallImageW, tbl_pants[i].smallImageH)
-        pantsTable[i].x = tbl_pants[i].smallImageX; pantsTable[i].y = tbl_pants[i].smallImageY
-        pantsTable[i].id = i
-        pantsTable[i].isVisible = false
-        overlayGroup:insert(pantsTable[i])
-        pantsTable[i]:addEventListener( "touch", PantsTouch )
+        if (i > 1) then
+            if (tbl_pants[i].character == tbl_occasions[mr].character or 
+                (tbl_pants[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
+                if (tbl_pants[i].occasion == tbl_occasions[mr].occasion) then
+                    pantsTable[#pantsTable+1] = display.newImageRect(tbl_pants[i].smallImage, tbl_pants[i].smallImageW, tbl_pants[i].smallImageH)
+                    pantsTable[#pantsTable].x = tbl_pants[i].smallImageX; pantsTable[#pantsTable].y = tbl_pants[i].smallImageY
+                    pantsTable[#pantsTable].id = i
+                    pantsTable[#pantsTable].isVisible = false
+                    overlayGroup:insert(pantsTable[#pantsTable])
+                    pantsTable[#pantsTable]:addEventListener( "touch", ShirtTouch )
+                end
+            end
+        else
+            pantsTable[i] = display.newImageRect(tbl_pants[i].smallImage, tbl_pants[i].smallImageW, tbl_pants[i].smallImageH)
+            pantsTable[i].x = tbl_pants[i].smallImageX; pantsTable[i].y = tbl_pants[i].smallImageY
+            pantsTable[i].id = i
+            pantsTable[i].isVisible = false
+            overlayGroup:insert(pantsTable[i])
+            pantsTable[i]:addEventListener( "touch", PantsTouch )
+        end
     end
     
     for i=1, #tbl_socks do
-        socksTable[i] = display.newImageRect(tbl_socks[i].smallImage, tbl_socks[i].smallImageW, tbl_socks[i].smallImageH)
-        socksTable[i].x = tbl_socks[i].smallImageX; socksTable[i].y = tbl_socks[i].smallImageY
-        socksTable[i].id = i
-        socksTable[i].isVisible = false
-        overlayGroup:insert(socksTable[i])
-        socksTable[i]:addEventListener( "touch", SocksTouch )
+        if (i > 1) then
+            if (tbl_socks[i].character == tbl_occasions[mr].character or 
+                (tbl_socks[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
+                if (tbl_socks[i].occasion == tbl_occasions[mr].occasion) then
+                    socksTable[#socksTable+1] = display.newImageRect(tbl_socks[i].smallImage, tbl_socks[i].smallImageW, tbl_socks[i].smallImageH)
+                    socksTable[#socksTable].x = tbl_socks[i].smallImageX; socksTable[#socksTable].y = tbl_socks[i].smallImageY
+                    socksTable[#socksTable].id = i
+                    socksTable[#socksTable].isVisible = false
+                    overlayGroup:insert(socksTable[#socksTable])
+                    socksTable[#socksTable]:addEventListener( "touch", ShirtTouch )
+                end
+            end
+        else
+            socksTable[i] = display.newImageRect(tbl_socks[i].smallImage, tbl_socks[i].smallImageW, tbl_socks[i].smallImageH)
+            socksTable[i].x = tbl_socks[i].smallImageX; socksTable[i].y = tbl_socks[i].smallImageY
+            socksTable[i].id = i
+            socksTable[i].isVisible = false
+            overlayGroup:insert(socksTable[i])
+            socksTable[i]:addEventListener( "touch", SocksTouch )
+        end
     end
     
     for i=1, #tbl_hair do
-        hairTable[i] = display.newImageRect(tbl_hair[i].smallImage, tbl_hair[i].smallImageW, tbl_hair[i].smallImageH)
-        hairTable[i].x = tbl_hair[i].smallImageX; hairTable[i].y = tbl_hair[i].smallImageY
-        hairTable[i].id = i
-        hairTable[i].isVisible = false
-        overlayGroup:insert(hairTable[i])
-        hairTable[i]:addEventListener( "touch", HairTouch )
+        if (i > 1) then
+            if (tbl_hair[i].character == tbl_occasions[mr].character or 
+                (tbl_hair[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
+                if (tbl_hair[i].occasion == tbl_occasions[mr].occasion) then
+                    hairTable[#hairTable+1] = display.newImageRect(tbl_hair[i].smallImage, tbl_hair[i].smallImageW, tbl_hair[i].smallImageH)
+                    hairTable[#hairTable].x = tbl_hair[i].smallImageX; hairTable[#hairTable].y = tbl_hair[i].smallImageY
+                    hairTable[#hairTable].id = i
+                    hairTable[#hairTable].isVisible = false
+                    overlayGroup:insert(hairTable[#hairTable])
+                    hairTable[#hairTable]:addEventListener( "touch", ShirtTouch )
+                end
+            end
+        else
+            hairTable[i] = display.newImageRect(tbl_hair[i].smallImage, tbl_hair[i].smallImageW, tbl_hair[i].smallImageH)
+            hairTable[i].x = tbl_hair[i].smallImageX; hairTable[i].y = tbl_hair[i].smallImageY
+            hairTable[i].id = i
+            hairTable[i].isVisible = false
+            overlayGroup:insert(hairTable[i])
+            hairTable[i]:addEventListener( "touch", HairTouch )
+        end
     end
     
     for i=1, #tbl_shoes do
-        shoesTable[i] = display.newImageRect(tbl_shoes[i].smallImage, tbl_shoes[i].smallImageW, tbl_shoes[i].smallImageH)
-        shoesTable[i].x = tbl_shoes[i].smallImageX; shoesTable[i].y = tbl_shoes[i].smallImageY
-        shoesTable[i].id = i
-        shoesTable[i].isVisible = false
-        overlayGroup:insert(shoesTable[i])
-        shoesTable[i]:addEventListener( "touch", ShoesTouch )
+        if (i > 1) then
+            if (tbl_shoes[i].character == tbl_occasions[mr].character or 
+                (tbl_shoes[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
+                if (tbl_shoes[i].occasion == tbl_occasions[mr].occasion) then
+                    shoesTable[#shoesTable+1] = display.newImageRect(tbl_shoes[i].smallImage, tbl_shoes[i].smallImageW, tbl_shoes[i].smallImageH)
+                    shoesTable[#shoesTable].x = tbl_shoes[i].smallImageX; shoesTable[#shoesTable].y = tbl_shoes[i].smallImageY
+                    shoesTable[#shoesTable].id = i
+                    shoesTable[#shoesTable].isVisible = false
+                    overlayGroup:insert(shoesTable[#shoesTable])
+                    shoesTable[#shoesTable]:addEventListener( "touch", ShirtTouch )
+                end
+            end
+        else
+            shoesTable[i] = display.newImageRect(tbl_shoes[i].smallImage, tbl_shoes[i].smallImageW, tbl_shoes[i].smallImageH)
+            shoesTable[i].x = tbl_shoes[i].smallImageX; shoesTable[i].y = tbl_shoes[i].smallImageY
+            shoesTable[i].id = i
+            shoesTable[i].isVisible = false
+            overlayGroup:insert(shoesTable[i])
+            shoesTable[i]:addEventListener( "touch", ShoesTouch )
+        end
     end
-    
+
     forwardArrow = display.newImageRect("assets/images/backArrow.png", 30, 30)
     forwardArrow.x = 288; forwardArrow.y = 55
     forwardArrow:rotate(180)
