@@ -39,10 +39,10 @@ textLabel.englishText = "You have 1 minute to guess the outfit I would choose fo
 
 local tbl_occasions = {
     {name="Work",   fullImage="assets/images/dressup/bg_workGuillermo.png", character=2, occasion=1},
-    {name="Beach",  fullImage="assets/images/dressup/bg_beach.png",         character=1, occasion=2},
-    {name="Home",   fullImage="assets/images/dressup/bg_bedroom.png",       character=1, occasion=2},
-    {name="Formal", fullImage="assets/images/dressup/bg_formal.png",        character=1, occasion=2},
-    {name="Work",   fullImage="assets/images/dressup/bg_workKarla.png",     character=1, occasion=2},
+    {name="Beach",  fullImage="assets/images/dressup/bg_beach.png",         character=0, occasion=2},
+    {name="Home",   fullImage="assets/images/dressup/bg_bedroom.png",       character=0, occasion=3},
+    {name="Formal", fullImage="assets/images/dressup/bg_formal.png",        character=0, occasion=4},
+    {name="Work",   fullImage="assets/images/dressup/bg_workKarla.png",     character=1, occasion=1},
 }
 
 local tbl_characters = {
@@ -60,7 +60,7 @@ local tbl_shirts = {
      character=1, occasion=2},
     {smallImage="assets/images/dressup/k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2}
+     character=2, occasion=1}
 }
 
 local tbl_pants = {
@@ -91,8 +91,14 @@ local tbl_socks = {
 
 local tbl_hair = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="assets/images/dressup/k_hair_long_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
-     fullImage="assets/images/dressup/k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
+     {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2},
+     {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2}
 }
 
@@ -457,8 +463,9 @@ function scene:createScene( event )
     
     for i=1, #tbl_shirts do
         if (i > 1) then
-            if (tbl_shirts[i].occasion == tbl_occasions[mr].occasion) then
-                if (tbl_shirts[i].character == tbl_occasions[mr].character) then
+            if (tbl_shirts[i].character == tbl_occasions[mr].character or 
+                (tbl_shirts[i].character == params.pCharacter and tbl_occasions[mr].character == 0)) then
+                if (tbl_shirts[i].occasion == tbl_occasions[mr].occasion) then
                     shirtsTable[#shirtsTable+1] = display.newImageRect(tbl_shirts[i].smallImage, tbl_shirts[i].smallImageW, tbl_shirts[i].smallImageH)
                     shirtsTable[#shirtsTable].x = tbl_shirts[i].smallImageX; shirtsTable[#shirtsTable].y = tbl_shirts[i].smallImageY
                     shirtsTable[#shirtsTable].id = i
