@@ -146,7 +146,7 @@ function scene:createScene( event )
     local charactersGroup = display.newGroup()
     local starsGroup = display.newGroup()
     
-    background = display.newImageRect("mapper_bg.png", 320, 480)
+    background = display.newImageRect("assets/images/mapper_bg.png", 320, 480)
     background:setReferencePoint( display.TopLeftReferencePoint )
     background.x = 0; background.y = 0
     
@@ -158,7 +158,7 @@ function scene:createScene( event )
     
     -- create character objects
     for i=1, 2, 1 do
-        characters[i] = display.newImageRect("character_"..i..".png", 70, 70)
+        characters[i] = display.newImageRect("assets/images/character_"..i..".png", 70, 70)
         characters[i].x = Ox + ((Ox*i)*(i-1)) ; characters[i].y = Oy
         characters[i].id = i
         characters[i]:addEventListener( "touch",ActivateCharacter )
@@ -168,7 +168,7 @@ function scene:createScene( event )
     -- create star objects
     local function CreateStars(objCharacter)
         for i=1, 13, 1 do
-            stars[i] = display.newImageRect("red-heart.png", 15, 14)
+            stars[i] = display.newImageRect("assets/images/red-heart.png", 15, 14)
             stars[i].angle = .1 + (i/2.07)
             stars[i].x = (length_x * math.cos(stars[i].angle)) + objCharacter.x
             stars[i].y = (length_y * math.sin(stars[i].angle)) + objCharacter.y

@@ -38,84 +38,84 @@ textLabel.englishTitle = "Challenge!"
 textLabel.englishText = "You have 1 minute to guess the outfit I would choose for this occasion."
 
 local tbl_occasions = {
-    {name="Work",   fullImage="bg_workGuillermo.png", character=2, occasion=1},
-    {name="Beach",  fullImage="bg_beach.png",         character=1, occasion=2},
-    {name="Home",   fullImage="bg_bedroom.png",       character=1, occasion=2},
-    {name="Formal", fullImage="bg_formal.png",        character=1, occasion=2},
-    {name="Work",   fullImage="bg_workKarla.png",     character=1, occasion=2},
+    {name="Work",   fullImage="assets/images/dressup/bg_workGuillermo.png", character=2, occasion=1},
+    {name="Beach",  fullImage="assets/images/dressup/bg_beach.png",         character=1, occasion=2},
+    {name="Home",   fullImage="assets/images/dressup/bg_bedroom.png",       character=1, occasion=2},
+    {name="Formal", fullImage="assets/images/dressup/bg_formal.png",        character=1, occasion=2},
+    {name="Work",   fullImage="assets/images/dressup/bg_workKarla.png",     character=1, occasion=2},
 }
 
 local tbl_characters = {
-    {name="Karla Rebecca",    fullImage="k_plain.png", character=1},
-    {name="Guillermo Javier", fullImage="g_plain.png", character=2}
+    {name="Karla Rebecca",    fullImage="assets/images/dressup/k_plain.png", character=1},
+    {name="Guillermo Javier", fullImage="assets/images/dressup/g_plain.png", character=2}
 }
 
 local tbl_shirts = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
-     fullImage="k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
+     fullImage="assets/images/dressup/k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_shirt_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=75,
-     fullImage="k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_shirt_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=75,
+     fullImage="assets/images/dressup/k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
-     fullImage="k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
+     fullImage="assets/images/dressup/k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2}
 }
 
 local tbl_pants = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
+     fullImage="assets/images/dressup/k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_bermudas_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_bermudas_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=77,
+     fullImage="assets/images/dressup/k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
-     fullImage="k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
+     fullImage="assets/images/dressup/k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2}
 }
 
 local tbl_socks = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
-     fullImage="k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2}
 }
 
 local tbl_hair = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="k_hair_long_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
-     fullImage="k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_hair_long_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2}
 }
 
 local tbl_shoes = {
-    {smallImage="no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2},
-    {smallImage="k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
-     fullImage="k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+    {smallImage="assets/images/dressup/k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2}
 }
 
 local tbl_icons = {
-    {name="shirt",   icon="icon_shirt.png", iconX=300, iconY=90,  iconW=35, iconH=35},
-    {name="pants",   icon="icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48},
-    {name="socks",   icon="icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46},
-    {name="hair",    icon="icon_hair.png",  iconX=300, iconY=270, iconW=35, iconH=39},
-    {name="shoes",   icon="icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23},
-    {name="no-sign", icon="no-sign.png",    iconX=300, iconY=380, iconW=35, iconH=35}
+    {name="shirt",   icon="assets/images/dressup/icon_shirt.png", iconX=300, iconY=90,  iconW=35, iconH=35},
+    {name="pants",   icon="assets/images/dressup/icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48},
+    {name="socks",   icon="assets/images/dressup/icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46},
+    {name="hair",    icon="assets/images/dressup/icon_hair.png",  iconX=300, iconY=270, iconW=35, iconH=39},
+    {name="shoes",   icon="assets/images/dressup/icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23},
+    {name="no-sign", icon="assets/images/dressup/no-sign.png",    iconX=300, iconY=380, iconW=35, iconH=35}
 }
 
 local function resetCharacter(event)
@@ -513,7 +513,7 @@ function scene:createScene( event )
         shoesTable[i]:addEventListener( "touch", ShoesTouch )
     end
     
-    forwardArrow = display.newImageRect("backArrow.png", 30, 30)
+    forwardArrow = display.newImageRect("assets/images/backArrow.png", 30, 30)
     forwardArrow.x = 288; forwardArrow.y = 55
     forwardArrow:rotate(180)
     forwardArrow.isVisible = false
