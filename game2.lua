@@ -659,8 +659,8 @@ function scene:createScene( event )
         end
     end
 
-    forwardArrow = display.newImageRect("assets/images/backArrow.png", 30, 30)
-    forwardArrow.x = 288; forwardArrow.y = 55
+    forwardArrow = display.newImageRect("assets/images/backArrow.png", 50, 50)
+    forwardArrow.x = 298; forwardArrow.y = 55
     forwardArrow:rotate(180)
     forwardArrow.isVisible = false
     overlayGroup:insert(forwardArrow)
