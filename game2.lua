@@ -401,7 +401,7 @@ local function btnBackTouch(event)
         {
         effect = "flipFadeOutIn",
         time = 300,
-        params = {var1 = "custom", var2 = "another"}
+        params = {var1 = "", var2 = ""}
         }
         storyboard.gotoScene("menu", options)
     end
@@ -454,6 +454,7 @@ local function MessageButtonTouch (event)
         end
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
+        btnSubmit:addEventListener("touch", btnSubmitTouch)
     end
 end
 
@@ -507,7 +508,7 @@ function scene:createScene( event )
     btnSubmitText.x = _W*.85; btnSubmitText.y = _H*.95
     btnSubmitText:setTextColor (0, 0, 0)
     
-    btnSubmit:addEventListener("touch", btnSubmitTouch)
+    --btnSubmit:addEventListener("touch", btnSubmitTouch)
     
     timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
     timerText:setTextColor(255)
@@ -731,7 +732,9 @@ function scene:exitScene( event )
     btnBack:removeEventListener( "touch", btnBackTouch )
     
     -- cancel game timer
-    timer.cancel(gameTimer)
+    if (gameTimer) then
+        timer.cancel(gameTimer)
+    end
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
