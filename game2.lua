@@ -30,13 +30,29 @@ local socksTable = {}
 local hairTable = {}
 local shoesTable = {}
 local characterObjOnTable = {}
-local textLabel = {}
 local secondsText = 59
 local gameTimer
 local duo_idx -- DressUp Occasion Index
-
-textLabel.englishTitle = "Challenge!"
-textLabel.englishText = "You have 1 minute to guess the outfit I would choose for this occasion."
+local gamePoints = 0
+local lg_index = 1
+local tbl_labels = {
+    {title1="Challenge!",
+     title2="Score",
+     text1 ="You have 1 minute to guess the outfit I would choose for this occasion.",
+     text2="You got ",
+     text3=" points of a possible total score of 15.",
+     btn1="Back",
+     btn2="Submit",
+     btn3="Ok!"},
+    {title1="¡Reto!",
+     title2="Puntuación",
+     text1 ="Tienes 1 minuto para adivinar que conbinación de ropa, yo seleccionaría para esta ocasión.",
+     text2="Tuvistes ",
+     text3=" puntos de una posible puntuación total de 15.",
+     btn1="Atrás",
+     btn2="Someter",
+     btn3="¡Ok!"}
+}
 
 local tbl_occasions = {
     {name="Work",   fullImage="assets/images/dressup/bg_workGuillermo.png", character=2, occasion=1},
@@ -55,65 +71,65 @@ local tbl_shirts = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=1},
     {smallImage="assets/images/dressup/k_shirt_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=2},
     {smallImage="assets/images/dressup/k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=2, occasion=1}
+     character=1, occasion=2, value=3}
 }
 
 local tbl_pants = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=1},
     {smallImage="assets/images/dressup/k_bermudas_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=2},
     {smallImage="assets/images/dressup/k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2}
+     character=1, occasion=2, value=3}
 }
 
 local tbl_socks = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=1},
     {smallImage="assets/images/dressup/k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=2},
     {smallImage="assets/images/dressup/k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2}
+     character=1, occasion=2, value=3}
 }
 
 local tbl_hair = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=1},
      {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=2},
      {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2}
+     character=1, occasion=2, value=3}
 }
 
 local tbl_shoes = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=1},
     {smallImage="assets/images/dressup/k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2},
+     character=1, occasion=2, value=2},
     {smallImage="assets/images/dressup/k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2}
+     character=1, occasion=2, value=3}
 }
 
 local tbl_icons = {
@@ -225,6 +241,7 @@ local function ShirtTouch(event)
     if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.shirt) then
+                gamePoints = gamePoints - characterObjOnTable.shirt.value
                 characterGroup:remove(characterObjOnTable.shirt)
                 characterObjOnTable.shirt = nil
             end
@@ -232,12 +249,17 @@ local function ShirtTouch(event)
             if (not characterObjOnTable.shirt) then
                 characterObjOnTable.shirt = display.newImageRect(tbl_shirts[t.id].fullImage, tbl_shirts[t.id].fullImageW, tbl_shirts[t.id].fullImageH)
                 characterObjOnTable.shirt.x = tbl_shirts[t.id].fullImageX; characterObjOnTable.shirt.y = tbl_shirts[t.id].fullImageY
+                characterObjOnTable.shirt.value = tbl_shirts[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.shirt.value
                 characterGroup:insert(characterObjOnTable.shirt)
             else
+                gamePoints = gamePoints - characterObjOnTable.shirt.value
                 characterGroup:remove(characterObjOnTable.shirt)
                 characterObjOnTable.shirt = nil
                 characterObjOnTable.shirt = display.newImageRect(tbl_shirts[t.id].fullImage, tbl_shirts[t.id].fullImageW, tbl_shirts[t.id].fullImageH)
                 characterObjOnTable.shirt.x = tbl_shirts[t.id].fullImageX; characterObjOnTable.shirt.y = tbl_shirts[t.id].fullImageY
+                characterObjOnTable.shirt.value = tbl_shirts[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.shirt.value
                 characterGroup:insert(characterObjOnTable.shirt)
             end
         end
@@ -250,6 +272,7 @@ local function PantsTouch(event)
     if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.pants) then
+                gamePoints = gamePoints - characterObjOnTable.pants.value
                 characterGroup:remove(characterObjOnTable.pants)
                 characterObjOnTable.pants = nil
             end
@@ -257,12 +280,17 @@ local function PantsTouch(event)
             if (not characterObjOnTable.pants) then
                 characterObjOnTable.pants = display.newImageRect(tbl_pants[t.id].fullImage, tbl_pants[t.id].fullImageW, tbl_pants[t.id].fullImageH)
                 characterObjOnTable.pants.x = tbl_pants[t.id].fullImageX; characterObjOnTable.pants.y = tbl_pants[t.id].fullImageY
+                characterObjOnTable.pants.value = tbl_pants[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.pants.value
                 characterGroup:insert(characterObjOnTable.pants)
             else
+                gamePoints = gamePoints - characterObjOnTable.pants.value
                 characterGroup:remove(characterObjOnTable.pants)
                 characterObjOnTable.pants = nil
                 characterObjOnTable.pants = display.newImageRect(tbl_pants[t.id].fullImage, tbl_pants[t.id].fullImageW, tbl_pants[t.id].fullImageH)
                 characterObjOnTable.pants.x = tbl_pants[t.id].fullImageX; characterObjOnTable.pants.y = tbl_pants[t.id].fullImageY
+                characterObjOnTable.pants.value = tbl_pants[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.pants.value
                 characterGroup:insert(characterObjOnTable.pants)
             end
         end
@@ -275,6 +303,7 @@ local function SocksTouch(event)
     if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.socks) then
+                gamePoints = gamePoints - characterObjOnTable.socks.value
                 characterGroup:remove(characterObjOnTable.socks)
                 characterObjOnTable.socks = nil
             end
@@ -282,12 +311,17 @@ local function SocksTouch(event)
             if (not characterObjOnTable.socks) then
                 characterObjOnTable.socks = display.newImageRect(tbl_socks[t.id].fullImage, tbl_socks[t.id].fullImageW, tbl_socks[t.id].fullImageH)
                 characterObjOnTable.socks.x = tbl_socks[t.id].fullImageX; characterObjOnTable.socks.y = tbl_socks[t.id].fullImageY
+                characterObjOnTable.socks.value = tbl_socks[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.socks.value
                 characterGroup:insert(characterObjOnTable.socks)
             else
+                gamePoints = gamePoints - characterObjOnTable.socks.value
                 characterGroup:remove(characterObjOnTable.socks)
                 characterObjOnTable.socks = nil
                 characterObjOnTable.socks = display.newImageRect(tbl_socks[t.id].fullImage, tbl_socks[t.id].fullImageW, tbl_socks[t.id].fullImageH)
                 characterObjOnTable.socks.x = tbl_socks[t.id].fullImageX; characterObjOnTable.socks.y = tbl_socks[t.id].fullImageY
+                characterObjOnTable.socks.value = tbl_socks[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.socks.value
                 characterGroup:insert(characterObjOnTable.socks)
             end
         end
@@ -300,6 +334,7 @@ local function HairTouch(event)
     if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.hair) then
+                gamePoints = gamePoints - characterObjOnTable.hair.value
                 characterGroup:remove(characterObjOnTable.hair)
                 characterObjOnTable.hair = nil
             end
@@ -307,12 +342,17 @@ local function HairTouch(event)
             if (not characterObjOnTable.hair) then
                 characterObjOnTable.hair = display.newImageRect(tbl_hair[t.id].fullImage, tbl_hair[t.id].fullImageW, tbl_hair[t.id].fullImageH)
                 characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
+                characterObjOnTable.hair.value = tbl_hair[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.hair.value
                 characterGroup:insert(characterObjOnTable.hair)
             else
+                gamePoints = gamePoints - characterObjOnTable.hair.value
                 characterGroup:remove(characterObjOnTable.hair)
                 characterObjOnTable.hair = nil
                 characterObjOnTable.hair = display.newImageRect(tbl_hair[t.id].fullImage, tbl_hair[t.id].fullImageW, tbl_hair[t.id].fullImageH)
                 characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
+                characterObjOnTable.hair.value = tbl_hair[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.hair.value
                 characterGroup:insert(characterObjOnTable.hair)
             end
         end
@@ -325,6 +365,7 @@ local function ShoesTouch(event)
     if ("began" == phase) then
         if (t.id == 1) then
             if (characterObjOnTable.shoes) then
+                gamePoints = gamePoints - characterObjOnTable.shoes.value
                 characterGroup:remove(characterObjOnTable.shoes)
                 characterObjOnTable.shoes = nil
             end
@@ -332,12 +373,17 @@ local function ShoesTouch(event)
             if (not characterObjOnTable.shoes) then
                 characterObjOnTable.shoes = display.newImageRect(tbl_shoes[t.id].fullImage, tbl_shoes[t.id].fullImageW, tbl_shoes[t.id].fullImageH)
                 characterObjOnTable.shoes.x = tbl_shoes[t.id].fullImageX; characterObjOnTable.shoes.y = tbl_shoes[t.id].fullImageY
+                characterObjOnTable.shoes.value = tbl_shoes[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.shoes.value
                 characterGroup:insert(characterObjOnTable.shoes)
             else
+                gamePoints = gamePoints - characterObjOnTable.shoes.value
                 characterGroup:remove(characterObjOnTable.shoes)
                 characterObjOnTable.shoes = nil
                 characterObjOnTable.shoes = display.newImageRect(tbl_shoes[t.id].fullImage, tbl_shoes[t.id].fullImageW, tbl_shoes[t.id].fullImageH)
                 characterObjOnTable.shoes.x = tbl_shoes[t.id].fullImageX; characterObjOnTable.shoes.y = tbl_shoes[t.id].fullImageY
+                characterObjOnTable.shoes.value = tbl_shoes[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.shoes.value
                 characterGroup:insert(characterObjOnTable.shoes)
             end
         end
@@ -364,6 +410,24 @@ end
 local function btnSubmitTouch(event)
     local t = event.target
     local phase = event.phase
+    if ("ended" == phase) then
+    local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
+        messageOverlay:setFillColor(0, 0, 0)
+        messageOverlay.alpha = .75
+        messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
+        messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
+        messageGroup:insert(messageOverlay)
+
+        local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
+        messageTitle:setReferencePoint(display.CenterReferencePoint)
+        messageTitle.x = _W*.50; messageTitle.y = _H*.20
+        messageGroup:insert(messageTitle)
+        
+        local messageText = display.newText(tbl_labels[lg_index].text2..gamePoints..tbl_labels[lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
+        messageText:setReferencePoint(display.CenterReferencePoint)
+        messageText.x = _W*.50; messageText.y = _H*.33
+        messageGroup:insert(messageText)
+    end
 end
 
 local function updateTimer(event)
@@ -427,7 +491,7 @@ function scene:createScene( event )
     btnBack:setReferencePoint(display.CenterReferencePoint)
     btnBack.x = _W*.15; btnBack.y = _H*.95
     
-    btnBackText = display.newText("Back", 0, 0, native.systemFontBold, 16)
+    btnBackText = display.newText(tbl_labels[lg_index].btn1, 0, 0, native.systemFontBold, 16)
     btnBackText:setReferencePoint(display.CenterReferencePoint)
     btnBackText.x = _W*.15; btnBackText.y = _H*.95
     btnBackText:setTextColor (0, 0, 0)
@@ -438,7 +502,7 @@ function scene:createScene( event )
     btnSubmit:setReferencePoint(display.CenterReferencePoint)
     btnSubmit.x = _W*.85; btnSubmit.y = _H*.95
     
-    btnSubmitText = display.newText("Submit", 0, 0, native.systemFontBold, 16)
+    btnSubmitText = display.newText(tbl_labels[lg_index].btn2, 0, 0, native.systemFontBold, 16)
     btnSubmitText:setReferencePoint(display.CenterReferencePoint)
     btnSubmitText.x = _W*.85; btnSubmitText.y = _H*.95
     btnSubmitText:setTextColor (0, 0, 0)
@@ -625,24 +689,24 @@ function scene:enterScene( event )
     messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
     messageGroup:insert(messageOverlay)
     
-    local messageTitle = display.newText(textLabel.englishTitle, 0, 0, native.systemFontBold, 20)
+    local messageTitle = display.newText(tbl_labels[lg_index].title1, 0, 0, native.systemFontBold, 20)
     messageTitle:setReferencePoint(display.CenterReferencePoint)
     messageTitle.x = _W*.50; messageTitle.y = _H*.20
     messageGroup:insert(messageTitle)
     
-    local messageText = display.newText(textLabel.englishText, 0, 0, 200, 0, native.systemFont, 16)
+    local messageText = display.newText(tbl_labels[lg_index].text1, 0, 0, 200, 0, native.systemFont, 16)
     messageText:setReferencePoint(display.CenterReferencePoint)
-    messageText.x = _W*.50; messageText.y = _H*.31
+    messageText.x = _W*.50; messageText.y = _H*.33
     messageGroup:insert(messageText)
     
     messageButton = display.newRoundedRect( 0, 0, 100, 40, 10 )
     messageButton:setReferencePoint(display.CenterReferencePoint)
-    messageButton.x = _W*.50; messageButton.y = _H*.45
+    messageButton.x = _W*.50; messageButton.y = _H*.47
     messageGroup:insert(messageButton)
     
-    local messageButtonText = display.newText("Ok!", 0, 0, native.systemFontBold, 20)
+    local messageButtonText = display.newText(tbl_labels[lg_index].btn3, 0, 0, native.systemFontBold, 20)
     messageButtonText:setReferencePoint(display.CenterReferencePoint)
-    messageButtonText.x = _W*.50; messageButtonText.y = _H*.45
+    messageButtonText.x = _W*.50; messageButtonText.y = _H*.47
     messageButtonText:setTextColor (0, 0, 0)
     messageGroup:insert(messageButtonText)
     
