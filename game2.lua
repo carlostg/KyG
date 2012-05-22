@@ -188,9 +188,7 @@ local function slideRight(event)
             iconsTable[i].isVisible = true
         end
     end
-    if ("began" == phase) then
-        transition.to(overlayGroup, {time=250, x=(overlayGroup.x+60), onComplete=changeArrowListener})
-    end
+    transition.to(overlayGroup, {time=250, x=(overlayGroup.x+60), onComplete=changeArrowListener})
 end
 
 local function slideLeft(event)
@@ -411,23 +409,31 @@ local function btnSubmitTouch(event)
     local t = event.target
     local phase = event.phase
     if ("ended" == phase) then
-    local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
-        messageOverlay:setFillColor(0, 0, 0)
-        messageOverlay.alpha = .75
-        messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
-        messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
-        messageGroup:insert(messageOverlay)
+        if (forwardArrow.isVisible) then
+            slideRight(forwardArrow)
+        end
+        for i=1, #tbl_icons do
+            iconsTable[i]:removeEventListener( "touch", slideLeft )
+        end
+        btnSubmit.isVisible = false
+        btnSubmitText.isVisible = false
+        local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
+            messageOverlay:setFillColor(0, 0, 0)
+            messageOverlay.alpha = .75
+            messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
+            messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
+            messageGroup:insert(messageOverlay)
 
-        local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
-        messageTitle:setReferencePoint(display.CenterReferencePoint)
-        messageTitle.x = _W*.50; messageTitle.y = _H*.20
-        messageGroup:insert(messageTitle)
-        
-        local messageText = display.newText(tbl_labels[lg_index].text2..gamePoints..tbl_labels[lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
-        messageText:setReferencePoint(display.CenterReferencePoint)
-        messageText.x = _W*.50; messageText.y = _H*.33
-        messageGroup:insert(messageText)
-    end
+            local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
+            messageTitle:setReferencePoint(display.CenterReferencePoint)
+            messageTitle.x = _W*.50; messageTitle.y = _H*.20
+            messageGroup:insert(messageTitle)
+
+            local messageText = display.newText(tbl_labels[lg_index].text2..gamePoints..tbl_labels[lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
+            messageText:setReferencePoint(display.CenterReferencePoint)
+            messageText.x = _W*.50; messageText.y = _H*.33
+            messageGroup:insert(messageText)
+        end
 end
 
 local function updateTimer(event)
@@ -454,7 +460,12 @@ local function MessageButtonTouch (event)
         end
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
+        btnSubmit.isVisible = true
+        btnSubmitText.isVisible = true
         btnSubmit:addEventListener("touch", btnSubmitTouch)
+        for i=1, #tbl_icons do
+            iconsTable[i]:addEventListener( "touch", slideLeft )
+        end
     end
 end
 
@@ -502,11 +513,13 @@ function scene:createScene( event )
     btnSubmit = display.newRoundedRect( 0, 0, 75, 30, 5 )
     btnSubmit:setReferencePoint(display.CenterReferencePoint)
     btnSubmit.x = _W*.85; btnSubmit.y = _H*.95
+    btnSubmit.isVisible = false
     
     btnSubmitText = display.newText(tbl_labels[lg_index].btn2, 0, 0, native.systemFontBold, 16)
     btnSubmitText:setReferencePoint(display.CenterReferencePoint)
     btnSubmitText.x = _W*.85; btnSubmitText.y = _H*.95
     btnSubmitText:setTextColor (0, 0, 0)
+    btnSubmitText.isVisible = false
     
     --btnSubmit:addEventListener("touch", btnSubmitTouch)
     
@@ -528,8 +541,7 @@ function scene:createScene( event )
         iconsTable[i].x = tbl_icons[i].iconX; iconsTable[i].y = tbl_icons[i].iconY
         iconsTable[i].name = tbl_icons[i].name
         overlayGroup:insert(iconsTable[i])
-        iconsTable[i]:addEventListener( "touch", slideLeft )
-        
+        --iconsTable[i]:addEventListener( "touch", slideLeft )
     end
     
     for i=1, #tbl_shirts do
@@ -652,7 +664,8 @@ function scene:createScene( event )
     forwardArrow:rotate(180)
     forwardArrow.isVisible = false
     overlayGroup:insert(forwardArrow)
-    forwardArrow:addEventListener( "touch", slideRight )
+    --forwardArrow:addEventListener( "touch", slideRight )
+    forwardArrow:addEventListener( "tap", slideRight )
     
     -----------------------------------------------------------------------------
     
