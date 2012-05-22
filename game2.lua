@@ -26,7 +26,7 @@ local st, en
 local iconsTable = {}
 local shirtsTable = {}
 local pantsTable = {}
-local socksTable = {}
+local accsTable = {}
 local hairTable = {}
 local shoesTable = {}
 local characterObjOnTable = {}
@@ -71,12 +71,21 @@ local tbl_shirts = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=3, value=1},
     {smallImage="assets/images/dressup/k_shirt_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=3, value=2},
     {smallImage="assets/images/dressup/k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=3},
+    {smallImage="assets/images/dressup/k_beach_top_bodyshirt_small.png", smallImageX=330, smallImageY=125, smallImageW=61, smallImageH=65,
+     fullImage="assets/images/dressup/k_beach_top_bodyshirt.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=1},
+    {smallImage="assets/images/dressup/k_beach_top_greenset_small.png", smallImageX=330, smallImageY=215, smallImageW=56, smallImageH=90,
+     fullImage="assets/images/dressup/k_beach_top_greenset.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=2},
+    {smallImage="assets/images/dressup/k_beach_top_polkaset_small.png", smallImageX=330, smallImageY=305, smallImageW=54, smallImageH=90,
+     fullImage="assets/images/dressup/k_beach_top_polkaset.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=3}
 }
 
@@ -84,25 +93,43 @@ local tbl_pants = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=3, value=1},
     {smallImage="assets/images/dressup/k_bermudas_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=3, value=2},
     {smallImage="assets/images/dressup/k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=3},
+    {smallImage="assets/images/dressup/k_beach_bottom_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/k_beach_bottom_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=1},
+    {smallImage="assets/images/dressup/k_beach_bottom_polka_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/k_beach_bottom_polka.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=2},
+    {smallImage="assets/images/dressup/k_beach_bottom_purpleset_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=116,
+     fullImage="assets/images/dressup/k_beach_bottom_purpleset.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=3}
 }
 
-local tbl_socks = {
+local tbl_accs = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=3, value=1},
     {smallImage="assets/images/dressup/k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=3, value=2},
     {smallImage="assets/images/dressup/k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=3},
+    {smallImage="assets/images/dressup/k_beach_acc_jeanshorts_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_beach_acc_jeanshorts.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=1},
+    {smallImage="assets/images/dressup/k_beach_acc_pinkshorts_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_beach_acc_pinkshorts.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=2},
+    {smallImage="assets/images/dressup/k_beach_acc_skirt_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_beach_acc_skirt.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=3}
 }
 
@@ -123,19 +150,28 @@ local tbl_shoes = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=3, value=1},
     {smallImage="assets/images/dressup/k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=3, value=2},
     {smallImage="assets/images/dressup/k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=3},
+    {smallImage="assets/images/dressup/k_beach_shoes_krogs_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_krogs.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=1},
+    {smallImage="assets/images/dressup/k_beach_shoes_watershoes_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_watershoes.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=2},
+    {smallImage="assets/images/dressup/k_beach_shoes_sandals_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_sandals.png", fullImageX=_W*.50, fullImageY=_H*.63, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=3}
 }
 
 local tbl_icons = {
     {name="shirt",   icon="assets/images/dressup/icon_shirt.png", iconX=300, iconY=90,  iconW=35, iconH=35},
     {name="pants",   icon="assets/images/dressup/icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48},
-    {name="socks",   icon="assets/images/dressup/icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46},
+    {name="accs",   icon="assets/images/dressup/icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46},
     {name="hair",    icon="assets/images/dressup/icon_hair.png",  iconX=300, iconY=270, iconW=35, iconH=39},
     {name="shoes",   icon="assets/images/dressup/icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23},
     {name="no-sign", icon="assets/images/dressup/no-sign.png",    iconX=300, iconY=380, iconW=35, iconH=35}
@@ -150,9 +186,9 @@ local function resetCharacter(event)
         characterGroup:remove(characterObjOnTable.pants)
         characterObjOnTable.pants = nil
     end
-    if (characterObjOnTable.socks) then
-        characterGroup:remove(characterObjOnTable.socks)
-        characterObjOnTable.socks = nil
+    if (characterObjOnTable.accs) then
+        characterGroup:remove(characterObjOnTable.accs)
+        characterObjOnTable.accs = nil
     end
     if (characterObjOnTable.hair) then
         characterGroup:remove(characterObjOnTable.hair)
@@ -175,8 +211,8 @@ local function slideRight(event)
         for i=1, #pantsTable do
             pantsTable[i].isVisible = false
         end
-        for i=1, #socksTable do
-            socksTable[i].isVisible = false
+        for i=1, #accsTable do
+            accsTable[i].isVisible = false
         end
         for i=1, #hairTable do
             hairTable[i].isVisible = false
@@ -214,9 +250,9 @@ local function slideLeft(event)
                     for i=1, #pantsTable do
                         pantsTable[i].isVisible = true
                     end
-                elseif (t.name == "socks") then
-                    for i=1, #socksTable do
-                        socksTable[i].isVisible = true
+                elseif (t.name == "accs") then
+                    for i=1, #accsTable do
+                        accsTable[i].isVisible = true
                     end
                 elseif (t.name == "hair") then
                     for i=1, #hairTable do
@@ -295,32 +331,32 @@ local function PantsTouch(event)
     end
 end
 
-local function SocksTouch(event)
+local function accsTouch(event)
     local t = event.target
     local phase = event.phase
     if ("began" == phase) then
         if (t.id == 1) then
-            if (characterObjOnTable.socks) then
-                gamePoints = gamePoints - characterObjOnTable.socks.value
-                characterGroup:remove(characterObjOnTable.socks)
-                characterObjOnTable.socks = nil
+            if (characterObjOnTable.accs) then
+                gamePoints = gamePoints - characterObjOnTable.accs.value
+                characterGroup:remove(characterObjOnTable.accs)
+                characterObjOnTable.accs = nil
             end
         else
-            if (not characterObjOnTable.socks) then
-                characterObjOnTable.socks = display.newImageRect(tbl_socks[t.id].fullImage, tbl_socks[t.id].fullImageW, tbl_socks[t.id].fullImageH)
-                characterObjOnTable.socks.x = tbl_socks[t.id].fullImageX; characterObjOnTable.socks.y = tbl_socks[t.id].fullImageY
-                characterObjOnTable.socks.value = tbl_socks[t.id].value
-                gamePoints = gamePoints + characterObjOnTable.socks.value
-                characterGroup:insert(characterObjOnTable.socks)
+            if (not characterObjOnTable.accs) then
+                characterObjOnTable.accs = display.newImageRect(tbl_accs[t.id].fullImage, tbl_accs[t.id].fullImageW, tbl_accs[t.id].fullImageH)
+                characterObjOnTable.accs.x = tbl_accs[t.id].fullImageX; characterObjOnTable.accs.y = tbl_accs[t.id].fullImageY
+                characterObjOnTable.accs.value = tbl_accs[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.accs.value
+                characterGroup:insert(characterObjOnTable.accs)
             else
-                gamePoints = gamePoints - characterObjOnTable.socks.value
-                characterGroup:remove(characterObjOnTable.socks)
-                characterObjOnTable.socks = nil
-                characterObjOnTable.socks = display.newImageRect(tbl_socks[t.id].fullImage, tbl_socks[t.id].fullImageW, tbl_socks[t.id].fullImageH)
-                characterObjOnTable.socks.x = tbl_socks[t.id].fullImageX; characterObjOnTable.socks.y = tbl_socks[t.id].fullImageY
-                characterObjOnTable.socks.value = tbl_socks[t.id].value
-                gamePoints = gamePoints + characterObjOnTable.socks.value
-                characterGroup:insert(characterObjOnTable.socks)
+                gamePoints = gamePoints - characterObjOnTable.accs.value
+                characterGroup:remove(characterObjOnTable.accs)
+                characterObjOnTable.accs = nil
+                characterObjOnTable.accs = display.newImageRect(tbl_accs[t.id].fullImage, tbl_accs[t.id].fullImageW, tbl_accs[t.id].fullImageH)
+                characterObjOnTable.accs.x = tbl_accs[t.id].fullImageX; characterObjOnTable.accs.y = tbl_accs[t.id].fullImageY
+                characterObjOnTable.accs.value = tbl_accs[t.id].value
+                gamePoints = gamePoints + characterObjOnTable.accs.value
+                characterGroup:insert(characterObjOnTable.accs)
             end
         end
     end
@@ -532,7 +568,7 @@ function scene:createScene( event )
     overlayGroup = display.newGroup()
     
     local bgOverlay = display.newRoundedRect(275, 30, 120, 390, 10)
-    bgOverlay:setFillColor(0, 0, 0)
+    bgOverlay:setFillColor(0,0,0)
     bgOverlay.alpha = .50
     overlayGroup:insert(bgOverlay)
 
@@ -590,26 +626,26 @@ function scene:createScene( event )
         end
     end
     
-    for i=1, #tbl_socks do
+    for i=1, #tbl_accs do
         if (i > 1) then
-            if (tbl_socks[i].character == tbl_occasions[duo_idx].character or 
-                (tbl_socks[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
-                if (tbl_socks[i].occasion == tbl_occasions[duo_idx].occasion) then
-                    socksTable[#socksTable+1] = display.newImageRect(tbl_socks[i].smallImage, tbl_socks[i].smallImageW, tbl_socks[i].smallImageH)
-                    socksTable[#socksTable].x = tbl_socks[i].smallImageX; socksTable[#socksTable].y = tbl_socks[i].smallImageY
-                    socksTable[#socksTable].id = i
-                    socksTable[#socksTable].isVisible = false
-                    overlayGroup:insert(socksTable[#socksTable])
-                    socksTable[#socksTable]:addEventListener( "touch", SocksTouch )
+            if (tbl_accs[i].character == tbl_occasions[duo_idx].character or 
+                (tbl_accs[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                if (tbl_accs[i].occasion == tbl_occasions[duo_idx].occasion) then
+                    accsTable[#accsTable+1] = display.newImageRect(tbl_accs[i].smallImage, tbl_accs[i].smallImageW, tbl_accs[i].smallImageH)
+                    accsTable[#accsTable].x = tbl_accs[i].smallImageX; accsTable[#accsTable].y = tbl_accs[i].smallImageY
+                    accsTable[#accsTable].id = i
+                    accsTable[#accsTable].isVisible = false
+                    overlayGroup:insert(accsTable[#accsTable])
+                    accsTable[#accsTable]:addEventListener( "touch", accsTouch )
                 end
             end
         else
-            socksTable[i] = display.newImageRect(tbl_socks[i].smallImage, tbl_socks[i].smallImageW, tbl_socks[i].smallImageH)
-            socksTable[i].x = tbl_socks[i].smallImageX; socksTable[i].y = tbl_socks[i].smallImageY
-            socksTable[i].id = i
-            socksTable[i].isVisible = false
-            overlayGroup:insert(socksTable[i])
-            socksTable[i]:addEventListener( "touch", SocksTouch )
+            accsTable[i] = display.newImageRect(tbl_accs[i].smallImage, tbl_accs[i].smallImageW, tbl_accs[i].smallImageH)
+            accsTable[i].x = tbl_accs[i].smallImageX; accsTable[i].y = tbl_accs[i].smallImageY
+            accsTable[i].id = i
+            accsTable[i].isVisible = false
+            overlayGroup:insert(accsTable[i])
+            accsTable[i]:addEventListener( "touch", accsTouch )
         end
     end
     
