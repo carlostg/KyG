@@ -16,13 +16,12 @@ local scene = storyboard.newScene()
 --	unless storyboard.removeScene() is called.
 -- 
 ---------------------------------------------------------------------------------
-
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 local obj1, obj2
 local forwardArrow, overlayGroup, characterGroup, messageGroup, occasionGroup
-local btnBack, btnBackText, btnMessage, btnMessage2, btnMessage3
+local btnBack, btnBackText, btnMessage, btnMessage2, btnMessage3, btnPhoto
 local st, en
 local iconsTable = {}
 local shirtsTable = {}
@@ -38,6 +37,8 @@ local duo_idx -- DressUp Occasion Index
 local secondsText = 59
 local gamePoints = 0
 local lg_index = 1
+local btnFont = native.systemFontBold
+local photoSound = audio.loadSound("assets/sounds/camera.wav");
 
 local onButtonRelease, setOcassion, loadObjectsTables, scoreOverlay
 
@@ -71,8 +72,8 @@ local tbl_occasions = {
 }
 
 local tbl_characters = {
-    {name="Karla Rebecca",    fullImage="assets/images/dressup/k_plain.png", character=1},
-    {name="Guillermo Javier", fullImage="assets/images/dressup/g_plain.png", character=2}
+    {name="Karla",    fullImage="assets/images/dressup/k_plain.png", character=1},
+    {name="Guillermo", fullImage="assets/images/dressup/g_plain.png", character=2}
 }
 
 local tbl_shirts = {
@@ -492,7 +493,7 @@ function scoreOverlay(event)
     btnMessage2 = widget.newButton{
         id = "btnMessage2",
         label = tbl_labels[lg_index].btn3,
-        font = "HelveticaNeue-Bold",
+        font = btnFont,
         width = 90, height = 30,
         fontSize = 16,
         yOffset = -2,
@@ -506,7 +507,7 @@ function scoreOverlay(event)
     btnMessage3 = widget.newButton{
         id = "btnMessage3",
         label = tbl_labels[lg_index].btn4,
-        font = "HelveticaNeue-Bold",
+        font = btnFont,
         width = 90, height = 30,
         fontSize = 16,
         yOffset = -2,
@@ -522,6 +523,35 @@ function scoreOverlay(event)
     messageGroup:insert(messageText)
     messageGroup:insert(btnMessage2)
     messageGroup:insert(btnMessage3)
+end
+
+local function onPhotoCapture(event)
+    local t = event.target
+    local phase = event.phase
+    local screenCap, hideFlash, flashSC
+    if (phase == "ended") then
+        function hideFlash()
+            transition.to(flashSC, {time=100, alpha=0})
+            screenCap:removeSelf()
+            btnPhoto:removeSelf()
+            screenCap = nil
+            btnPhoto = nil
+            overlayGroup.isVisible = true
+            timerText.isVisible = true
+            btnBack.isVisible = true
+        end
+        audio.play(photoSound)
+        overlayGroup.isVisible = false
+        timerText.isVisible = false
+        btnBack.isVisible = false
+        btnPhoto.isVisible = false
+        screenCap = display.captureScreen(true)
+
+        flashSC = display.newRect(0, 0, 320, 480)
+        flashSC:setFillColor(255)
+        flashSC.alpha = 0.0
+        transition.to(flashSC, {time=200, alpha=1, onComplete=hideFlash})
+    end
 end
 
 function onButtonRelease(event)
@@ -560,6 +590,9 @@ function onButtonRelease(event)
             local child = messageGroup[i]
             child:removeSelf()
         end
+        btnPhoto = display.newImageRect("assets/images/camera.png", 50, 44)
+        btnPhoto.x = _W*.85; btnPhoto.y = _H*.95
+        btnPhoto:addEventListener("touch", onPhotoCapture)
     elseif (btn.id == "btnMessage3")then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
@@ -747,7 +780,7 @@ function scene:createScene( event )
     btnBack = widget.newButton{
         id = "btnBack",
         label = tbl_labels[lg_index].btn1,
-        font = "HelveticaNeue-Bold",
+        font = btnFont,
         width = 75, height = 30,
         fontSize = 16,
         yOffset = -2,
@@ -761,7 +794,7 @@ function scene:createScene( event )
     btnSubmit = widget.newButton{
         id = "btnSubmit",
         label = tbl_labels[lg_index].btn2,
-        font = "HelveticaNeue-Bold",
+        font = btnFont,
         width = 75, height = 30,
         fontSize = 16,
         yOffset = -2,
@@ -839,7 +872,7 @@ function scene:enterScene( event )
     btnMessage = widget.newButton{
         id = "btnMessage",
         label = tbl_labels[lg_index].btn3,
-        font = "HelveticaNeue-Bold",
+        font = btnFont,
         width = 100, height = 30,
         fontSize = 16,
         yOffset = -2,

@@ -146,14 +146,14 @@ function scene:createScene( event )
     local charactersGroup = display.newGroup()
     local starsGroup = display.newGroup()
     
-    background = display.newImageRect("assets/images/mapper_bg.png", 320, 480)
+    background = display.newImageRect("assets/images/mapper_bg2.png", 320, 480)
     background:setReferencePoint( display.TopLeftReferencePoint )
     background.x = 0; background.y = 0
     
     --local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino", 22)
     local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino Linotype One", 42)
     title_txt:setReferencePoint( display.CenterReferencePoint )
-    title_txt.x = _W*.50; title_txt.y = _H*.10
+    title_txt.x = _W*.50; title_txt.y = _H*.12
     title_txt:setTextColor(200,100,50)
     
     -- create character objects
