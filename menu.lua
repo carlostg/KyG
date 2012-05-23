@@ -192,10 +192,21 @@ function scene:createScene( event )
     btnGame1.alpha = .30
     btnGame1:addEventListener("touch", btnGameTouch)
     
-    local btnGame1Txt = display.newText("Game 1", 0, 0, "Zapfino Linotype One", 32)
+    local btnGame1Txt = Wrapper:newParagraph({
+	text = "Do You Know Us?",
+	width = 70,
+	height =70,                     -- fontSize will be calculated automatically if set 
+	font = native.systemFontBold,
+	lineSpace = 0,
+	alignment  = "center",
+	-- Parameters for auto font-sizing
+	fontSizeMin = 8,
+	fontSizeMax = 48,
+	incrementSize = 2
+    })
     btnGame1Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame1Txt.x = btnGame1.x; btnGame1Txt.y = btnGame1.y
-    btnGame1Txt:setTextColor(200,100,50)
+    btnGame1Txt:setTextColor({200,100,50})
     
     local btnGame2 = display.newCircle( _W*.70, _H*.30, 50 )
     btnGame2.name = "btnGame2"
@@ -203,10 +214,21 @@ function scene:createScene( event )
     btnGame2.alpha = .30
     btnGame2:addEventListener("touch", btnGameTouch)
     
-    local btnGame2Txt = display.newText("Game 2", 0, 0, "Zapfino Linotype One", 32)
+    local btnGame2Txt = Wrapper:newParagraph({
+	text = "Guess Our Styles",
+	width = 70,
+	height =70,                     -- fontSize will be calculated automatically if set 
+	font = native.systemFontBold,
+	lineSpace = 0,
+	alignment  = "center",
+	-- Parameters for auto font-sizing
+	fontSizeMin = 8,
+	fontSizeMax = 48,
+	incrementSize = 2
+    })
     btnGame2Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame2Txt.x = btnGame2.x; btnGame2Txt.y = btnGame2.y 
-    btnGame2Txt:setTextColor(200,100,50)
+    btnGame2Txt:setTextColor({200,100,50})
     
     local btnGame3 = display.newCircle( _W*.30, _H*.55, 50 )
     btnGame3.name = "btnGame3"
@@ -214,10 +236,21 @@ function scene:createScene( event )
     btnGame3.alpha = .30
     btnGame3:addEventListener("touch", btnGameTouch)
     
-    local btnGame3Txt = display.newText("Game 3", 0, 0, "Zapfino Linotype One", 32)
+    local btnGame3Txt = Wrapper:newParagraph({
+	text = "Scrabble Our Names",
+	width = 70,
+	height =70,                     -- fontSize will be calculated automatically if set 
+	font = native.systemFontBold,
+	lineSpace = 0,
+	alignment  = "center",
+	-- Parameters for auto font-sizing
+	fontSizeMin = 8,
+	fontSizeMax = 48,
+	incrementSize = 2
+    })
     btnGame3Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y 
-    btnGame3Txt:setTextColor(200,100,50)
+    btnGame3Txt:setTextColor({200,100,50})
     
     local btnGame4 = display.newCircle( _W*.70, _H*.55, 50 )
     btnGame4.name = "btnGame4"
@@ -225,10 +258,21 @@ function scene:createScene( event )
     btnGame4.alpha = .30
     btnGame4:addEventListener("touch", btnGameTouch)
     
-    local btnGame4Txt = display.newText("Game 4", 0, 0, "Zapfino Linotype One", 32)
+    local btnGame4Txt = Wrapper:newParagraph({
+	text = "Shoot Me Not",
+	width = 70,
+	height =70,                     -- fontSize will be calculated automatically if set 
+	font = native.systemFontBold,
+	lineSpace = 0,
+	alignment  = "center",
+	-- Parameters for auto font-sizing
+	fontSizeMin = 8,
+	fontSizeMax = 48,
+	incrementSize = 2
+    })
     btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
-    btnGame4Txt:setTextColor(200,100,50)
+    btnGame4Txt:setTextColor({200,100,50})
     
     -----------------------------------------------------------------------------
     

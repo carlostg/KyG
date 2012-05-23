@@ -6,6 +6,7 @@
 display.setStatusBar( display.HiddenStatusBar )
 
 local storyboard = require "storyboard"
+Wrapper = require("wrapper")
 
 --  global variables
 _H = display.contentHeight
