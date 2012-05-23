@@ -5,6 +5,7 @@
 ----------------------------------------------------------------------------------
 
 local storyboard = require( "storyboard" )
+local widget = require "widget"
 local scene = storyboard.newScene()
 
 ----------------------------------------------------------------------------------
@@ -20,8 +21,8 @@ local scene = storyboard.newScene()
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 local obj1, obj2
-local forwardArrow, overlayGroup, characterGroup, messageGroup
-local btnBack, btnBackText, messageButton
+local forwardArrow, overlayGroup, characterGroup, messageGroup, occasionGroup
+local btnBack, btnBackText, btnMessage, btnMessage2, btnMessage3
 local st, en
 local iconsTable = {}
 local shirtsTable = {}
@@ -30,11 +31,16 @@ local accsTable = {}
 local hairTable = {}
 local shoesTable = {}
 local characterObjOnTable = {}
-local secondsText = 59
+local tbl_params = {}
+local background
 local gameTimer
 local duo_idx -- DressUp Occasion Index
+local secondsText = 59
 local gamePoints = 0
 local lg_index = 1
+
+local onButtonRelease, setOcassion, loadObjectsTables, scoreOverlay
+
 local tbl_labels = {
     {title1="Challenge!",
      title2="Score",
@@ -43,7 +49,8 @@ local tbl_labels = {
      text3=" points of a possible total score of 15.",
      btn1="Back",
      btn2="Submit",
-     btn3="Ok!"},
+     btn3="Ok!",
+     btn4="Next"},
     {title1="¡Reto!",
      title2="Puntuación",
      text1 ="Tienes 1 minuto para adivinar que conbinación de ropa, yo seleccionaría para esta ocasión.",
@@ -51,7 +58,8 @@ local tbl_labels = {
      text3=" puntos de una posible puntuación total de 15.",
      btn1="Atrás",
      btn2="Someter",
-     btn3="¡Ok!"}
+     btn3="¡Ok!",
+     btn4="Próxima"}
 }
 
 local tbl_occasions = {
@@ -207,6 +215,19 @@ local function resetCharacter(event)
         characterGroup:remove(characterObjOnTable.shoes)
         characterObjOnTable.shoes = nil
     end
+end
+
+local function resetAllObjectsTables(event)
+    for i=overlayGroup.numChildren,3,-1 do
+        local child = overlayGroup[i]
+        child:removeSelf()
+    end
+    iconsTable = {}
+    shirtsTable = {}
+    pantsTable = {}
+    accsTable = {}
+    hairTable = {}
+    shoesTable = {}
 end
 
 local function slideRight(event)
@@ -433,54 +454,6 @@ local function ShoesTouch(event)
     end
 end
 
-local function btnBackTouch(event)
-    local t = event.target
-    local phase = event.phase
-    if ("began" == phase) then
-        t:setFillColor( 175,238,238 )
-    elseif ("ended" == phase) or ("cancelled" == phase) then
-        t:setFillColor( 255 )
-        local options =
-        {
-        effect = "flipFadeOutIn",
-        time = 300,
-        params = {var1 = "", var2 = ""}
-        }
-        storyboard.gotoScene("menu", options)
-    end
-end
-
-local function btnSubmitTouch(event)
-    local t = event.target
-    local phase = event.phase
-    if ("ended" == phase) then
-        if (forwardArrow.isVisible) then
-            slideRight(forwardArrow)
-        end
-        for i=1, #tbl_icons do
-            iconsTable[i]:removeEventListener( "touch", slideLeft )
-        end
-        btnSubmit.isVisible = false
-        btnSubmitText.isVisible = false
-        local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
-            messageOverlay:setFillColor(0, 0, 0)
-            messageOverlay.alpha = .75
-            messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
-            messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
-            messageGroup:insert(messageOverlay)
-
-            local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
-            messageTitle:setReferencePoint(display.CenterReferencePoint)
-            messageTitle.x = _W*.50; messageTitle.y = _H*.20
-            messageGroup:insert(messageTitle)
-
-            local messageText = display.newText(tbl_labels[lg_index].text2..gamePoints..tbl_labels[lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
-            messageText:setReferencePoint(display.CenterReferencePoint)
-            messageText.x = _W*.50; messageText.y = _H*.33
-            messageGroup:insert(messageText)
-        end
-end
-
 local function updateTimer(event)
     secondsText = secondsText - 1
     if (secondsText < 10) then
@@ -488,17 +461,90 @@ local function updateTimer(event)
     end
     if (event.count == 59) then
         timer.cancel(gameTimer)
+        
+        if (forwardArrow.isVisible) then
+            slideRight(forwardArrow)
+        end
+        for i=1, #tbl_icons do
+            iconsTable[i]:removeEventListener( "touch", slideLeft )
+        end
+        btnSubmit.isVisible = false
+        scoreOverlay()
     end
     timerText.text = "0:"..secondsText
 end
 
-local function MessageButtonTouch (event)
-    local t = event.target
-    local phase = event.phase
-    if ("began" == phase) then
-        messageButton:setFillColor( 175,238,238 )
-    elseif ("ended" == phase) or ("cancelled" == phase) then
-        messageButton:setFillColor( 255 )
+function scoreOverlay(event)
+    local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
+    messageOverlay:setFillColor(0, 0, 0)
+    messageOverlay.alpha = .75
+    messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
+    messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
+
+    local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
+    messageTitle:setReferencePoint(display.CenterReferencePoint)
+    messageTitle.x = _W*.50; messageTitle.y = _H*.20
+
+    local messageText = display.newText(tbl_labels[lg_index].text2..gamePoints..tbl_labels[lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
+    messageText:setReferencePoint(display.CenterReferencePoint)
+    messageText.x = _W*.50; messageText.y = _H*.33
+
+    btnMessage2 = widget.newButton{
+        id = "btnMessage2",
+        label = tbl_labels[lg_index].btn3,
+        font = "HelveticaNeue-Bold",
+        width = 90, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnMessage2.x = _W*.34
+    btnMessage2.y = _H*.47
+
+    btnMessage3 = widget.newButton{
+        id = "btnMessage3",
+        label = tbl_labels[lg_index].btn4,
+        font = "HelveticaNeue-Bold",
+        width = 90, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnMessage3.x = _W*.66
+    btnMessage3.y = _H*.47
+
+    messageGroup:insert(messageOverlay)
+    messageGroup:insert(messageTitle)
+    messageGroup:insert(messageText)
+    messageGroup:insert(btnMessage2)
+    messageGroup:insert(btnMessage3)
+end
+
+function onButtonRelease(event)
+    local btn = event.target
+    if (btn.id == "btnBack") then
+        local options =
+            {
+            effect = "flipFadeOutIn",
+            time = 300,
+            params = {var1 = "", var2 = ""}
+            }
+        storyboard.gotoScene("menu", options)
+    elseif (btn.id == "btnSubmit") then
+        if (forwardArrow.isVisible) then
+            slideRight(forwardArrow)
+        end
+        for i=1, #tbl_icons do
+            iconsTable[i]:removeEventListener( "touch", slideLeft )
+        end
+        timer.cancel(gameTimer)
+        btnSubmit.isVisible = false
+        scoreOverlay()
+    elseif (btn.id == "btnMessage") then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
             child:removeSelf()
@@ -506,93 +552,46 @@ local function MessageButtonTouch (event)
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
         btnSubmit.isVisible = true
-        btnSubmitText.isVisible = true
-        btnSubmit:addEventListener("touch", btnSubmitTouch)
+        for i=1, #tbl_icons do
+            iconsTable[i]:addEventListener( "touch", slideLeft )
+        end
+    elseif (btn.id == "btnMessage2")then
+        for i=messageGroup.numChildren,1,-1 do
+            local child = messageGroup[i]
+            child:removeSelf()
+        end
+    elseif (btn.id == "btnMessage3")then
+        for i=messageGroup.numChildren,1,-1 do
+            local child = messageGroup[i]
+            child:removeSelf()
+        end
+        setOcassion(tbl_params)
+        resetAllObjectsTables()
+        loadObjectsTables(tbl_params)
+        resetCharacter()
+        gamePoints = 0
+        secondsText = 59
+        timerText.isVisible = true
+        gameTimer = timer.performWithDelay(1000, updateTimer, 0)
+        btnSubmit.isVisible = true
         for i=1, #tbl_icons do
             iconsTable[i]:addEventListener( "touch", slideLeft )
         end
     end
 end
 
--- Called when the scene's view does not exist:
-function scene:createScene( event )
-    local params = event.params
-    local group = self.view
-    characterGroup = display.newGroup()
-
-    if (params.pCharacter == 1) then
-        duo.char1 = duo.char1 + 1
-        if (duo.char1 > 5) then
-            duo.char1 = 2
-        end
-        duo_idx = duo.char1
-    else
-        duo.char2 = duo.char2 + 1
-        if (duo.char2 > 4) then
-            duo.char2 = 1
-        end
-        duo_idx = duo.char2
-    end
-    
-    local background = display.newImage(tbl_occasions[duo_idx].fullImage)
-    
-    local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage, 280, 350)
-    character.x = _W*.50; character.y = _H*.63
-    characterGroup:insert(character)
-    
-    obj1 = display.newText(tbl_characters[params.pCharacter].name, 0, 0, "Zapfino Linotype One", 40)
-    obj1:setTextColor(255)
-    obj1.x = _W*.5; obj1.y = _H*.08
-    
-    btnBack = display.newRoundedRect( 0, 0, 75, 30, 5 )
-    btnBack:setReferencePoint(display.CenterReferencePoint)
-    btnBack.x = _W*.15; btnBack.y = _H*.95
-    
-    btnBackText = display.newText(tbl_labels[lg_index].btn1, 0, 0, native.systemFontBold, 16)
-    btnBackText:setReferencePoint(display.CenterReferencePoint)
-    btnBackText.x = _W*.15; btnBackText.y = _H*.95
-    btnBackText:setTextColor (0, 0, 0)
-    
-    btnBack:addEventListener("touch", btnBackTouch)
-    
-    btnSubmit = display.newRoundedRect( 0, 0, 75, 30, 5 )
-    btnSubmit:setReferencePoint(display.CenterReferencePoint)
-    btnSubmit.x = _W*.85; btnSubmit.y = _H*.95
-    btnSubmit.isVisible = false
-    
-    btnSubmitText = display.newText(tbl_labels[lg_index].btn2, 0, 0, native.systemFontBold, 16)
-    btnSubmitText:setReferencePoint(display.CenterReferencePoint)
-    btnSubmitText.x = _W*.85; btnSubmitText.y = _H*.95
-    btnSubmitText:setTextColor (0, 0, 0)
-    btnSubmitText.isVisible = false
-    
-    --btnSubmit:addEventListener("touch", btnSubmitTouch)
-    
-    timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
-    timerText:setTextColor(255)
-    timerText.x = 30; timerText.y = 20
-    timerText.isVisible = false
-    
-    -- create overlay scence to control objects selection
-    overlayGroup = display.newGroup()
-    
-    local bgOverlay = display.newRoundedRect(275, 30, 120, 390, 10)
-    bgOverlay:setFillColor(0,0,0)
-    bgOverlay.alpha = .50
-    overlayGroup:insert(bgOverlay)
-
+function loadObjectsTables(event)
     for i=1, #tbl_icons do
         iconsTable[i] = display.newImageRect(tbl_icons[i].icon, tbl_icons[i].iconW, tbl_icons[i].iconH)
         iconsTable[i].x = tbl_icons[i].iconX; iconsTable[i].y = tbl_icons[i].iconY
         iconsTable[i].name = tbl_icons[i].name
         overlayGroup:insert(iconsTable[i])
-        --iconsTable[i]:addEventListener( "touch", slideLeft )
     end
     
     for i=1, #tbl_shirts do
         if (i > 1) then
             if (tbl_shirts[i].character == tbl_occasions[duo_idx].character or 
-                (tbl_shirts[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                (tbl_shirts[i].character == event.pCharacter and tbl_occasions[duo_idx].character == 0)) then
                 if (tbl_shirts[i].occasion == tbl_occasions[duo_idx].occasion) then
                     shirtsTable[#shirtsTable+1] = display.newImageRect(tbl_shirts[i].smallImage, tbl_shirts[i].smallImageW, tbl_shirts[i].smallImageH)
                     shirtsTable[#shirtsTable].x = tbl_shirts[i].smallImageX; shirtsTable[#shirtsTable].y = tbl_shirts[i].smallImageY
@@ -615,7 +614,7 @@ function scene:createScene( event )
     for i=1, #tbl_pants do
         if (i > 1) then
             if (tbl_pants[i].character == tbl_occasions[duo_idx].character or 
-                (tbl_pants[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                (tbl_pants[i].character == event.pCharacter and tbl_occasions[duo_idx].character == 0)) then
                 if (tbl_pants[i].occasion == tbl_occasions[duo_idx].occasion) then
                     pantsTable[#pantsTable+1] = display.newImageRect(tbl_pants[i].smallImage, tbl_pants[i].smallImageW, tbl_pants[i].smallImageH)
                     pantsTable[#pantsTable].x = tbl_pants[i].smallImageX; pantsTable[#pantsTable].y = tbl_pants[i].smallImageY
@@ -638,7 +637,7 @@ function scene:createScene( event )
     for i=1, #tbl_accs do
         if (i > 1) then
             if (tbl_accs[i].character == tbl_occasions[duo_idx].character or 
-                (tbl_accs[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                (tbl_accs[i].character == event.pCharacter and tbl_occasions[duo_idx].character == 0)) then
                 if (tbl_accs[i].occasion == tbl_occasions[duo_idx].occasion) then
                     accsTable[#accsTable+1] = display.newImageRect(tbl_accs[i].smallImage, tbl_accs[i].smallImageW, tbl_accs[i].smallImageH)
                     accsTable[#accsTable].x = tbl_accs[i].smallImageX; accsTable[#accsTable].y = tbl_accs[i].smallImageY
@@ -661,7 +660,7 @@ function scene:createScene( event )
     for i=1, #tbl_hair do
         if (i > 1) then
             if (tbl_hair[i].character == tbl_occasions[duo_idx].character or 
-                (tbl_hair[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                (tbl_hair[i].character == event.pCharacter and tbl_occasions[duo_idx].character == 0)) then
                 if (tbl_hair[i].occasion == tbl_occasions[duo_idx].occasion) then
                     hairTable[#hairTable+1] = display.newImageRect(tbl_hair[i].smallImage, tbl_hair[i].smallImageW, tbl_hair[i].smallImageH)
                     hairTable[#hairTable].x = tbl_hair[i].smallImageX; hairTable[#hairTable].y = tbl_hair[i].smallImageY
@@ -684,7 +683,7 @@ function scene:createScene( event )
     for i=1, #tbl_shoes do
         if (i > 1) then
             if (tbl_shoes[i].character == tbl_occasions[duo_idx].character or 
-                (tbl_shoes[i].character == params.pCharacter and tbl_occasions[duo_idx].character == 0)) then
+                (tbl_shoes[i].character == event.pCharacter and tbl_occasions[duo_idx].character == 0)) then
                 if (tbl_shoes[i].occasion == tbl_occasions[duo_idx].occasion) then
                     shoesTable[#shoesTable+1] = display.newImageRect(tbl_shoes[i].smallImage, tbl_shoes[i].smallImageW, tbl_shoes[i].smallImageH)
                     shoesTable[#shoesTable].x = tbl_shoes[i].smallImageX; shoesTable[#shoesTable].y = tbl_shoes[i].smallImageY
@@ -703,14 +702,95 @@ function scene:createScene( event )
             shoesTable[i]:addEventListener( "touch", ShoesTouch )
         end
     end
+end
+
+function setOcassion(event)
+    if (event.pCharacter == 1) then
+        duo.char1 = duo.char1 + 1
+        if (duo.char1 > 5) then
+            duo.char1 = 2
+        end
+        duo_idx = duo.char1
+    else
+        duo.char2 = duo.char2 + 1
+        if (duo.char2 > 4) then
+            duo.char2 = 1
+        end
+        duo_idx = duo.char2
+    end
+    
+    background = display.newImage(tbl_occasions[duo_idx].fullImage)
+    occasionGroup:insert(background)
+end
+
+-- Called when the scene's view does not exist:
+function scene:createScene( event )
+    local params = event.params
+    local group = self.view
+    
+    tbl_params = params
+    
+    occasionGroup = display.newGroup()
+    characterGroup = display.newGroup()
+    overlayGroup = display.newGroup() -- create overlay group to control objects selection
+    
+    setOcassion(tbl_params)
+    
+    local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage, 280, 350)
+    character.x = _W*.50; character.y = _H*.63
+    characterGroup:insert(character)
+    
+    obj1 = display.newText(tbl_characters[params.pCharacter].name, 0, 0, "Zapfino Linotype One", 40)
+    obj1:setTextColor(255)
+    obj1.x = _W*.5; obj1.y = _H*.08
+
+    btnBack = widget.newButton{
+        id = "btnBack",
+        label = tbl_labels[lg_index].btn1,
+        font = "HelveticaNeue-Bold",
+        width = 75, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnBack.x = _W*.15
+    btnBack.y = _H*.95
+    
+    btnSubmit = widget.newButton{
+        id = "btnSubmit",
+        label = tbl_labels[lg_index].btn2,
+        font = "HelveticaNeue-Bold",
+        width = 75, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnSubmit.x = _W*.85
+    btnSubmit.y = _H*.95
+    btnSubmit.isVisible = false
+    
+    timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
+    timerText:setTextColor(255)
+    timerText.x = 30; timerText.y = 20
+    timerText.isVisible = false
+    
+    local bgOverlay = display.newRoundedRect(275, 30, 120, 390, 10)
+    bgOverlay:setFillColor(0,0,0)
+    bgOverlay.alpha = .50
+    overlayGroup:insert(bgOverlay)
 
     forwardArrow = display.newImageRect("assets/images/backArrow.png", 50, 50)
     forwardArrow.x = 298; forwardArrow.y = 55
     forwardArrow:rotate(180)
     forwardArrow.isVisible = false
     overlayGroup:insert(forwardArrow)
-    --forwardArrow:addEventListener( "touch", slideRight )
     forwardArrow:addEventListener( "tap", slideRight )
+    
+    loadObjectsTables(tbl_params)
     
     -----------------------------------------------------------------------------
     
@@ -719,15 +799,13 @@ function scene:createScene( event )
     
     -----------------------------------------------------------------------------
     
-    group:insert(background)
+    group:insert(occasionGroup)
     group:insert(characterGroup)
     group:insert(overlayGroup)
     group:insert(obj1)
     group:insert(timerText)
     group:insert(btnBack)
-    group:insert(btnBackText)
     group:insert(btnSubmit)
-    group:insert(btnSubmitText)
 end
 
 
@@ -758,18 +836,20 @@ function scene:enterScene( event )
     messageText.x = _W*.50; messageText.y = _H*.33
     messageGroup:insert(messageText)
     
-    messageButton = display.newRoundedRect( 0, 0, 100, 40, 10 )
-    messageButton:setReferencePoint(display.CenterReferencePoint)
-    messageButton.x = _W*.50; messageButton.y = _H*.47
-    messageGroup:insert(messageButton)
-    
-    local messageButtonText = display.newText(tbl_labels[lg_index].btn3, 0, 0, native.systemFontBold, 20)
-    messageButtonText:setReferencePoint(display.CenterReferencePoint)
-    messageButtonText.x = _W*.50; messageButtonText.y = _H*.47
-    messageButtonText:setTextColor (0, 0, 0)
-    messageGroup:insert(messageButtonText)
-    
-    messageButton:addEventListener("touch", MessageButtonTouch)
+    btnMessage = widget.newButton{
+        id = "btnMessage",
+        label = tbl_labels[lg_index].btn3,
+        font = "HelveticaNeue-Bold",
+        width = 100, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnMessage.x = _W*.50
+    btnMessage.y = _H*.47
+    messageGroup:insert(btnMessage)
     -- end of the challenge message code
     
     -----------------------------------------------------------------------------
@@ -785,9 +865,6 @@ end
 -- Called when scene is about to move offscreen:
 function scene:exitScene( event )
     local group = self.view
-    
-    -- remove touch listener for btnBack
-    btnBack:removeEventListener( "touch", btnBackTouch )
     
     -- cancel game timer
     if (gameTimer) then
