@@ -533,17 +533,20 @@ local function onPhotoCapture(event)
         function hideFlash()
             transition.to(flashSC, {time=100, alpha=0})
             screenCap:removeSelf()
-            btnPhoto:removeSelf()
             screenCap = nil
-            btnPhoto = nil
             overlayGroup.isVisible = true
             timerText.isVisible = true
             btnBack.isVisible = true
+            btnPhoto.isVisible = true
+            if (timerText.text ~= "0:00") then
+                btnSubmit.isVisible = true
+            end
         end
         audio.play(photoSound)
         overlayGroup.isVisible = false
         timerText.isVisible = false
         btnBack.isVisible = false
+        btnSubmit.isVisible = false
         btnPhoto.isVisible = false
         screenCap = display.captureScreen(true)
 
@@ -582,6 +585,7 @@ function onButtonRelease(event)
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
         btnSubmit.isVisible = true
+        btnPhoto.isVisible = true
         for i=1, #tbl_icons do
             iconsTable[i]:addEventListener( "touch", slideLeft )
         end
@@ -590,9 +594,6 @@ function onButtonRelease(event)
             local child = messageGroup[i]
             child:removeSelf()
         end
-        btnPhoto = display.newImageRect("assets/images/camera.png", 50, 44)
-        btnPhoto.x = _W*.85; btnPhoto.y = _H*.95
-        btnPhoto:addEventListener("touch", onPhotoCapture)
     elseif (btn.id == "btnMessage3")then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
@@ -811,6 +812,11 @@ function scene:createScene( event )
     timerText.x = 30; timerText.y = 20
     timerText.isVisible = false
     
+    btnPhoto = display.newImageRect("assets/images/camera.png", 50, 44)
+    btnPhoto.x = 35; btnPhoto.y = 70
+    btnPhoto.isVisible = false
+    btnPhoto:addEventListener("touch", onPhotoCapture)
+    
     local bgOverlay = display.newRoundedRect(275, 30, 120, 390, 10)
     bgOverlay:setFillColor(0,0,0)
     bgOverlay.alpha = .50
@@ -839,6 +845,7 @@ function scene:createScene( event )
     group:insert(timerText)
     group:insert(btnBack)
     group:insert(btnSubmit)
+    group:insert(btnPhoto)
 end
 
 
