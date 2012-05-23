@@ -72,8 +72,8 @@ local tbl_occasions = {
 }
 
 local tbl_characters = {
-    {name="Karla",    fullImage="assets/images/dressup/k_plain.png", character=1},
-    {name="Guillermo", fullImage="assets/images/dressup/g_plain.png", character=2}
+    {name="Karla",     fullImage="assets/images/dressup/k_plain.png", character=1, fullImageW=280, fullImageH=350},
+    {name="Guillermo", fullImage="assets/images/dressup/g_plain.png", character=2, fullImageW=295, fullImageH=360}
 }
 
 local tbl_shirts = {
@@ -542,7 +542,6 @@ local function onPhotoCapture(event)
                 btnSubmit.isVisible = true
             end
         end
-        audio.play(photoSound)
         overlayGroup.isVisible = false
         timerText.isVisible = false
         btnBack.isVisible = false
@@ -554,6 +553,7 @@ local function onPhotoCapture(event)
         flashSC:setFillColor(255)
         flashSC.alpha = 0.0
         transition.to(flashSC, {time=200, alpha=1, onComplete=hideFlash})
+        audio.play(photoSound)
     end
 end
 
@@ -770,8 +770,9 @@ function scene:createScene( event )
     
     setOcassion(tbl_params)
     
-    local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage, 280, 350)
-    character.x = _W*.50; character.y = _H*.63
+    local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage,
+        tbl_characters[params.pCharacter].fullImageW, tbl_characters[params.pCharacter].fullImageH)
+    character.x = _W*.50; character.y = _H*.60
     characterGroup:insert(character)
     
     obj1 = display.newText(tbl_characters[params.pCharacter].name, 0, 0, "Zapfino Linotype One", 40)
