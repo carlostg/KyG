@@ -250,7 +250,7 @@ function scene:createScene( event )
 --	fontSizeMax = 20,
 --	incrementSize = 2
 --    })
-    local btnGame3Txt = display.newText("Scrabble", 0, 0, "Zapfino Linotype One", 36)
+    local btnGame3Txt = display.newText("Words", 0, 0, "Zapfino Linotype One", 36)
     btnGame3Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y 
     btnGame3Txt:setTextColor(200,100,50)
