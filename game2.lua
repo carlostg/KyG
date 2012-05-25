@@ -34,11 +34,12 @@ local tbl_params = {}
 local background
 local gameTimer
 local duo_idx -- DressUp Occasion Index
+local timerText
 local secondsText = 59
 local gamePoints = 0
 local lg_index = 1
 local btnFont = native.systemFontBold
-local photoSound = audio.loadSound("assets/sounds/camera.wav");
+local photoSound = audio.loadSound("assets/sounds/camera.wav")
 
 local onButtonRelease, setOcassion, loadObjectsTables, scoreOverlay
 
