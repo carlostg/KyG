@@ -121,34 +121,75 @@ function scene:createScene(event)
         end
     end
     
-    --This function is called everytime you let go of a tile.
-    local function positionCheck( tile )
-        local inPosition = false
-        local positionInt = 1
-        
-        --First we check it its near a square we can place it on..
-        for i=1, #boardTile do
-            local xPos = boardTile[i].x - tile.x 
-            local yPos = boardTile[i].y - tile.y
+    -------------------------------------------
+    -- *** Setup the letter functions***
+    -------------------------------------------
+    --Pressed when you finish your go
+    local function submitPressed( event )
+        if event.phase == "ended" then
+            print("---------- Submitted a new go -------------")
             
-            --If its wihin 25 pixels of the board sqaure, we put it on it.
-            if xPos >= -25 and xPos <= 25 and yPos >= -25 and yPos <= 25 and boardTile[i].tileOn == false then
-                inPosition = true
-                positionInt = i
-                boardTile[i].tileOn = true 
-                boardTile[i].tileState = "new" 
-                boardTile[i].tileVal = tile.letter 
-                boardTile[i].tileId = tile.id 
-                tile.onTile = i
-                break;
+            --Keep track of amount of words found in each direction, aswell as score
+            local scoreToAdd = 0
+            local validGo = true
+            local skipGo = true
+            
+            --Our "send tile back" function used in the checks below...
+            local function sendTileBack( tileInt )
+                boardTile[tileInt].tileOn = false 
+                boardTile[tileInt].tileState = "none" 
+                playerLetters[boardTile[tileInt].tileId].onTile = 0
+                local trans = transition.to(playerLetters[boardTile[tileInt].tileId], {time=200, x= playerLetters[boardTile[tileInt].tileId].originalX, y=_H-26 })
             end
-        end
-        
-        --If it matches a square, we pace it, if not reset it.
-        if inPosition == true then
-            local trans = transition.to(tile, {time=200, x= boardTile[positionInt].x, y = boardTile[positionInt].y})
-        else
-            local trans = transition.to(tile, {time=200, x= tile.originalX, y = tile.originalY})
+            
+            --Then we can check to see if a tile was placed, if it wasnt we skip.
+            for i=1,#boardTile do
+                if boardTile[i].tileState == "new" then
+                    if i > 2 then --If more than 3 letters placed
+                        skipGo = false
+                        break;
+                    end
+                end
+            end
+            
+            --If skip is false we check the words!
+            --We need to loop through the board to see where the tiles are...
+            if skipGo == false then
+                local word = ""
+                local score = 0
+                --So we check out our boardTile array...
+                for i=1, #boardTile do
+                    if boardTile[i].tileState == "new" then
+                        word  = word .. letters[boardTile[i].tileVal]
+                        score = score + letterVals[boardTile[i].tileVal]
+                        if wordList[word] then 
+                            print(word, score)
+                            scoreToAdd = scoreToAdd + score
+                            validGo = true
+                        elseif word ~= "" then
+                            print("Invalid word in a ROW, setting validGo to false", word)
+                            validGo = false
+                        end
+                    else
+                        break;
+                    end
+                end
+            end
+            
+            --If it isnt a valid go we show an alert...
+            if validGo == false then
+                local alert = native.showAlert("Alert","Incorrect word or placement, please try again.",{"OK"})
+                clearPressed(event)
+                --if it is tell them
+            else
+                local function newGo()	
+                    updateScore("player1", scoreToAdd)
+                    local alert = native.showAlert("Well done!","You found a word worth "..scoreToAdd.." points! Now its the next players go...",{"OK"})
+                    clearPressed(event)
+                end
+                --We delay it so that the transitions that may occuer above can finish.
+                local timer = timer.performWithDelay(250,newGo,1)
+            end
         end
     end
     
@@ -169,10 +210,7 @@ function scene:createScene(event)
             end
             
         elseif t.isFocus then
-            if event.phase == "moved" then
-                --t.x = event.x
-                --t.y = event.y
-            elseif event.phase == "ended" or event.phase == "cancelled" then
+            if event.phase == "ended" or event.phase == "cancelled" then
                 display.getCurrentStage():setFocus( nil )
                 t.isFocus = nil
                 
@@ -249,7 +287,7 @@ function scene:createScene(event)
     setupPlayerLetters()
     
     --The clear button resets the position of your tiles
-    local function clearPressed( event )
+    function clearPressed( event )
         if event.phase == "ended" then
             --Reset positions and vars for player letters
             for i=1, #playerLetters do
@@ -269,7 +307,13 @@ function scene:createScene(event)
     clearBtn.x = 60; clearBtn.y = _H-123
     clearBtn:addEventListener("touch", clearPressed)
     mainGroup:insert(clearBtn)
-
+    
+    --The submit, clear and end buttons
+    local submitBtn = display.newRect(0,0,120,26)
+    submitBtn.alpha = 0.01
+    submitBtn.x = _W-60; submitBtn.y = _H-123
+    submitBtn:addEventListener("touch", submitPressed)
+    mainGroup:insert(submitBtn)
     
     -----------------------------------------------------------------------------
     
