@@ -39,9 +39,10 @@ local p1Score = 0
 local secs, count = 120, 121
 local secondsText = 0
 local minutesText = 0
-local lg_index = 2
+--local lg_index = 2
 local timerText
 local wordsGroup
+local path
 
 
 
@@ -173,9 +174,12 @@ function scene:createScene(event)
 
         -------------------------------------------
         -- *** Create the dictionary list ***
-        -- Thanks to peach for this handy code snippet.
         -------------------------------------------
-        local path = system.pathForFile("assets/misc/words_KG_eng.txt")
+        if lg_index == 1 then
+            path = system.pathForFile("assets/misc/words_KG_eng.txt")
+        else
+            path = system.pathForFile("assets/misc/words_KG_esp.txt")
+        end
         local file = io.open(path, "r")
         if file then
             for line in file:lines() do
@@ -282,7 +286,7 @@ function scene:createScene(event)
                     child:removeSelf()
                 end
             end
-            for key,value in pairs(savedWords) do
+            for key,value in TableSorter.orderedPairs(savedWords) do
                 local dWord = display.newText(key, 0, 0, "Helvetica", 17)
                 dWord:setReferencePoint(display.CenterLeftReferencePoint)
                 dWord:setTextColor(0)

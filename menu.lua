@@ -23,8 +23,8 @@ physics.start()
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
 -- local variables
-local Ox = _W*0.25
-local Oy = _H*0.85
+local Ox = _W*0.35
+local Oy = _H*0.80
 local angle = .1
 local angleStep = .025
 local length_x = 43
@@ -34,6 +34,19 @@ local stars = {}
 local selectedCharacter = 1
 local background
 local btnGame1, btnGame2, btnGame3, btnGame4
+
+local tbl_labels = {
+    {title1="",
+     btn1="Trivia",
+     btn2="DressUp",
+     btn3="Words",
+     btn4="TheRing"},
+    {title1="",
+     btn1="Trivia",
+     btn2="Vísteme",
+     btn3="Palabras",
+     btn4="El Anillo"}
+}
 
 -- physics to make stars chase the character
 local function ChaseCharacter(objCharacter,objStar)
@@ -136,6 +149,14 @@ local function btnGameTouch(event)
             params = { var1="custom", var2="another" }
             }
             storyboard.gotoScene( "game4", options )
+        elseif (t.name == "btnConfig") then
+            local options =
+            {
+            effect = "flipFadeOutIn",
+            time = 300,
+            params = { var1="custom", var2="another" }
+            }
+            storyboard.gotoScene( "setup", options )
         end
     end
 end
@@ -159,7 +180,8 @@ function scene:createScene( event )
     -- create character objects
     for i=1, 2, 1 do
         characters[i] = display.newImageRect("assets/images/character_"..i..".png", 70, 70)
-        characters[i].x = Ox + ((Ox*i)*(i-1)) ; characters[i].y = Oy
+        --characters[i].x = Ox + ((Ox*i)*(i-1)) ; characters[i].y = Oy
+        characters[i].x = Ox + ((_W*0.15*i)*(i-1)) ; characters[i].y = Oy
         characters[i].id = i
         characters[i]:addEventListener( "touch",ActivateCharacter )
         charactersGroup:insert(characters[i])
@@ -186,9 +208,9 @@ function scene:createScene( event )
     CreateStars(characters[selectedCharacter])
     
     -- create game menu buttons
-    local btnGame1 = display.newCircle( _W*.30, _H*.30, 50 )
+    local btnGame1 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
+    btnGame1.x = _W*.30; btnGame1.y = _H*.30
     btnGame1.name = "btnGame1"
-    btnGame1:setFillColor(200,100,50)
     btnGame1.alpha = .30
     btnGame1:addEventListener("touch", btnGameTouch)
     
@@ -204,14 +226,14 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame1Txt = display.newText("Trivia", 0, 0, "Zapfino Linotype One", 36)
+    local btnGame1Txt = display.newText(tbl_labels[lg_index].btn1, 0, 0, "Zapfino Linotype One", 36)
     btnGame1Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame1Txt.x = btnGame1.x; btnGame1Txt.y = btnGame1.y
     btnGame1Txt:setTextColor(200,100,50)
     
-    local btnGame2 = display.newCircle( _W*.70, _H*.30, 50 )
+    local btnGame2 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
+    btnGame2.x = _W*.70; btnGame2.y = _H*.30
     btnGame2.name = "btnGame2"
-    btnGame2:setFillColor(200,100,50)
     btnGame2.alpha = .30
     btnGame2:addEventListener("touch", btnGameTouch)
     
@@ -227,14 +249,14 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame2Txt = display.newText("DressUp", 0, 0, "Zapfino Linotype One", 36)
+    local btnGame2Txt = display.newText(tbl_labels[lg_index].btn2, 0, 0, "Zapfino Linotype One", 36)
     btnGame2Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame2Txt.x = btnGame2.x; btnGame2Txt.y = btnGame2.y 
     btnGame2Txt:setTextColor(200,100,50)
     
-    local btnGame3 = display.newCircle( _W*.30, _H*.55, 50 )
+    local btnGame3 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
+    btnGame3.x = _W*.30; btnGame3.y = _H*.55
     btnGame3.name = "btnGame3"
-    btnGame3:setFillColor(200,100,50)
     btnGame3.alpha = .30
     btnGame3:addEventListener("touch", btnGameTouch)
     
@@ -250,14 +272,14 @@ function scene:createScene( event )
 --	fontSizeMax = 20,
 --	incrementSize = 2
 --    })
-    local btnGame3Txt = display.newText("Words", 0, 0, "Zapfino Linotype One", 36)
+    local btnGame3Txt = display.newText(tbl_labels[lg_index].btn3, 0, 0, "Zapfino Linotype One", 36)
     btnGame3Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y 
     btnGame3Txt:setTextColor(200,100,50)
     
-    local btnGame4 = display.newCircle( _W*.70, _H*.55, 50 )
+    local btnGame4 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
+    btnGame4.x = _W*.70; btnGame4.y = _H*.55
     btnGame4.name = "btnGame4"
-    btnGame4:setFillColor(200,100,50)
     btnGame4.alpha = .30
     btnGame4:addEventListener("touch", btnGameTouch)
     
@@ -273,10 +295,24 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame4Txt = display.newText("Shooter", 0, 0, "Zapfino Linotype One", 36)
+    local btnGame4Txt = display.newText(tbl_labels[lg_index].btn4, 0, 0, "Zapfino Linotype One", 36)
     btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
     btnGame4Txt:setTextColor(200,100,50)
+    
+    local btnConfig = display.newImageRect("assets/images/settings.png", 35, 35)
+    btnConfig.x = _W*.91; btnConfig.y = _H*.94
+    btnConfig.name = "btnConfig"
+    btnConfig:addEventListener("touch", btnGameTouch)
+    
+--    -- create overlay scence to control objects selection
+--    local options_overlay =
+--    {
+--    effect = "slideLeft",
+--    time = 300,
+--    params = { var1 = "custom", var2 = "another" }
+--    }
+--    storyboard.showOverlay( "menu_overlay", options_overlay )
     
     -----------------------------------------------------------------------------
     
@@ -295,8 +331,20 @@ function scene:createScene( event )
     group:insert(btnGame3Txt)
     group:insert(btnGame4)
     group:insert(btnGame4Txt)
+    group:insert(btnConfig)
     group:insert(charactersGroup)
     group:insert(starsGroup)
+    local function onComplete(event)
+        local i = event.index
+        if 1 == i then
+            lg_index = 1 --English language selected
+        elseif 2 == i then
+            lg_index = 2 --Spanish language selected
+        end
+    end
+    if lg_index == 0 then
+        alert = native.showAlert("Language / Idioma"," ",{"English", "Español"}, onComplete)
+    end
 end
 
 
@@ -307,6 +355,7 @@ function scene:enterScene( event )
     storyboard.removeScene("game2")
     storyboard.removeScene("game3")
     storyboard.removeScene("game4")
+    storyboard.removeScene("setup")
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)

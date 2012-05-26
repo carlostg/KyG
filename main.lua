@@ -7,6 +7,7 @@ display.setStatusBar( display.HiddenStatusBar )
 
 local storyboard = require "storyboard"
 Wrapper = require("wrapper")
+TableSorter = require( "TableSorter" )
 
 --  global variables
 _H = display.contentHeight
@@ -15,6 +16,7 @@ _MR = math.random
 duo= {} -- DressUp Occasion Index
 duo.char1 = 1 -- for Character 1 (Karla)
 duo.char2 = 0 -- for Character 2 (Guillermo)
+lg_index = 1  -- for laguage control (1=English, 2=Español)
 
 -- load menu.lua
 storyboard.gotoScene("menu")
