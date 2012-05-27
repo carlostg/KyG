@@ -16,7 +16,8 @@ _MR = math.random
 duo= {} -- DressUp Occasion Index
 duo.char1 = 1 -- for Character 1 (Karla)
 duo.char2 = 0 -- for Character 2 (Guillermo)
-lg_index = 1  -- for laguage control (1=English, 2=Español)
+lg_index  = 1 -- for laguage control (1=English, 2=Español)
+tbl_index = 1 -- for Table number definition
 
 -- load menu.lua
 storyboard.gotoScene("menu")

@@ -35,11 +35,14 @@ local background
 local gameTimer
 local duo_idx -- DressUp Occasion Index
 local timerText
-local secondsText = 59
+local secs, count = 120, 121
+local secondsText = 0
+local minutesText = 0
 local gamePoints = 0
 --local lg_index = 1
 local btnFont = native.systemFontBold
 local photoSound = audio.loadSound("assets/sounds/camera.wav")
+local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.m4a")
 
 local onButtonRelease, setOcassion, loadObjectsTables, scoreOverlay
 
@@ -79,6 +82,24 @@ local tbl_characters = {
 
 local tbl_shirts = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_work_shirt1_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=42,
+     fullImage="assets/images/dressup/k_work_shirt1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=1},
+    {smallImage="assets/images/dressup/k_work_shirt2_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=70,
+     fullImage="assets/images/dressup/k_work_shirt2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=2},
+    {smallImage="assets/images/dressup/k_work_shirt3_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/k_work_shirt3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=3},
+    {smallImage="assets/images/dressup/k_beach_top_bodyshirt_small.png", smallImageX=330, smallImageY=125, smallImageW=61, smallImageH=65,
+     fullImage="assets/images/dressup/k_beach_top_bodyshirt.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=1},
+    {smallImage="assets/images/dressup/k_beach_top_greenset_small.png", smallImageX=330, smallImageY=215, smallImageW=54, smallImageH=55,
+     fullImage="assets/images/dressup/k_beach_top_greenset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=2},
+    {smallImage="assets/images/dressup/k_beach_top_polkaset_small.png", smallImageX=330, smallImageY=305, smallImageW=60, smallImageH=30,
+     fullImage="assets/images/dressup/k_beach_top_polkaset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=3},
     {smallImage="assets/images/dressup/k_shirt_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_pink.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=3, value=1},
@@ -88,19 +109,25 @@ local tbl_shirts = {
     {smallImage="assets/images/dressup/k_shirt_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=75,
      fullImage="assets/images/dressup/k_shirt_green.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=3, value=3},
-    {smallImage="assets/images/dressup/k_beach_top_bodyshirt_small.png", smallImageX=330, smallImageY=125, smallImageW=61, smallImageH=65,
-     fullImage="assets/images/dressup/k_beach_top_bodyshirt.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
-    {smallImage="assets/images/dressup/k_beach_top_greenset_small.png", smallImageX=330, smallImageY=215, smallImageW=54, smallImageH=55,
-     fullImage="assets/images/dressup/k_beach_top_greenset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
-    {smallImage="assets/images/dressup/k_beach_top_polkaset_small.png", smallImageX=330, smallImageY=305, smallImageW=60, smallImageH=30,
-     fullImage="assets/images/dressup/k_beach_top_polkaset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3}
+    {smallImage="assets/images/dressup/k_formal_dress1_small.png", smallImageX=330, smallImageY=135, smallImageW=62, smallImageH=120,
+     fullImage="assets/images/dressup/k_formal_dress1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=4, value=1},
+    {smallImage="assets/images/dressup/k_formal_dress2_small.png", smallImageX=330, smallImageY=265, smallImageW=64, smallImageH=110,
+     fullImage="assets/images/dressup/k_formal_dress2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=4, value=1}
 }
 
 local tbl_pants = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_beach_bottom_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/k_beach_bottom_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=1},
+    {smallImage="assets/images/dressup/k_beach_bottom_polka_small.png", smallImageX=330, smallImageY=200, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/k_beach_bottom_polka.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=2},
+    {smallImage="assets/images/dressup/k_beach_bottom_purpleset_small.png", smallImageX=330, smallImageY=290, smallImageW=70, smallImageH=116,
+     fullImage="assets/images/dressup/k_beach_bottom_purpleset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=3},
     {smallImage="assets/images/dressup/k_bermudas_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=3, value=1},
@@ -110,28 +137,16 @@ local tbl_pants = {
     {smallImage="assets/images/dressup/k_bermudas_red_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=77,
      fullImage="assets/images/dressup/k_bermudas_red.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=3, value=3},
-    {smallImage="assets/images/dressup/k_beach_bottom_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=53,
-     fullImage="assets/images/dressup/k_beach_bottom_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
-    {smallImage="assets/images/dressup/k_beach_bottom_polka_small.png", smallImageX=330, smallImageY=200, smallImageW=70, smallImageH=53,
-     fullImage="assets/images/dressup/k_beach_bottom_polka.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
-    {smallImage="assets/images/dressup/k_beach_bottom_purpleset_small.png", smallImageX=330, smallImageY=290, smallImageW=70, smallImageH=116,
-     fullImage="assets/images/dressup/k_beach_bottom_purpleset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3}
+    {smallImage="assets/images/dressup/k_work_pants1_small.png", smallImageX=330, smallImageY=125, smallImageW=50, smallImageH=81,
+     fullImage="assets/images/dressup/k_work_pants1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=2},
+    {smallImage="assets/images/dressup/k_work_pants2_small.png", smallImageX=330, smallImageY=216, smallImageW=49, smallImageH=70,
+     fullImage="assets/images/dressup/k_work_pants2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=3}
 }
 
 local tbl_accs = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="assets/images/dressup/k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
-     fullImage="assets/images/dressup/k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=1},
-    {smallImage="assets/images/dressup/k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
-     fullImage="assets/images/dressup/k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=2},
-    {smallImage="assets/images/dressup/k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
-     fullImage="assets/images/dressup/k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=3},
     {smallImage="assets/images/dressup/k_beach_acc_jeanshorts_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_beach_acc_jeanshorts.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=1},
@@ -140,11 +155,29 @@ local tbl_accs = {
      character=1, occasion=2, value=2},
     {smallImage="assets/images/dressup/k_beach_acc_skirt_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_beach_acc_skirt.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3}
+     character=1, occasion=2, value=3},
+    {smallImage="assets/images/dressup/k_socks_white_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_socks_white.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=1},
+    {smallImage="assets/images/dressup/k_socks_blue_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_socks_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=2},
+    {smallImage="assets/images/dressup/k_socks_green_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_socks_green.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=3}
 }
 
 local tbl_hair = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=1},
+    {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=2},
+    {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=3},
     {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=1},
@@ -162,20 +195,20 @@ local tbl_hair = {
      character=1, occasion=3, value=2},
     {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=3}
+     character=1, occasion=3, value=3},
+    {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=4, value=1},
+    {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=4, value=2},
+    {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
+     fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=4, value=3}
 }
 
 local tbl_shoes = {
     {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="assets/images/dressup/k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
-     fullImage="assets/images/dressup/k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=1},
-    {smallImage="assets/images/dressup/k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
-     fullImage="assets/images/dressup/k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=2},
-    {smallImage="assets/images/dressup/k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
-     fullImage="assets/images/dressup/k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=3},
     {smallImage="assets/images/dressup/k_beach_shoes_krogs_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_beach_shoes_krogs.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
      character=1, occasion=2, value=1},
@@ -184,7 +217,16 @@ local tbl_shoes = {
      character=1, occasion=2, value=2},
     {smallImage="assets/images/dressup/k_beach_shoes_sandals_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_beach_shoes_sandals.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3}
+     character=1, occasion=2, value=3},
+    {smallImage="assets/images/dressup/k_snickers_pink_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_snickers_pink.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=1},
+    {smallImage="assets/images/dressup/k_snickers_green_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_snickers_green.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=2},
+    {smallImage="assets/images/dressup/k_snickers_blue_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_snickers_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=3}
 }
 
 local tbl_icons = {
@@ -457,11 +499,24 @@ local function ShoesTouch(event)
 end
 
 local function updateTimer(event)
-    secondsText = secondsText - 1
-    if (secondsText < 10) then
-        secondsText = "0"..secondsText
+    local remainder = secs % 60
+    if remainder == 0 then
+        minutesText = secs / 60
+        secondsText = 0
+    else
+        minutesText = (secs-remainder) / 60
+        secondsText = remainder
     end
-    if (event.count == 59) then
+    
+    secs = secs - 1
+    
+    if secondsText < 10 then
+        secondsText = "0" ..secondsText
+    end
+    
+    timerText.text = minutesText .. ":" ..secondsText
+    
+    if (event.count == count) then
         timer.cancel(gameTimer)
         
         if (forwardArrow.isVisible) then
@@ -473,7 +528,7 @@ local function updateTimer(event)
         btnSubmit.isVisible = false
         scoreOverlay()
     end
-    timerText.text = "0:"..secondsText
+    
 end
 
 function scoreOverlay(event)
@@ -492,7 +547,7 @@ function scoreOverlay(event)
     messageText.x = _W*.50; messageText.y = _H*.33
 
     btnMessage2 = widget.newButton{
-        id = "btnMessage2",
+        id = "btnMessage_Stop",
         label = tbl_labels[lg_index].btn3,
         font = btnFont,
         width = 90, height = 30,
@@ -506,7 +561,7 @@ function scoreOverlay(event)
     btnMessage2.y = _H*.47
 
     btnMessage3 = widget.newButton{
-        id = "btnMessage3",
+        id = "btnMessage_Next",
         label = tbl_labels[lg_index].btn4,
         font = btnFont,
         width = 90, height = 30,
@@ -578,7 +633,7 @@ function onButtonRelease(event)
         timer.cancel(gameTimer)
         btnSubmit.isVisible = false
         scoreOverlay()
-    elseif (btn.id == "btnMessage") then
+    elseif (btn.id == "btnMessage_Ok") then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
             child:removeSelf()
@@ -590,12 +645,15 @@ function onButtonRelease(event)
         for i=1, #tbl_icons do
             iconsTable[i]:addEventListener( "touch", slideLeft )
         end
-    elseif (btn.id == "btnMessage2")then
+        --Backgroud music
+        audio.setVolume(0.25, {channel=5})
+        audio.play(bgMusic, {channel=5, loops=-1})
+    elseif (btn.id == "btnMessage_Stop")then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
             child:removeSelf()
         end
-    elseif (btn.id == "btnMessage3")then
+    elseif (btn.id == "btnMessage_Next")then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
             child:removeSelf()
@@ -605,7 +663,8 @@ function onButtonRelease(event)
         loadObjectsTables(tbl_params)
         resetCharacter()
         gamePoints = 0
-        secondsText = 59
+        secondsText = 0
+        secs = 120
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
         btnSubmit.isVisible = true
@@ -809,7 +868,7 @@ function scene:createScene( event )
     btnSubmit.y = _H*.95
     btnSubmit.isVisible = false
     
-    timerText = display.newText("0:"..secondsText, 0, 0, systemFont, 20)
+    timerText = display.newText(minutesText..":0"..secondsText, 0, 0, systemFont, 20)
     timerText:setTextColor(255)
     timerText.x = 30; timerText.y = 20
     timerText.isVisible = false
@@ -879,7 +938,7 @@ function scene:enterScene( event )
     messageGroup:insert(messageText)
     
     btnMessage = widget.newButton{
-        id = "btnMessage",
+        id = "btnMessage_Ok",
         label = tbl_labels[lg_index].btn3,
         font = btnFont,
         width = 100, height = 30,
@@ -912,6 +971,7 @@ function scene:exitScene( event )
     if (gameTimer) then
         timer.cancel(gameTimer)
     end
+    audio.stop()
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

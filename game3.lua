@@ -23,6 +23,8 @@ local scene = storyboard.newScene()
 --Functions declaration
 local setupPlayerLetters, clearPressed, displaySavedWords, updateTimer, removeListenerPlayerLetters
 local tileClick = audio.loadSound("assets/sounds/tileClick.wav")
+local winSound = audio.loadSound("assets/sounds/wordWin.wav")
+local failSound = audio.loadSound("assets/sounds/wordError.aiff")
 local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.m4a")
 -------------------------------------------
 -- *** Setup the variables and sprites we will use ***
@@ -36,7 +38,7 @@ local boardTile = {}
 local savedWords = {}
 local playerLetters = {}
 local p1Score = 0
-local secs, count = 120, 121
+local secs, count = 180, 181
 local secondsText = 0
 local minutesText = 0
 --local lg_index = 2
@@ -50,7 +52,7 @@ local tbl_labels = {
     {title1="Let's See!",
      title2="Time's Up!",
      title3="Alert",
-     text1 ="You have 2 minutes to find as many words and with the greatest possible value.",
+     text1 ="You have 3 minutes to find as many words and with the greatest possible value.",
      text2="You found ",
      text3=" words with a grand total of ",
      text4=" points, Try again!",
@@ -242,6 +244,8 @@ function scene:createScene(event)
                     --Checks if the word has already been entered
                     if not savedWords[word] then
                         if wordList[word] then 
+                            audio.setVolume(0.25, {channel=15})
+                            audio.play(winSound, {channel=15})
                             print(word, score)
                             scoreToAdd = scoreToAdd + score
                             validGo = true
@@ -265,6 +269,8 @@ function scene:createScene(event)
                     else
                         local alert = native.showAlert(tbl_labels[lg_index].title3,tbl_labels[lg_index].text6,{"OK"})
                     end
+                    audio.setVolume(0.75, {channel=10})
+                    audio.play(failSound, {channel=10})
                     clearPressed(event)
                 else
                     local function newGo()	

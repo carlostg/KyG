@@ -45,7 +45,7 @@ local tbl_labels = {
      btn1="Trivia",
      btn2="Vísteme",
      btn3="Palabras",
-     btn4="El Anillo"}
+     btn4="ElAnillo"}
 }
 
 -- physics to make stars chase the character
@@ -211,7 +211,7 @@ function scene:createScene( event )
     local btnGame1 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
     btnGame1.x = _W*.30; btnGame1.y = _H*.30
     btnGame1.name = "btnGame1"
-    btnGame1.alpha = .30
+    btnGame1.alpha = .50
     btnGame1:addEventListener("touch", btnGameTouch)
     
 --    local btnGame1Txt = Wrapper:newParagraph({
@@ -234,7 +234,7 @@ function scene:createScene( event )
     local btnGame2 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
     btnGame2.x = _W*.70; btnGame2.y = _H*.30
     btnGame2.name = "btnGame2"
-    btnGame2.alpha = .30
+    btnGame2.alpha = .50
     btnGame2:addEventListener("touch", btnGameTouch)
     
 --    local btnGame2Txt = Wrapper:newParagraph({
@@ -257,7 +257,7 @@ function scene:createScene( event )
     local btnGame3 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
     btnGame3.x = _W*.30; btnGame3.y = _H*.55
     btnGame3.name = "btnGame3"
-    btnGame3.alpha = .30
+    btnGame3.alpha = .50
     btnGame3:addEventListener("touch", btnGameTouch)
     
 --    local btnGame3Txt = Wrapper:newParagraph({
@@ -280,7 +280,7 @@ function scene:createScene( event )
     local btnGame4 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
     btnGame4.x = _W*.70; btnGame4.y = _H*.55
     btnGame4.name = "btnGame4"
-    btnGame4.alpha = .30
+    btnGame4.alpha = .50
     btnGame4:addEventListener("touch", btnGameTouch)
     
 --    local btnGame4Txt = Wrapper:newParagraph({
@@ -295,7 +295,7 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame4Txt = display.newText(tbl_labels[lg_index].btn4, 0, 0, "Zapfino Linotype One", 36)
+    local btnGame4Txt = display.newText(tbl_labels[lg_index].btn4, 0, 0, "Zapfino Linotype One", 30)
     btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
     btnGame4Txt:setTextColor(200,100,50)
