@@ -51,24 +51,32 @@ local path
 local tbl_labels = {
     {title1="Let's See!",
      title2="Time's Up!",
-     title3="Alert",
+     title3="Alert!",
      text1 ="You have 3 minutes to find as many words and with the greatest possible value.",
      text2="You found ",
      text3=" words with a grand total of ",
      text4=" points, Try again!",
      text5="Duplicate word, please try again.",
      text6="Incorrect word, please try again.",
-     text7="Score: "},
+     text7="Score: ",
+     text8="Do you really want to quit the game?",
+     btn1 ="YES",
+     btn2 ="NO"
+    },
     {title1="¡Vamos a Ver!",
      title2="¡Se Acabó el Tiempo!",
-     title3="Alerta",
-     text1 ="Tienes 2 minutos para encontrar la mayor cantidad de palabras con el mayor valor posible.",
+     title3="¡Alerta!",
+     text1 ="Tienes 3 minutos para encontrar la mayor cantidad de palabras con el mayor valor posible.",
      text2="Encontraste ",
      text3=" palabras con un gran total de ",
      text4=" puntos, ¡Intenta otra vez!",
      text5="Palabra duplicada, ¡Intenta otra vez!",
      text6="Palabra incorrecta, ¡Intenta otra vez!",
-     text7="Puntos: "}
+     text7="Puntos: ",
+     text8="¿Realmente quieres salir del juego?",
+     btn1 ="SÍ",
+     btn2 ="NO"
+    }
 }
 
 function trim2(s)
@@ -76,13 +84,23 @@ function trim2(s)
 end
 
 local function onButtonRelease(event)
-    local options =
-    {
-    effect = "flipFadeOutIn",
-    time = 300,
-    params = { var1 = "custom", var2 = "another" }
-    }
-    storyboard.gotoScene( "menu", options )
+    local function onCompleteAlert(event)
+        local i = event.index
+        if 1 == i then
+            local options =
+            {
+             effect = "flipFadeOutIn",
+             time = 300,
+             params = { var1 = "custom", var2 = "another" }
+            }
+            storyboard.gotoScene( "menu", options )
+        elseif 2 == i then
+            --do nothing
+        end
+    end
+    
+    alert = native.showAlert(tbl_labels[lg_index].title3, tbl_labels[lg_index].text8,
+            {tbl_labels[lg_index].btn1, tbl_labels[lg_index].btn2}, onCompleteAlert)
 end
 
 --Updates timer / gameover when time expires

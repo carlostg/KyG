@@ -1,4 +1,4 @@
-
+CiderRunMode = {};CiderRunMode.runmode = true;CiderRunMode.assertImage = true;require "CiderDebugger";
 --
 -- main.lua
 --
@@ -6,6 +6,7 @@
 display.setStatusBar( display.HiddenStatusBar )
 
 local storyboard = require "storyboard"
+widget = require "widget"
 Wrapper = require("wrapper")
 TableSorter = require( "TableSorter" )
 

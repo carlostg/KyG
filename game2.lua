@@ -5,7 +5,6 @@
 ----------------------------------------------------------------------------------
 
 local storyboard = require( "storyboard" )
-local widget = require "widget"
 local scene = storyboard.newScene()
 
 ----------------------------------------------------------------------------------
@@ -21,7 +20,7 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 local obj1, obj2
 local forwardArrow, overlayGroup, characterGroup, messageGroup, occasionGroup
-local btnBack, btnBackText, btnMessage, btnMessage2, btnMessage3, btnPhoto
+local btnBack, btnBackText, btnMessage, btnMessage2, btnMessage3, btnMessage4, btnMessage5, btnPhoto
 local st, en
 local iconsTable = {}
 local shirtsTable = {}
@@ -49,22 +48,32 @@ local onButtonRelease, setOcassion, loadObjectsTables, scoreOverlay
 local tbl_labels = {
     {title1="Challenge!",
      title2="Score",
-     text1 ="You have 1 minute to guess the outfit I would choose for this occasion.",
+     title3="Alert!",
+     text1 ="You have 2 minutes to guess the outfit I would choose for this occasion.",
      text2="You got ",
      text3=" points of a possible total score of 15.",
+     text4="Do you really want to quit the game?",
      btn1="Quit",
      btn2="Submit",
      btn3="Ok!",
-     btn4="Next"},
+     btn4="Next",
+     btn5="YES",
+     btn6="NO"
+    },
     {title1="¡Reto!",
      title2="Puntuación",
-     text1 ="Tienes 1 minuto para adivinar que conbinación de ropa, yo seleccionaría para esta ocasión.",
+     title4="¡Alerta!",
+     text1 ="Tienes 2 minutos para adivinar que conbinación de ropa, yo seleccionaría para esta ocasión.",
      text2="Tuvistes ",
      text3=" puntos de una posible puntuación total de 15.",
+     text4="¿Realmente quieres salir del juego?",
      btn1="Salir",
      btn2="Someter",
      btn3="¡Ok!",
-     btn4="Próxima"}
+     btn4="Próxima",
+     btn5="SÍ",
+     btn6="NO"
+    }
 }
 
 local tbl_occasions = {
@@ -298,6 +307,8 @@ local function slideRight(event)
             iconsTable[i].isVisible = true
         end
     end
+    btnSubmit.isVisible = true
+    btnBack.isVisible = true
     transition.to(overlayGroup, {time=250, x=(overlayGroup.x+60), onComplete=changeArrowListener})
 end
 
@@ -338,6 +349,8 @@ local function slideLeft(event)
                     end
                 end
             end
+            btnSubmit.isVisible = false
+            btnBack.isVisible = false
             transition.to(overlayGroup, {time=250, x=(overlayGroup.x-60), onComplete=changeArrowListener})
         end
     end
@@ -531,6 +544,56 @@ local function updateTimer(event)
     
 end
 
+function quitOverlay(event)
+    local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
+    messageOverlay:setFillColor(0, 0, 0)
+    messageOverlay.alpha = .75
+    messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
+    messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
+
+    local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
+    messageTitle:setReferencePoint(display.CenterReferencePoint)
+    messageTitle.x = _W*.50; messageTitle.y = _H*.20
+
+    local messageText = display.newText(tbl_labels[lg_index].text4, 0, 0, 200, 0, native.systemFont, 16)
+    messageText:setReferencePoint(display.CenterReferencePoint)
+    messageText.x = _W*.50; messageText.y = _H*.33
+
+    btnMessage4 = widget.newButton{
+        id = "btnMessage_YES",
+        label = tbl_labels[lg_index].btn5,
+        font = btnFont,
+        width = 90, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnMessage4.x = _W*.34
+    btnMessage4.y = _H*.47
+
+    btnMessage5 = widget.newButton{
+        id = "btnMessage_NO",
+        label = tbl_labels[lg_index].btn6,
+        font = btnFont,
+        width = 90, height = 30,
+        fontSize = 16,
+        yOffset = -2,
+        labelColor = { default={ 65 }, over={ 0 } },
+        emboss = true,
+        onRelease = onButtonRelease
+    }
+    btnMessage5.x = _W*.66
+    btnMessage5.y = _H*.47
+
+    messageGroup:insert(messageOverlay)
+    messageGroup:insert(messageTitle)
+    messageGroup:insert(messageText)
+    messageGroup:insert(btnMessage4)
+    messageGroup:insert(btnMessage5)
+end
+
 function scoreOverlay(event)
     local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
     messageOverlay:setFillColor(0, 0, 0)
@@ -616,6 +679,10 @@ end
 function onButtonRelease(event)
     local btn = event.target
     if (btn.id == "btnBack") then
+        btnBack.isVisible = false
+        btnSubmit.isVisible = false
+        quitOverlay()
+    elseif (btn.id == "btnMessage_YES") then
         local options =
             {
             effect = "flipFadeOutIn",
@@ -623,6 +690,15 @@ function onButtonRelease(event)
             params = {var1 = "", var2 = ""}
             }
         storyboard.gotoScene("menu", options)
+    elseif (btn.id == "btnMessage_NO") then
+        for i=messageGroup.numChildren,1,-1 do
+            local child = messageGroup[i]
+            child:removeSelf()
+        end
+        btnBack.isVisible = true
+        if(iconsTable[1]._functionListeners.touch)then
+            btnSubmit.isVisible = true
+        end
     elseif (btn.id == "btnSubmit") then
         if (forwardArrow.isVisible) then
             slideRight(forwardArrow)
@@ -632,6 +708,7 @@ function onButtonRelease(event)
         end
         timer.cancel(gameTimer)
         btnSubmit.isVisible = false
+        btnBack.isVisible = false
         scoreOverlay()
     elseif (btn.id == "btnMessage_Ok") then
         for i=messageGroup.numChildren,1,-1 do
@@ -641,6 +718,7 @@ function onButtonRelease(event)
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
         btnSubmit.isVisible = true
+        btnBack.isVisible = true
         btnPhoto.isVisible = true
         for i=1, #tbl_icons do
             iconsTable[i]:addEventListener( "touch", slideLeft )
@@ -653,6 +731,7 @@ function onButtonRelease(event)
             local child = messageGroup[i]
             child:removeSelf()
         end
+        btnBack.isVisible = true
     elseif (btn.id == "btnMessage_Next")then
         for i=messageGroup.numChildren,1,-1 do
             local child = messageGroup[i]
@@ -668,6 +747,7 @@ function onButtonRelease(event)
         timerText.isVisible = true
         gameTimer = timer.performWithDelay(1000, updateTimer, 0)
         btnSubmit.isVisible = true
+        btnBack.isVisible = true
         for i=1, #tbl_icons do
             iconsTable[i]:addEventListener( "touch", slideLeft )
         end
@@ -827,7 +907,7 @@ function scene:createScene( event )
     occasionGroup = display.newGroup()
     characterGroup = display.newGroup()
     overlayGroup = display.newGroup() -- create overlay group to control objects selection
-    
+
     setOcassion(tbl_params)
     
     local character = display.newImageRect(tbl_characters[params.pCharacter].fullImage,
@@ -852,6 +932,7 @@ function scene:createScene( event )
     }
     btnBack.x = _W*.15
     btnBack.y = _H*.95
+    btnBack.isVisible = false
     
     btnSubmit = widget.newButton{
         id = "btnSubmit",
@@ -881,7 +962,7 @@ function scene:createScene( event )
     local bgOverlay = display.newRoundedRect(275, 30, 120, 390, 10)
     bgOverlay:setFillColor(0,0,0)
     bgOverlay.alpha = .50
-    overlayGroup:insert(bgOverlay)
+    overlayGroup:insert( bgOverlay )
 
     forwardArrow = display.newImageRect("assets/images/backArrow.png", 50, 50)
     forwardArrow.x = 298; forwardArrow.y = 55
