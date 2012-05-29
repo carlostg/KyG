@@ -19,13 +19,14 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
-local title_txt, obj2, file, contents, tIndex
+local title_txt, obj2, file, contents, tIndex, p1Text
 local btnA, btnB, btnC, btnD, btnNext
 local ansA, ansB, ansC, ansD
 local triviaGroup
 local tblTrivias = {}
 local tblRandom = {}
 local nextTriviaId = 1
+local p1Score = 0
 
 local winSound = audio.loadSound("assets/sounds/wordWin.wav")
 local failSound = audio.loadSound("assets/sounds/wordError.aiff")
@@ -35,16 +36,22 @@ local displayTrivia --function
 local tbl_labels = {
     {title1="Trivia",
      title2="Subject:",
+     text1="Score: ",
      sc1="The Bride",
      sc2="The Broom",
      sc3="The Couple",
-     btn1="Next"},
+     btn1="Next",
+     btn2="Quit"
+    },
     {title1="Trivia",
      title2="Tema",
+     text1="Puntos: ",
      sc1="La Novia",
      sc2="El Novio",
      sc3="La Pareja",
-     btn1="Próxima"}
+     btn1="Próxima",
+     btn2="Salir"
+    }
 }
 
 local function getRandomNumbers(event)
@@ -61,7 +68,7 @@ local function getRandomNumbers(event)
     end
 end
 
-local function objTouch( event )
+local function onBtnQuit( event )
     local options =
     {
     effect = "flipFadeOutIn",
@@ -103,6 +110,13 @@ local function loadTblTrivias(event)
     end
 end
 
+local function updateScore(event)
+    p1Score = p1Score + 5
+    p1Text.text = tbl_labels[lg_index].text1..p1Score
+    p1Text:setReferencePoint(display.CenterLeftReferencePoint)
+    p1Text.x = 15
+end
+        
 local function onButtonRelease(event)
     local btn = event.target
     
@@ -145,6 +159,7 @@ local function onButtonRelease(event)
     if (btn.id == tblTrivias[tIndex].answer) then
         audio.setVolume(0.25, {channel=15})
         audio.play(winSound, {channel=15})
+        updateScore()
     else
         audio.setVolume(0.75, {channel=10})
         audio.play(failSound, {channel=10})
@@ -155,8 +170,12 @@ local function onButtonRelease(event)
             local child = triviaGroup[i]
             child:removeSelf()
         end
-
-        displayTrivia() 
+        
+        if nextTriviaId == 20 then
+            onBtnQuit()
+        else
+            displayTrivia()
+        end
     end
     btnNext = widget.newButton{
         id         = "btnNext",
@@ -293,6 +312,12 @@ function scene:createScene( event )
     background:setReferencePoint( display.TopLeftReferencePoint )
     background.x = 0; background.y = 0
     
+    --P1 score...
+    p1Text = display.newText(tbl_labels[lg_index].text1.."0",0,0,"Helvetica",17)
+    p1Text:setReferencePoint(display.CenterLeftReferencePoint)
+    p1Text:setTextColor(0)
+    p1Text.x = 15; p1Text.y = 20
+    
     title_txt = display.newText(tbl_labels[lg_index].title1, 0, 0, "Zapfino Linotype One", 50)
     title_txt:setReferencePoint( display.CenterReferencePoint )
     title_txt.x = _W*.50; title_txt.y = _H*.12
@@ -303,11 +328,21 @@ function scene:createScene( event )
     getRandomNumbers()
     
     displayTrivia()
-    
-    obj2 = display.newText("Back", 0, 0, native.systemFont, 24)
-    obj2:setTextColor(0)
-    obj2.x = _W*.12; obj2.y = _H*.95
-    obj2:addEventListener( "touch", objTouch )
+
+    local btnQuit = widget.newButton{
+        id         = "btnQuit",
+        label      = tbl_labels[lg_index].btn2,
+        font       = btnFont,
+        width      = 70, height = 30,
+        fontSize   = 16,
+        yOffset    = -2,
+        default    = "assets/images/btnBrown.png",
+        labelColor = { default={ 255 }, over={ 0 } },
+        emboss     = true,
+        onRelease  = onBtnQuit
+    }
+    btnQuit.x = _W*.17
+    btnQuit.y = _H*.93
     
     -----------------------------------------------------------------------------
     
@@ -317,9 +352,10 @@ function scene:createScene( event )
     -----------------------------------------------------------------------------
     
     group:insert(background)
+    group:insert(p1Text)
     group:insert(title_txt)
     group:insert(triviaGroup)
-    group:insert(obj2)
+    group:insert(btnQuit)
 end
 
 
@@ -343,7 +379,7 @@ function scene:exitScene( event )
     local group = self.view
     
     -- remove touch listener for obj
-    obj2:removeEventListener( "touch", objTouch )
+    --btnQuit:removeEventListener( "touch", onBtnQuit )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)

@@ -18,20 +18,24 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 -- BEGINNING OF YOUR IMPLEMENTATION
 ---------------------------------------------------------------------------------
-local obj2, isEnglish, isSpanish, title_txt, title_txt2, title_txt3
+local isEnglish, isSpanish, title_txt, title_txt2, title_txt3, btnQuit
 local nTables = {}
 local createTables --functions
 
 local tbl_labels = {
     {title1="Configuration",
      title3="Select Your Table Number",
-     btn1=""},
+     btn1="",
+     btn2="Quit"
+    },
     {title1="Configuración",
      title3="Seleccione Su Número de Mesa",
-     btn1=""}
+     btn1="",
+     btn2="Salir"
+    }
 }
 
-local function objTouch( event )
+local function onBtnQuit( event )
     local options =
     {
     effect = "flipFadeOutIn",
@@ -50,6 +54,7 @@ local onTabRelease = function( event )
     end
     title_txt.text = tbl_labels[lg_index].title1
     title_txt3.text = tbl_labels[lg_index].title3
+    btnQuit.label = tbl_labels[lg_index].btn2
 end
 
 local function nTableTouch(event)
@@ -136,11 +141,20 @@ function scene:createScene( event )
     end
     createTables(5, 4)
     
-    
-    obj2 = display.newText("Back", 0, 0, native.systemFont, 24)
-    obj2:setTextColor(0)
-    obj2.x = _W*.12; obj2.y = _H*.95
-    obj2:addEventListener( "touch", objTouch )
+    btnQuit = widget.newButton{
+        id         = "btnQuit",
+        label      = tbl_labels[lg_index].btn2,
+        font       = btnFont,
+        width      = 70, height = 30,
+        fontSize   = 16,
+        yOffset    = -2,
+        default    = "assets/images/btnBrown.png",
+        labelColor = { default={ 255 }, over={ 0 } },
+        emboss     = true,
+        onRelease  = onBtnQuit
+    }
+    btnQuit.x = _W*.17
+    btnQuit.y = _H*.93
     
     -----------------------------------------------------------------------------
     
@@ -155,7 +169,7 @@ function scene:createScene( event )
     group:insert(title_txt3)
     group:insert(tablesGroup)
     group:insert(buttonTabs)
-    group:insert(obj2)
+    group:insert(btnQuit)
 end
 
 
@@ -179,7 +193,7 @@ function scene:exitScene( event )
     local group = self.view
     
     -- remove touch listener for obj
-    obj2:removeEventListener( "touch", objTouch )
+    --obj2:removeEventListener( "touch", objTouch )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. stop timers, remove listeners, unload sounds, etc.)
