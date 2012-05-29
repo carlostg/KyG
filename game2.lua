@@ -71,7 +71,7 @@ local tbl_labels = {
      btn2="Someter",
      btn3="¡Ok!",
      btn4="Próxima",
-     btn5="SÍ",
+     btn5="S�?",
      btn6="NO"
     }
 }
@@ -951,7 +951,7 @@ function scene:enterScene( event )
     local group = self.view
     
     -- remove previous scene's view
-    storyboard.purgeScene( "menu" )
+    storyboard.removeScene( "menu" )
     
     -- the following code is to manage the challenge message
     messageGroup = display.newGroup()

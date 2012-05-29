@@ -74,7 +74,7 @@ local tbl_labels = {
      text6="Palabra incorrecta, ¡Intenta otra vez!",
      text7="Puntos: ",
      text8="¿Realmente quieres salir del juego?",
-     btn1 ="SÍ",
+     btn1 ="S�?",
      btn2 ="NO"
     }
 }
@@ -442,6 +442,7 @@ function scene:createScene(event)
             end
             return true
         end
+        
         local clearBtn = display.newRect(0,0,120,26)
         clearBtn.alpha = 0.01
         clearBtn.x = 60; clearBtn.y = _H-123
@@ -474,7 +475,7 @@ function scene:enterScene( event )
     local group = self.view
     
     -- remove previous scene's view
-    storyboard.purgeScene( "menu" )
+    storyboard.removeScene( "menu" )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)

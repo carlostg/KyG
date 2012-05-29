@@ -65,7 +65,7 @@ function scene:enterScene( event )
     local group = self.view
     
     -- remove previous scene's view
-    storyboard.purgeScene( "menu" )
+    storyboard.removeScene( "menu" )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)

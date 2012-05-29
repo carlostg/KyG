@@ -33,19 +33,23 @@ local characters = {}
 local stars = {}
 local selectedCharacter = 1
 local background
-local btnGame1, btnGame2, btnGame3, btnGame4
+local btnGame1, btnGame2, btnGame3, btnGame4, btnPost
 
 local tbl_labels = {
     {title1="",
      btn1="Trivia",
      btn2="DressUp",
      btn3="Words",
-     btn4="TheRing"},
+     btn4="TheRing",
+     btn5="Post"
+    },
     {title1="",
      btn1="Trivia",
      btn2="Vísteme",
      btn3="Palabras",
-     btn4="ElAnillo"}
+     btn4="ElAnillo",
+     btn5="Enviar"
+    }
 }
 
 -- physics to make stars chase the character
@@ -60,6 +64,12 @@ local function OrbitCharacter(objCharacter,objStar)
     objStar.x = (length_x * math.cos(objStar.angle)) + objCharacter.x
     objStar.y = (length_y * math.sin(objStar.angle)) + objCharacter.y
     objStar.angle = objStar.angle + angleStep
+end
+
+-- activate post icon
+local function ActivatePostIcon(obj)
+    transition.to(btnPost, {time=750, alpha=.10, onComplete=""})
+    transition.to(btnPost, {time=600, alpha=1, delay=750, onComplete=""})
 end
 
 -- swap stars to touched character
@@ -300,19 +310,18 @@ function scene:createScene( event )
     btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
     btnGame4Txt:setTextColor(200,100,50)
     
+    btnPost = display.newImageRect("assets/images/postIcon.png", 35, 35)
+    btnPost.x = _W*.10; btnPost.y = _H*.936
+    btnPost.name = "btnPost"
+    btnPost.alpha = 1
+    btnPost:addEventListener("touch", btnGameTouch)
+    ActivatePostIcon(btnPost)
+    btnPostTimer = timer.performWithDelay(1500, function() ActivatePostIcon(btnPost) end, 0)
+    
     local btnConfig = display.newImageRect("assets/images/settings.png", 35, 35)
     btnConfig.x = _W*.91; btnConfig.y = _H*.94
     btnConfig.name = "btnConfig"
     btnConfig:addEventListener("touch", btnGameTouch)
-    
---    -- create overlay scence to control objects selection
---    local options_overlay =
---    {
---    effect = "slideLeft",
---    time = 300,
---    params = { var1 = "custom", var2 = "another" }
---    }
---    storyboard.showOverlay( "menu_overlay", options_overlay )
     
     -----------------------------------------------------------------------------
     
@@ -331,6 +340,7 @@ function scene:createScene( event )
     group:insert(btnGame3Txt)
     group:insert(btnGame4)
     group:insert(btnGame4Txt)
+    group:insert(btnPost)
     group:insert(btnConfig)
     group:insert(charactersGroup)
     group:insert(starsGroup)

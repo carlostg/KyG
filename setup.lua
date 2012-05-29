@@ -148,7 +148,7 @@ function scene:createScene( event )
         width      = 70, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onBtnQuit
@@ -178,7 +178,7 @@ function scene:enterScene( event )
     local group = self.view
     
     -- remove previous scene's view
-    storyboard.purgeScene( "menu" )
+    storyboard.removeScene( "menu" )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)

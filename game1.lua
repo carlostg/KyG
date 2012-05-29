@@ -57,7 +57,7 @@ local tbl_labels = {
      sc3="La Pareja",
      btn1="Próxima",
      btn2="Salir",
-     btn3 ="SÍ",
+     btn3 ="S�?",
      btn4 ="NO"
     }
 }
@@ -130,9 +130,6 @@ local function loadTblTrivias(event)
         tblTrivias = json.decode(contents) 
     end
     
-    for i=1, #tblTrivias do
-        print("Trivia Id: "..tblTrivias[i].id, tblTrivias[i].answer, tblTrivias[i].subject, tblTrivias[i].question)
-    end
 end
 
 local function updateScore(event)
@@ -210,7 +207,8 @@ local function onButtonRelease(event)
         width      = 70, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
+        over       = "assets/images/btnBrnOver.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onNext
@@ -232,7 +230,7 @@ function displayTrivia(event)
     
     local tSubject = display.newText(tblTrivias[tIndex].subject, 0, 0, _W*.80, 0, "Zapfino Linotype One", 40)
     tSubject:setReferencePoint( display.CenterLeftReferencePoint )
-    tSubject.x = _W*.40; tSubject.y = _H*.22
+    tSubject.x = _W*.40; tSubject.y = _H*.23
     tSubject:setTextColor(200,100,50)
     triviaGroup:insert(tSubject)
     
@@ -254,7 +252,8 @@ function displayTrivia(event)
         width      = 30, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
+        over       = "assets/images/btnBrnOver.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onButtonRelease
@@ -275,7 +274,8 @@ function displayTrivia(event)
         width      = 30, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
+        over       = "assets/images/btnBrnOver.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onButtonRelease
@@ -296,7 +296,8 @@ function displayTrivia(event)
         width      = 30, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
+        over       = "assets/images/btnBrnOver.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onButtonRelease
@@ -317,7 +318,8 @@ function displayTrivia(event)
         width      = 30, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
+        over       = "assets/images/btnBrnOver.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onButtonRelease
@@ -362,7 +364,8 @@ function scene:createScene( event )
         width      = 70, height = 30,
         fontSize   = 16,
         yOffset    = -2,
-        default    = "assets/images/btnBrown.png",
+        default    = "assets/images/btnBrn.png",
+        over       = "assets/images/btnBrnOver.png",
         labelColor = { default={ 255 }, over={ 0 } },
         emboss     = true,
         onRelease  = onBtnQuit
@@ -390,7 +393,7 @@ function scene:enterScene( event )
     local group = self.view
     
     -- remove previous scene's view
-    storyboard.purgeScene( "menu" )
+    storyboard.removeScene( "menu" )
     -----------------------------------------------------------------------------
     
     --	INSERT code here (e.g. start timers, load audio, start listeners, etc.)
