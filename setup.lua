@@ -6,7 +6,6 @@
 
 local storyboard = require( "storyboard" )
 local scene = storyboard.newScene()
-local segmentedControl = require( "segmentedcontrol" )
 ----------------------------------------------------------------------------------
 -- 
 --	NOTE:
@@ -74,7 +73,6 @@ function scene:createScene( event )
     background:setReferencePoint( display.TopLeftReferencePoint )
     background.x = 0; background.y = 0
     
-    --local title_txt = display.newText("Karla & Guillermo", 0, 0, "Zapfino", 22)
     title_txt = display.newText(tbl_labels[lg_index].title1, 0, 0, "Zapfino Linotype One", 42)
     title_txt:setReferencePoint( display.CenterReferencePoint )
     title_txt.x = _W*.50; title_txt.y = _H*.12
