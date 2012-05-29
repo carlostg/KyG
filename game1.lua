@@ -36,21 +36,29 @@ local displayTrivia --function
 local tbl_labels = {
     {title1="Trivia",
      title2="Subject:",
+     title3="Alert!",
      text1="Score: ",
+     text2="Do you really want to quit the game?",
      sc1="The Bride",
      sc2="The Broom",
      sc3="The Couple",
      btn1="Next",
-     btn2="Quit"
+     btn2="Quit",
+     btn3 ="YES",
+     btn4 ="NO"
     },
     {title1="Trivia",
      title2="Tema",
+     title3="¡Alerta!",
      text1="Puntos: ",
+     text2="¿Realmente quieres salir del juego?",
      sc1="La Novia",
      sc2="El Novio",
      sc3="La Pareja",
      btn1="Próxima",
-     btn2="Salir"
+     btn2="Salir",
+     btn3 ="SÍ",
+     btn4 ="NO"
     }
 }
 
@@ -78,6 +86,23 @@ local function onBtnQuit( event )
     storyboard.gotoScene( "menu", options )
 end
 
+local function onCompleteAlert(event)
+    local i = event.index
+    if 1 == i then
+        onBtnQuit()
+        
+--        local options =
+--        {
+--            effect = "flipFadeOutIn",
+--            time = 300,
+--            params = { var1 = "custom", var2 = "another" }
+--        }
+--        storyboard.gotoScene( "menu", options )
+    elseif 2 == i then
+        --do nothing
+    end
+end
+    
 local function loadTblTrivias(event)
     
     -------------------------------------------
@@ -171,8 +196,9 @@ local function onButtonRelease(event)
             child:removeSelf()
         end
         
-        if nextTriviaId == 20 then
-            onBtnQuit()
+        if nextTriviaId > 20 then
+            local alert = native.showAlert(tbl_labels[lg_index].title3, tbl_labels[lg_index].text2,
+            {tbl_labels[lg_index].btn3, tbl_labels[lg_index].btn4}, onCompleteAlert)
         else
             displayTrivia()
         end

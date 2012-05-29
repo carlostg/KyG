@@ -54,7 +54,7 @@ local onTabRelease = function( event )
     end
     title_txt.text = tbl_labels[lg_index].title1
     title_txt3.text = tbl_labels[lg_index].title3
-    btnQuit.label = tbl_labels[lg_index].btn2
+    btnQuit:setLabel(tbl_labels[lg_index].btn2)
 end
 
 local function nTableTouch(event)
