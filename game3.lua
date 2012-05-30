@@ -41,7 +41,7 @@ local p1Score = 0
 local secs, count = 180, 181
 local secondsText = 0
 local minutesText = 0
---local lg_index = 2
+--local setupTable.lg_index = 2
 local timerText
 local wordsGroup
 local path
@@ -74,7 +74,7 @@ local tbl_labels = {
      text6="Palabra incorrecta, ¡Intenta otra vez!",
      text7="Puntos: ",
      text8="¿Realmente quieres salir del juego?",
-     btn1 ="S�?",
+     btn1 ="SÍ",
      btn2 ="NO"
     }
 }
@@ -99,8 +99,8 @@ local function onButtonRelease(event)
         end
     end
     
-    alert = native.showAlert(tbl_labels[lg_index].title3, tbl_labels[lg_index].text8,
-            {tbl_labels[lg_index].btn1, tbl_labels[lg_index].btn2}, onCompleteAlert)
+    alert = native.showAlert(tbl_labels[setupTable.lg_index].title3, tbl_labels[setupTable.lg_index].text8,
+            {tbl_labels[setupTable.lg_index].btn1, tbl_labels[setupTable.lg_index].btn2}, onCompleteAlert)
 end
 
 --Updates timer / gameover when time expires
@@ -127,9 +127,9 @@ function updateTimer(event)
         timer.cancel(gameTimer)
         audio.stop()
         removeListenerPlayerLetters()
-        local alert = native.showAlert(tbl_labels[lg_index].title2,
-            tbl_labels[lg_index].text2..wordsGroup.numChildren..tbl_labels[lg_index].text3..
-            p1Score..tbl_labels[lg_index].text4,{ "OK"} )
+        local alert = native.showAlert(tbl_labels[setupTable.lg_index].title2,
+            tbl_labels[setupTable.lg_index].text2..wordsGroup.numChildren..tbl_labels[setupTable.lg_index].text3..
+            p1Score..tbl_labels[setupTable.lg_index].text4,{ "OK"} )
     end
     
 end
@@ -152,7 +152,7 @@ function scene:createScene(event)
     mainGroup:insert(bg)
 
     --P1 score...
-    local p1Text = display.newText(tbl_labels[lg_index].text7.."0",0,0,"Helvetica",17)
+    local p1Text = display.newText(tbl_labels[setupTable.lg_index].text7.."0",0,0,"Helvetica",17)
     p1Text:setReferencePoint(display.CenterLeftReferencePoint)
     p1Text:setTextColor(0)
     p1Text.x = 10; p1Text.y = 15
@@ -195,7 +195,7 @@ function scene:createScene(event)
         -------------------------------------------
         -- *** Create the dictionary list ***
         -------------------------------------------
-        if lg_index == 1 then
+        if setupTable.lg_index == 1 then
             path = system.pathForFile("assets/misc/words_KG_eng.txt")
         else
             path = system.pathForFile("assets/misc/words_KG_esp.txt")
@@ -214,7 +214,7 @@ function scene:createScene(event)
         local function updateScore( player, amount )
             if player == "player1" then
                 p1Score = p1Score + amount
-                p1Text.text = tbl_labels[lg_index].text7..p1Score
+                p1Text.text = tbl_labels[setupTable.lg_index].text7..p1Score
                 p1Text:setReferencePoint(display.CenterLeftReferencePoint)
                 p1Text.x = 10;
             end
@@ -283,9 +283,9 @@ function scene:createScene(event)
                 --If it isnt a valid go we show an alert...
                 if validGo == false then
                     if duplicateWord == true then
-                        local alert = native.showAlert(tbl_labels[lg_index].title3,tbl_labels[lg_index].text5,{"OK"})
+                        local alert = native.showAlert(tbl_labels[setupTable.lg_index].title3,tbl_labels[setupTable.lg_index].text5,{"OK"})
                     else
-                        local alert = native.showAlert(tbl_labels[lg_index].title3,tbl_labels[lg_index].text6,{"OK"})
+                        local alert = native.showAlert(tbl_labels[setupTable.lg_index].title3,tbl_labels[setupTable.lg_index].text6,{"OK"})
                     end
                     audio.setVolume(0.75, {channel=10})
                     audio.play(failSound, {channel=10})
@@ -466,7 +466,7 @@ function scene:createScene(event)
 
     group:insert(mainGroup)
     group:insert(btnEnd)
-    alert = native.showAlert(tbl_labels[lg_index].title1,tbl_labels[lg_index].text1,{"OK"}, onComplete)
+    alert = native.showAlert(tbl_labels[setupTable.lg_index].title1,tbl_labels[setupTable.lg_index].text1,{"OK"}, onComplete)
 end
 
 

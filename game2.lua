@@ -38,7 +38,7 @@ local secs, count = 120, 121
 local secondsText = 0
 local minutesText = 0
 local gamePoints = 0
---local lg_index = 1
+--local setupTable.lg_index = 1
 local btnFont = native.systemFontBold
 local photoSound = audio.loadSound("assets/sounds/camera.wav")
 local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.m4a")
@@ -71,7 +71,7 @@ local tbl_labels = {
      btn2="Someter",
      btn3="¡Ok!",
      btn4="Próxima",
-     btn5="S�?",
+     btn5="SÍ",
      btn6="NO"
     }
 }
@@ -506,17 +506,17 @@ function quitOverlay(event)
     messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
     messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
 
-    local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
+    local messageTitle = display.newText(tbl_labels[setupTable.lg_index].title2, 0, 0, native.systemFontBold, 20)
     messageTitle:setReferencePoint(display.CenterReferencePoint)
     messageTitle.x = _W*.50; messageTitle.y = _H*.20
 
-    local messageText = display.newText(tbl_labels[lg_index].text4, 0, 0, 200, 0, native.systemFont, 16)
+    local messageText = display.newText(tbl_labels[setupTable.lg_index].text4, 0, 0, 200, 0, native.systemFont, 16)
     messageText:setReferencePoint(display.CenterReferencePoint)
     messageText.x = _W*.50; messageText.y = _H*.33
 
     btnMessage4 = widget.newButton{
         id = "btnMessage_YES",
-        label = tbl_labels[lg_index].btn5,
+        label = tbl_labels[setupTable.lg_index].btn5,
         font = btnFont,
         width = 90, height = 30,
         fontSize = 16,
@@ -530,7 +530,7 @@ function quitOverlay(event)
 
     btnMessage5 = widget.newButton{
         id = "btnMessage_NO",
-        label = tbl_labels[lg_index].btn6,
+        label = tbl_labels[setupTable.lg_index].btn6,
         font = btnFont,
         width = 90, height = 30,
         fontSize = 16,
@@ -556,17 +556,17 @@ function scoreOverlay(event)
     messageOverlay:setReferencePoint(display.TopCenterReferencePoint)
     messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
 
-    local messageTitle = display.newText(tbl_labels[lg_index].title2, 0, 0, native.systemFontBold, 20)
+    local messageTitle = display.newText(tbl_labels[setupTable.lg_index].title2, 0, 0, native.systemFontBold, 20)
     messageTitle:setReferencePoint(display.CenterReferencePoint)
     messageTitle.x = _W*.50; messageTitle.y = _H*.20
 
-    local messageText = display.newText(tbl_labels[lg_index].text2..gamePoints..tbl_labels[lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
+    local messageText = display.newText(tbl_labels[setupTable.lg_index].text2..gamePoints..tbl_labels[setupTable.lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
     messageText:setReferencePoint(display.CenterReferencePoint)
     messageText.x = _W*.50; messageText.y = _H*.33
 
     btnMessage2 = widget.newButton{
         id = "btnMessage_Stop",
-        label = tbl_labels[lg_index].btn3,
+        label = tbl_labels[setupTable.lg_index].btn3,
         font = btnFont,
         width = 90, height = 30,
         fontSize = 16,
@@ -580,7 +580,7 @@ function scoreOverlay(event)
 
     btnMessage3 = widget.newButton{
         id = "btnMessage_Next",
-        label = tbl_labels[lg_index].btn4,
+        label = tbl_labels[setupTable.lg_index].btn4,
         font = btnFont,
         width = 90, height = 30,
         fontSize = 16,
@@ -876,7 +876,7 @@ function scene:createScene( event )
 
     btnBack = widget.newButton{
         id = "btnBack",
-        label = tbl_labels[lg_index].btn1,
+        label = tbl_labels[setupTable.lg_index].btn1,
         font = btnFont,
         width = 75, height = 30,
         fontSize = 16,
@@ -891,7 +891,7 @@ function scene:createScene( event )
     
     btnSubmit = widget.newButton{
         id = "btnSubmit",
-        label = tbl_labels[lg_index].btn2,
+        label = tbl_labels[setupTable.lg_index].btn2,
         font = btnFont,
         width = 75, height = 30,
         fontSize = 16,
@@ -963,19 +963,19 @@ function scene:enterScene( event )
     messageOverlay.x = _W*.50; messageOverlay.y = _H*.15
     messageGroup:insert(messageOverlay)
     
-    local messageTitle = display.newText(tbl_labels[lg_index].title1, 0, 0, native.systemFontBold, 20)
+    local messageTitle = display.newText(tbl_labels[setupTable.lg_index].title1, 0, 0, native.systemFontBold, 20)
     messageTitle:setReferencePoint(display.CenterReferencePoint)
     messageTitle.x = _W*.50; messageTitle.y = _H*.20
     messageGroup:insert(messageTitle)
     
-    local messageText = display.newText(tbl_labels[lg_index].text1, 0, 0, 200, 0, native.systemFont, 16)
+    local messageText = display.newText(tbl_labels[setupTable.lg_index].text1, 0, 0, 200, 0, native.systemFont, 16)
     messageText:setReferencePoint(display.CenterReferencePoint)
     messageText.x = _W*.50; messageText.y = _H*.33
     messageGroup:insert(messageText)
     
     btnMessage = widget.newButton{
         id = "btnMessage_Ok",
-        label = tbl_labels[lg_index].btn3,
+        label = tbl_labels[setupTable.lg_index].btn3,
         font = btnFont,
         width = 100, height = 30,
         fontSize = 16,

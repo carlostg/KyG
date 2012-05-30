@@ -48,13 +48,14 @@ end
 local onTabRelease = function( event )
     local id = event.target.id
     if id == "1" then
-        lg_index = 1
+        setupTable.lg_index = 1
     elseif id == "2" then
-        lg_index = 2
+        setupTable.lg_index = 2
     end
-    title_txt.text = tbl_labels[lg_index].title1
-    title_txt3.text = tbl_labels[lg_index].title3
-    btnQuit:setLabel(tbl_labels[lg_index].btn2)
+    saveTable(setupTable, "setupTable.json")
+    title_txt.text = tbl_labels[setupTable.lg_index].title1
+    title_txt3.text = tbl_labels[setupTable.lg_index].title3
+    btnQuit:setLabel(tbl_labels[setupTable.lg_index].btn2)
 end
 
 local function nTableTouch(event)
@@ -64,7 +65,8 @@ local function nTableTouch(event)
         for i=1, #nTables do
             nTables[i].alpha = .50
         end
-        tbl_index = t.id
+        setupTable.tbl_index = t.id
+        saveTable(setupTable, "setupTable.json")
         t.alpha = 1
     end
 end
@@ -78,7 +80,7 @@ function scene:createScene( event )
     background:setReferencePoint( display.TopLeftReferencePoint )
     background.x = 0; background.y = 0
     
-    title_txt = display.newText(tbl_labels[lg_index].title1, 0, 0, "Zapfino Linotype One", 42)
+    title_txt = display.newText(tbl_labels[setupTable.lg_index].title1, 0, 0, "Zapfino Linotype One", 42)
     title_txt:setReferencePoint( display.CenterReferencePoint )
     title_txt.x = _W*.50; title_txt.y = _H*.12
     title_txt:setTextColor(200,100,50)
@@ -88,7 +90,7 @@ function scene:createScene( event )
     title_txt2.x = _W*.50; title_txt2.y = _H*.28
     title_txt2:setTextColor(200,100,50)
     
-    if lg_index == 1 then
+    if setupTable.lg_index == 1 then
         isEnglish = true
         isSpanish = false
     else
@@ -106,7 +108,7 @@ function scene:createScene( event )
     buttonTabs:setReferencePoint( display.CenterReferencePoint )
     buttonTabs.x =_W*.50; buttonTabs.y =_H*.36
     
-    title_txt3 = display.newText(tbl_labels[lg_index].title3, 0, 0, "Helvetica", 18)
+    title_txt3 = display.newText(tbl_labels[setupTable.lg_index].title3, 0, 0, "Helvetica", 18)
     title_txt3:setReferencePoint( display.CenterReferencePoint )
     title_txt3.x = _W*.50; title_txt3.y = _H*.47
     title_txt3:setTextColor(200,100,50)
@@ -119,7 +121,7 @@ function scene:createScene( event )
                 local nTable = display.newImageRect("assets/images/ball_orange.png", 40, 40)
                 nTable.name = 'table_'..n
                 nTable.id = n
-                if tbl_index == nTable.id then
+                if setupTable.tbl_index == nTable.id then
                     nTable.alpha = 1.00
                 else
                     nTable.alpha = .50
@@ -143,7 +145,7 @@ function scene:createScene( event )
     
     btnQuit = widget.newButton{
         id         = "btnQuit",
-        label      = tbl_labels[lg_index].btn2,
+        label      = tbl_labels[setupTable.lg_index].btn2,
         font       = btnFont,
         width      = 70, height = 30,
         fontSize   = 16,

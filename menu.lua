@@ -236,7 +236,7 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame1Txt = display.newText(tbl_labels[lg_index].btn1, 0, 0, "Zapfino Linotype One", 36)
+    local btnGame1Txt = display.newText(tbl_labels[setupTable.lg_index].btn1, 0, 0, "Zapfino Linotype One", 36)
     btnGame1Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame1Txt.x = btnGame1.x; btnGame1Txt.y = btnGame1.y
     btnGame1Txt:setTextColor(200,100,50)
@@ -259,7 +259,7 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame2Txt = display.newText(tbl_labels[lg_index].btn2, 0, 0, "Zapfino Linotype One", 36)
+    local btnGame2Txt = display.newText(tbl_labels[setupTable.lg_index].btn2, 0, 0, "Zapfino Linotype One", 36)
     btnGame2Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame2Txt.x = btnGame2.x; btnGame2Txt.y = btnGame2.y 
     btnGame2Txt:setTextColor(200,100,50)
@@ -282,7 +282,7 @@ function scene:createScene( event )
 --	fontSizeMax = 20,
 --	incrementSize = 2
 --    })
-    local btnGame3Txt = display.newText(tbl_labels[lg_index].btn3, 0, 0, "Zapfino Linotype One", 36)
+    local btnGame3Txt = display.newText(tbl_labels[setupTable.lg_index].btn3, 0, 0, "Zapfino Linotype One", 36)
     btnGame3Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y 
     btnGame3Txt:setTextColor(200,100,50)
@@ -305,7 +305,7 @@ function scene:createScene( event )
 --	fontSizeMax = 48,
 --	incrementSize = 2
 --    })
-    local btnGame4Txt = display.newText(tbl_labels[lg_index].btn4, 0, 0, "Zapfino Linotype One", 30)
+    local btnGame4Txt = display.newText(tbl_labels[setupTable.lg_index].btn4, 0, 0, "Zapfino Linotype One", 30)
     btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
     btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
     btnGame4Txt:setTextColor(200,100,50)
@@ -347,12 +347,12 @@ function scene:createScene( event )
     local function onComplete(event)
         local i = event.index
         if 1 == i then
-            lg_index = 1 --English language selected
+            setupTable.lg_index = 1 --English language selected
         elseif 2 == i then
-            lg_index = 2 --Spanish language selected
+            setupTable.lg_index = 2 --Spanish language selected
         end
     end
-    if lg_index == 0 then
+    if setupTable.lg_index == 0 then
         alert = native.showAlert("Language / Idioma"," ",{"English", "Español"}, onComplete)
     end
 end

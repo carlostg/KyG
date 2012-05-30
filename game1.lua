@@ -37,8 +37,10 @@ local tbl_labels = {
     {title1="Trivia",
      title2="Subject:",
      title3="Alert!",
+     title4="Great!",
      text1="Score: ",
      text2="Do you really want to quit the game?",
+     text3="Your total score was:",
      sc1="The Bride",
      sc2="The Broom",
      sc3="The Couple",
@@ -50,14 +52,16 @@ local tbl_labels = {
     {title1="Trivia",
      title2="Tema",
      title3="¡Alerta!",
+     title4="¡Tremendo!",
      text1="Puntos: ",
      text2="¿Realmente quieres salir del juego?",
+     text3="Tu puntuación total fue:",
      sc1="La Novia",
      sc2="El Novio",
      sc3="La Pareja",
      btn1="Próxima",
      btn2="Salir",
-     btn3 ="S�?",
+     btn3 ="SÍ?",
      btn4 ="NO"
     }
 }
@@ -90,14 +94,6 @@ local function onCompleteAlert(event)
     local i = event.index
     if 1 == i then
         onBtnQuit()
-        
---        local options =
---        {
---            effect = "flipFadeOutIn",
---            time = 300,
---            params = { var1 = "custom", var2 = "another" }
---        }
---        storyboard.gotoScene( "menu", options )
     elseif 2 == i then
         --do nothing
     end
@@ -109,10 +105,10 @@ local function loadTblTrivias(event)
     -- *** Create the dictionary list ***
     -------------------------------------------
     -- create a file path for corona i/o depending on language (1=English, 2=Spanish)
-    if lg_index == 1 then
+    if setupTable.lg_index == 1 then
         path = system.pathForFile("assets/misc/trivia_eng.json")
     else
-        path = system.pathForFile("assets/misc/trivia_eng.json")
+        path = system.pathForFile("assets/misc/trivia_esp.json")
     end
     
     -- io.open opens a file at path. returns nil if no file found
@@ -134,9 +130,27 @@ end
 
 local function updateScore(event)
     p1Score = p1Score + 5
-    p1Text.text = tbl_labels[lg_index].text1..p1Score
+    p1Text.text = tbl_labels[setupTable.lg_index].text1..p1Score
     p1Text:setReferencePoint(display.CenterLeftReferencePoint)
     p1Text.x = 15
+end
+
+local function printFinalScore(event)
+    local scoreText_txt = display.newText(tbl_labels[setupTable.lg_index].text3, 0, 0, "Helvetica", 25)
+    scoreText_txt:setReferencePoint( display.CenterReferencePoint )
+    scoreText_txt.x = _W*.50; scoreText_txt.y = _H*.30
+    scoreText_txt:setTextColor(200,100,50)
+    triviaGroup:insert(scoreText_txt)
+    
+    local scoreValue_txt = display.newText(p1Score, 0, 0, "Helvetica", 50)
+    scoreValue_txt:setReferencePoint( display.CenterReferencePoint )
+    scoreValue_txt.x = _W*.50; scoreValue_txt.y = _H*.45
+    scoreValue_txt:setTextColor(200,100,50)
+    triviaGroup:insert(scoreValue_txt)
+end
+
+local function saveFinalScore(event)
+    
 end
         
 local function onButtonRelease(event)
@@ -193,16 +207,16 @@ local function onButtonRelease(event)
             child:removeSelf()
         end
         
-        if nextTriviaId > 20 then
-            local alert = native.showAlert(tbl_labels[lg_index].title3, tbl_labels[lg_index].text2,
-            {tbl_labels[lg_index].btn3, tbl_labels[lg_index].btn4}, onCompleteAlert)
+        if nextTriviaId > 5 then
+            printFinalScore()
+            saveFinalScore()
         else
             displayTrivia()
         end
     end
     btnNext = widget.newButton{
         id         = "btnNext",
-        label      = tbl_labels[lg_index].btn1,
+        label      = tbl_labels[setupTable.lg_index].btn1,
         font       = btnFont,
         width      = 70, height = 30,
         fontSize   = 16,
@@ -222,7 +236,7 @@ end
 function displayTrivia(event)
     tIndex = tblRandom[nextTriviaId]
     
-    local title_txt2 = display.newText(tbl_labels[lg_index].title2, 0, 0, "Helvetica", 24)
+    local title_txt2 = display.newText(tbl_labels[setupTable.lg_index].title2, 0, 0, "Helvetica", 24)
     title_txt2:setReferencePoint( display.CenterLeftReferencePoint )
     title_txt2.x = _W*.10; title_txt2.y = _H*.22
     title_txt2:setTextColor(200,100,50)
@@ -341,12 +355,12 @@ function scene:createScene( event )
     background.x = 0; background.y = 0
     
     --P1 score...
-    p1Text = display.newText(tbl_labels[lg_index].text1.."0",0,0,"Helvetica",17)
+    p1Text = display.newText(tbl_labels[setupTable.lg_index].text1.."0",0,0,"Helvetica",17)
     p1Text:setReferencePoint(display.CenterLeftReferencePoint)
     p1Text:setTextColor(0)
     p1Text.x = 15; p1Text.y = 20
     
-    title_txt = display.newText(tbl_labels[lg_index].title1, 0, 0, "Zapfino Linotype One", 50)
+    title_txt = display.newText(tbl_labels[setupTable.lg_index].title1, 0, 0, "Zapfino Linotype One", 50)
     title_txt:setReferencePoint( display.CenterReferencePoint )
     title_txt.x = _W*.50; title_txt.y = _H*.12
     title_txt:setTextColor(200,100,50)
@@ -359,7 +373,7 @@ function scene:createScene( event )
 
     local btnQuit = widget.newButton{
         id         = "btnQuit",
-        label      = tbl_labels[lg_index].btn2,
+        label      = tbl_labels[setupTable.lg_index].btn2,
         font       = btnFont,
         width      = 70, height = 30,
         fontSize   = 16,
