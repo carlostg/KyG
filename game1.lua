@@ -150,7 +150,11 @@ local function printFinalScore(event)
 end
 
 local function saveFinalScore(event)
+    scoreTable.trivia.round = scoreTable.trivia.round + 1
+    scoreTable.trivia.score = scoreTable.trivia.score + p1Score
+    saveTable(scoreTable, "scoreTable.json")
     
+    local postResult = insertScore(1, setupTable.tbl_index, p1Score)
 end
         
 local function onButtonRelease(event)
@@ -207,7 +211,7 @@ local function onButtonRelease(event)
             child:removeSelf()
         end
         
-        if nextTriviaId > 5 then
+        if nextTriviaId > 20 then
             printFinalScore()
             saveFinalScore()
         else

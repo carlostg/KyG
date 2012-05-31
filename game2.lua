@@ -20,6 +20,7 @@ local scene = storyboard.newScene()
 ---------------------------------------------------------------------------------
 local obj1, obj2
 local forwardArrow, overlayGroup, characterGroup, messageGroup, occasionGroup
+local char1Group, char2Group, char3Group, char4Group, char5Group
 local btnBack, btnBackText, btnMessage, btnMessage2, btnMessage3, btnMessage4, btnMessage5, btnPhoto
 local st, en
 local iconsTable = {}
@@ -38,6 +39,7 @@ local secs, count = 120, 121
 local secondsText = 0
 local minutesText = 0
 local gamePoints = 0
+local ocassionValue = 0
 --local setupTable.lg_index = 1
 local btnFont = native.systemFontBold
 local photoSound = audio.loadSound("assets/sounds/camera.wav")
@@ -51,7 +53,7 @@ local tbl_labels = {
      title3="Alert!",
      text1 ="You have 2 minutes to guess the outfit I would choose for this occasion.",
      text2="You got ",
-     text3=" points of a possible total score of 15.",
+     text3=" points of a possible total score of ",
      text4="Do you really want to quit the game?",
      btn1="Quit",
      btn2="Submit",
@@ -65,7 +67,7 @@ local tbl_labels = {
      title4="¡Alerta!",
      text1 ="Tienes 2 minutos para adivinar que conbinación de ropa, yo seleccionaría para esta ocasión.",
      text2="Tuvistes ",
-     text3=" puntos de una posible puntuación total de 15.",
+     text3=" puntos de una posible puntuación total de ",
      text4="¿Realmente quieres salir del juego?",
      btn1="Salir",
      btn2="Someter",
@@ -77,149 +79,305 @@ local tbl_labels = {
 }
 
 local tbl_occasions = {
-    {name="Work",   fullImage="assets/images/dressup/bg_workGuillermo.png", character=2, occasion=1},
-    {name="Beach",  fullImage="assets/images/dressup/bg_beach.png",         character=0, occasion=2},
-    {name="Formal", fullImage="assets/images/dressup/bg_formal.png",        character=0, occasion=3},
-    {name="Work",   fullImage="assets/images/dressup/bg_workKarla.png",     character=1, occasion=1},
+    {name="Work",   fullImage="assets/images/dressup/bg_workGuillermo.png", character=2, occasion=1, char1Value=0 , char2Value=50},
+    {name="Beach",  fullImage="assets/images/dressup/bg_beach.png",         character=0, occasion=2, char1Value=85, char2Value=45},
+    {name="Formal", fullImage="assets/images/dressup/bg_formal.png",        character=0, occasion=3, char1Value=60, char2Value=80},
+    {name="Work",   fullImage="assets/images/dressup/bg_workKarla.png",     character=1, occasion=1, char1Value=80, char2Value=0},
 }
 
 local tbl_characters = {
     {name="Karla",     fullImage="assets/images/dressup/k_plain.png", character=1, fullImageW=280, fullImageH=350},
-    {name="Guillermo", fullImage="assets/images/dressup/g_plain.png", character=2, fullImageW=295, fullImageH=360}
+    {name="Guillermo", fullImage="assets/images/dressup/g_plain.png", character=2, fullImageW=280, fullImageH=350}
 }
 
 local tbl_shirts = {
-    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="assets/images/dressup/k_work_shirt1_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=42,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=390, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_work_shirt1_small.png", smallImageX=330, smallImageY=105, smallImageW=70, smallImageH=42,
      fullImage="assets/images/dressup/k_work_shirt1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=1},
-    {smallImage="assets/images/dressup/k_work_shirt2_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=70,
+     character=1, occasion=1, value=10},
+    {smallImage="assets/images/dressup/k_work_shirt2_small.png", smallImageX=330, smallImageY=175, smallImageW=70, smallImageH=70,
      fullImage="assets/images/dressup/k_work_shirt2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=2},
-    {smallImage="assets/images/dressup/k_work_shirt3_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=53,
+     character=1, occasion=1, value=5},
+    {smallImage="assets/images/dressup/k_work_shirt3_small.png", smallImageX=330, smallImageY=245, smallImageW=70, smallImageH=53,
      fullImage="assets/images/dressup/k_work_shirt3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=3},
+     character=1, occasion=1, value=20},
+    {smallImage="assets/images/dressup/k_work_shirt4_small.png", smallImageX=330, smallImageY=315, smallImageW=55, smallImageH=69,
+     fullImage="assets/images/dressup/k_work_shirt4.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=15}, 
     {smallImage="assets/images/dressup/k_beach_top_bodyshirt_small.png", smallImageX=330, smallImageY=125, smallImageW=61, smallImageH=65,
      fullImage="assets/images/dressup/k_beach_top_bodyshirt.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=2, value=10},
     {smallImage="assets/images/dressup/k_beach_top_greenset_small.png", smallImageX=330, smallImageY=215, smallImageW=54, smallImageH=55,
      fullImage="assets/images/dressup/k_beach_top_greenset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=2, value=15},
     {smallImage="assets/images/dressup/k_beach_top_polkaset_small.png", smallImageX=330, smallImageY=305, smallImageW=60, smallImageH=30,
      fullImage="assets/images/dressup/k_beach_top_polkaset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3},
-    {smallImage="assets/images/dressup/k_formal_dress1_small.png", smallImageX=330, smallImageY=135, smallImageW=62, smallImageH=120,
+     character=1, occasion=2, value=5},
+    {smallImage="assets/images/dressup/k_formal_dress1_small.png", smallImageX=355, smallImageY=100, smallImageW=42, smallImageH=81,
      fullImage="assets/images/dressup/k_formal_dress1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=1},
-    {smallImage="assets/images/dressup/k_formal_dress2_small.png", smallImageX=330, smallImageY=265, smallImageW=64, smallImageH=110,
+     character=1, occasion=3, value=15},
+    {smallImage="assets/images/dressup/k_formal_dress2_small.png", smallImageX=315, smallImageY=175, smallImageW=63, smallImageH=110,
      fullImage="assets/images/dressup/k_formal_dress2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=1}
+     character=1, occasion=3, value=5},
+    {smallImage="assets/images/dressup/k_formal_dress3_small.png", smallImageX=355, smallImageY=270, smallImageW=46, smallImageH=80,
+     fullImage="assets/images/dressup/k_formal_dress3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=20},
+    {smallImage="assets/images/dressup/k_formal_dress4_small.png", smallImageX=310, smallImageY=330, smallImageW=60, smallImageH=80,
+     fullImage="assets/images/dressup/k_formal_dress4.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=10}, 
+    {smallImage="assets/images/dressup/g_work_shirt1_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=60,
+     fullImage="assets/images/dressup/g_work_shirt1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=15},
+    {smallImage="assets/images/dressup/g_work_shirt2_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/g_work_shirt2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=5},
+    {smallImage="assets/images/dressup/g_work_shirt3_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=53,
+     fullImage="assets/images/dressup/g_work_shirt3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=10},
+    {smallImage="assets/images/dressup/g_playa_top1_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=58,
+     fullImage="assets/images/dressup/g_playa_top1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=15},
+    {smallImage="assets/images/dressup/g_playa_top2_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=60,
+     fullImage="assets/images/dressup/g_playa_top2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=5},
+    {smallImage="assets/images/dressup/g_playa_top3_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=78,
+     fullImage="assets/images/dressup/g_playa_top3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=10},
+    {smallImage="assets/images/dressup/g_party_shirt1_small.png", smallImageX=340, smallImageY=100, smallImageW=70, smallImageH=60,
+     fullImage="assets/images/dressup/g_party_shirt1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=15},
+    {smallImage="assets/images/dressup/g_party_shirt2_small.png", smallImageX=320, smallImageY=155, smallImageW=70, smallImageH=47,
+     fullImage="assets/images/dressup/g_party_shirt2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=25},
+    {smallImage="assets/images/dressup/g_party_shirt3_small.png", smallImageX=340, smallImageY=210, smallImageW=70, smallImageH=58,
+     fullImage="assets/images/dressup/g_party_shirt3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=5},
+    {smallImage="assets/images/dressup/g_party_shirt4_small.png", smallImageX=320, smallImageY=280, smallImageW=70, smallImageH=77,
+     fullImage="assets/images/dressup/g_party_shirt4.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=10},
+    {smallImage="assets/images/dressup/g_party_shirt5_small.png", smallImageX=340, smallImageY=345, smallImageW=70, smallImageH=45,
+     fullImage="assets/images/dressup/g_party_shirt5.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=20}
 }
 
 local tbl_pants = {
-    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="assets/images/dressup/k_work_pants1_small.png", smallImageX=330, smallImageY=125, smallImageW=50, smallImageH=81,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=390, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_work_pants1_small.png", smallImageX=350, smallImageY=105, smallImageW=50, smallImageH=81,
      fullImage="assets/images/dressup/k_work_pants1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=2},
-    {smallImage="assets/images/dressup/k_work_pants2_small.png", smallImageX=330, smallImageY=216, smallImageW=49, smallImageH=70,
+     character=1, occasion=1, value=20},
+    {smallImage="assets/images/dressup/k_work_pants2_small.png", smallImageX=310, smallImageY=190, smallImageW=49, smallImageH=70,
      fullImage="assets/images/dressup/k_work_pants2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=3},
+     character=1, occasion=1, value=15},
+    {smallImage="assets/images/dressup/k_work_skirt2_small.png", smallImageX=360, smallImageY=260, smallImageW=45, smallImageH=70,
+     fullImage="assets/images/dressup/k_work_skirt2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=10}, 
+    {smallImage="assets/images/dressup/k_work_skirt1_small.png", smallImageX=315, smallImageY=325, smallImageW=70, smallImageH=113,
+     fullImage="assets/images/dressup/k_work_skirt1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=5},
     {smallImage="assets/images/dressup/k_beach_bottom_blue_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=53,
      fullImage="assets/images/dressup/k_beach_bottom_blue.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=2, value=15},
     {smallImage="assets/images/dressup/k_beach_bottom_polka_small.png", smallImageX=330, smallImageY=200, smallImageW=70, smallImageH=53,
      fullImage="assets/images/dressup/k_beach_bottom_polka.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=2, value=10},
     {smallImage="assets/images/dressup/k_beach_bottom_purpleset_small.png", smallImageX=330, smallImageY=290, smallImageW=70, smallImageH=116,
      fullImage="assets/images/dressup/k_beach_bottom_purpleset.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3}
+     character=1, occasion=2, value=5},
+    {smallImage="assets/images/dressup/g_work_pants1_small.png", smallImageX=330, smallImageY=125, smallImageW=79, smallImageH=94,
+     fullImage="assets/images/dressup/g_work_pants1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=5},
+    {smallImage="assets/images/dressup/g_work_pants2_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=84,
+     fullImage="assets/images/dressup/g_work_pants2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=10},
+    {smallImage="assets/images/dressup/g_work_pants4_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=84,
+     fullImage="assets/images/dressup/g_work_pants4.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=15},
+    {smallImage="assets/images/dressup/g_playa_bottom1_small.png", smallImageX=330, smallImageY=125, smallImageW=68, smallImageH=120,
+     fullImage="assets/images/dressup/g_playa_bottom1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=5},
+    {smallImage="assets/images/dressup/g_playa_bottom2_small.png", smallImageX=330, smallImageY=235, smallImageW=70, smallImageH=43,
+     fullImage="assets/images/dressup/g_playa_bottom2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=10},
+    {smallImage="assets/images/dressup/g_playa_bottom3_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=51,
+     fullImage="assets/images/dressup/g_playa_bottom3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=15},
+    {smallImage="assets/images/dressup/g_party_pants1_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=83,
+     fullImage="assets/images/dressup/g_party_pants1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=10},
+    {smallImage="assets/images/dressup/g_party_pants2_small.png", smallImageX=330, smallImageY=235, smallImageW=70, smallImageH=84,
+     fullImage="assets/images/dressup/g_party_pants2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=15},
+    {smallImage="assets/images/dressup/g_party_pants3_small.png", smallImageX=330, smallImageY=315, smallImageW=70, smallImageH=59,
+     fullImage="assets/images/dressup/g_party_pants3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=5}
 }
 
 local tbl_accs = {
-    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=390, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_beach_acc_jeanshorts_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_beach_acc_jeanshorts.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=2, value=15},
     {smallImage="assets/images/dressup/k_beach_acc_pinkshorts_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_beach_acc_pinkshorts.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=2, value=10},
     {smallImage="assets/images/dressup/k_beach_acc_skirt_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
      fullImage="assets/images/dressup/k_beach_acc_skirt.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3}
+     character=1, occasion=2, value=5}
 }
 
 local tbl_hair = {
-    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=390, smallImageW=35, smallImageH=35},
     {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=1},
-    {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
-     fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=2},
-    {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
-     fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=1, value=3},
+     character=1, occasion=1, value=15},
+    {smallImage="assets/images/dressup/k_hair1_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=81,
+     fullImage="assets/images/dressup/k_hair1.png", fullImageX=_W*.50, fullImageY=_H*.575, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=10},
+    {smallImage="assets/images/dressup/k_hair2_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_hair2.png", fullImageX=_W*.50, fullImageY=_H*.45, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=5},
     {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
+     character=1, occasion=2, value=15},
     {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
+     character=1, occasion=2, value=5},
     {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3},
+     character=1, occasion=2, value=10},
     {smallImage="assets/images/dressup/k_hair_long_brown_small.png", smallImageX=330, smallImageY=125, smallImageW=44, smallImageH=75,
      fullImage="assets/images/dressup/k_hair_long_brown.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=1},
-    {smallImage="assets/images/dressup/k_hair_long_blond_small.png", smallImageX=330, smallImageY=215, smallImageW=44, smallImageH=75,
-     fullImage="assets/images/dressup/k_hair_long_blond.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=2},
-    {smallImage="assets/images/dressup/k_hair_long_black_small.png", smallImageX=330, smallImageY=305, smallImageW=44, smallImageH=75,
-     fullImage="assets/images/dressup/k_hair_long_black.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=3, value=3}
+     character=1, occasion=3, value=15},
+    {smallImage="assets/images/dressup/k_hair1_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=81,
+     fullImage="assets/images/dressup/k_hair1.png", fullImageX=_W*.50, fullImageY=_H*.575, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=10},
+    {smallImage="assets/images/dressup/k_hair2_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=65,
+     fullImage="assets/images/dressup/k_hair2.png", fullImageX=_W*.50, fullImageY=_H*.45, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=5},
+    {smallImage="assets/images/dressup/g_party_hat1_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=41,
+     fullImage="assets/images/dressup/g_party_hat1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=15},
+    {smallImage="assets/images/dressup/g_party_hat2_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=46,
+     fullImage="assets/images/dressup/g_party_hat2.png", fullImageX=_W*.50, fullImageY=_H*.59, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=10},
+    {smallImage="assets/images/dressup/g_party_hat3_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=36,
+     fullImage="assets/images/dressup/g_party_hat3.png", fullImageX=_W*.50, fullImageY=_H*.55, fullImageW=250, fullImageH=350,
+     character=2, occasion=3, value=5}
 }
 
 local tbl_shoes = {
-    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=380, smallImageW=35, smallImageH=35},
-    {smallImage="assets/images/dressup/k_beach_shoes_krogs_small.png", smallImageX=330, smallImageY=125, smallImageW=70, smallImageH=33,
+    {smallImage="assets/images/dressup/no-sign.png", smallImageX=330, smallImageY=390, smallImageW=35, smallImageH=35},
+    {smallImage="assets/images/dressup/k_shoes1_small.png", smallImageX=330, smallImageY=110, smallImageW=70, smallImageH=34,
+     fullImage="assets/images/dressup/k_shoes1.png", fullImageX=_W*.50, fullImageY=_H*.62, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=20},
+    {smallImage="assets/images/dressup/k_shoes2_small.png", smallImageX=330, smallImageY=165, smallImageW=70, smallImageH=35,
+     fullImage="assets/images/dressup/k_shoes2.png", fullImageX=_W*.50, fullImageY=_H*.62, fullImageW=280, fullImageH=350,
+     character=1, occasion=1, value=25},
+    {smallImage="assets/images/dressup/k_beach_shoes_krogs_small.png", smallImageX=330, smallImageY=270, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_beach_shoes_krogs.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=1},
-    {smallImage="assets/images/dressup/k_beach_shoes_watershoes_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     character=1, occasion=1, value=10},
+    {smallImage="assets/images/dressup/k_beach_shoes_watershoes_small.png", smallImageX=330, smallImageY=325, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_beach_shoes_watershoes.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=2},
-    {smallImage="assets/images/dressup/k_beach_shoes_sandals_small.png", smallImageX=330, smallImageY=305, smallImageW=70, smallImageH=33,
+     character=1, occasion=1, value=15},
+    {smallImage="assets/images/dressup/k_beach_shoes_sandals_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
      fullImage="assets/images/dressup/k_beach_shoes_sandals.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
-     character=1, occasion=2, value=3},
+     character=1, occasion=1, value=5},
+    {smallImage="assets/images/dressup/k_beach_shoes_krogs_small.png", smallImageX=330, smallImageY=110, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_krogs.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=20},
+    {smallImage="assets/images/dressup/k_beach_shoes_watershoes_small.png", smallImageX=330, smallImageY=165, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_watershoes.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=15},
+    {smallImage="assets/images/dressup/k_beach_shoes_sandals_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_sandals.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=25},
+    {smallImage="assets/images/dressup/k_shoes1_small.png", smallImageX=330, smallImageY=270, smallImageW=70, smallImageH=34,
+     fullImage="assets/images/dressup/k_shoes1.png", fullImageX=_W*.50, fullImageY=_H*.62, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=5},
+    {smallImage="assets/images/dressup/k_shoes2_small.png", smallImageX=330, smallImageY=325, smallImageW=70, smallImageH=35,
+     fullImage="assets/images/dressup/k_shoes2.png", fullImageX=_W*.50, fullImageY=_H*.62, fullImageW=280, fullImageH=350,
+     character=1, occasion=2, value=10},
+    {smallImage="assets/images/dressup/k_beach_shoes_krogs_small.png", smallImageX=330, smallImageY=110, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_krogs.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=15},
+    {smallImage="assets/images/dressup/k_beach_shoes_watershoes_small.png", smallImageX=330, smallImageY=165, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_watershoes.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=5},
+    {smallImage="assets/images/dressup/k_beach_shoes_sandals_small.png", smallImageX=330, smallImageY=215, smallImageW=70, smallImageH=33,
+     fullImage="assets/images/dressup/k_beach_shoes_sandals.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=10},
+    {smallImage="assets/images/dressup/k_shoes1_small.png", smallImageX=330, smallImageY=270, smallImageW=70, smallImageH=34,
+     fullImage="assets/images/dressup/k_shoes1.png", fullImageX=_W*.50, fullImageY=_H*.62, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=25},
+    {smallImage="assets/images/dressup/k_shoes2_small.png", smallImageX=330, smallImageY=325, smallImageW=70, smallImageH=35,
+     fullImage="assets/images/dressup/k_shoes2.png", fullImageX=_W*.50, fullImageY=_H*.62, fullImageW=280, fullImageH=350,
+     character=1, occasion=3, value=20}, 
+    {smallImage="assets/images/dressup/g_work_shoes1_small.png", smallImageX=330, smallImageY=125, smallImageW=100, smallImageH=47,
+     fullImage="assets/images/dressup/g_work_shoes1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=15},
+    {smallImage="assets/images/dressup/g_work_shoes2_small.png", smallImageX=330, smallImageY=190, smallImageW=100, smallImageH=49,
+     fullImage="assets/images/dressup/g_work_shoes2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=5}, 
+    {smallImage="assets/images/dressup/g_work_shoes3_small.png", smallImageX=330, smallImageY=255, smallImageW=100, smallImageH=47,
+     fullImage="assets/images/dressup/g_work_shoes3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=10},
+    {smallImage="assets/images/dressup/g_work_shoes4_small.png", smallImageX=330, smallImageY=320, smallImageW=100, smallImageH=47,
+     fullImage="assets/images/dressup/g_work_shoes4.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=1, value=20},
+    {smallImage="assets/images/dressup/g_playa_feet1_small.png", smallImageX=330, smallImageY=125, smallImageW=100, smallImageH=43,
+     fullImage="assets/images/dressup/g_playa_feet1.png", fullImageX=_W*.50, fullImageY=_H*.75, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=5}, 
+    {smallImage="assets/images/dressup/g_playa_feet2_small.png", smallImageX=330, smallImageY=215, smallImageW=100, smallImageH=45,
+     fullImage="assets/images/dressup/g_playa_feet2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=10},
+    {smallImage="assets/images/dressup/g_playa_feet3_small.png", smallImageX=330, smallImageY=305, smallImageW=100, smallImageH=42,
+     fullImage="assets/images/dressup/g_playa_feet3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=2, value=15},
+    {smallImage="assets/images/dressup/g_party_shoes1_small.png", smallImageX=330, smallImageY=115, smallImageW=100, smallImageH=49,
+     fullImage="assets/images/dressup/g_party_shoes1.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=15}, 
+    {smallImage="assets/images/dressup/g_party_shoes2_small.png", smallImageX=330, smallImageY=180, smallImageW=100, smallImageH=47,
+     fullImage="assets/images/dressup/g_party_shoes2.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=20},
+    {smallImage="assets/images/dressup/g_party_shoes3_small.png", smallImageX=330, smallImageY=245, smallImageW=100, smallImageH=47,
+     fullImage="assets/images/dressup/g_party_shoes3.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=10},
+    {smallImage="assets/images/dressup/g_party_shoes4_small.png", smallImageX=330, smallImageY=300, smallImageW=100, smallImageH=43,
+     fullImage="assets/images/dressup/g_party_shoes4.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=5},
+    {smallImage="assets/images/dressup/g_party_shoes5_small.png", smallImageX=330, smallImageY=350, smallImageW=100, smallImageH=43,
+     fullImage="assets/images/dressup/g_party_shoes5.png", fullImageX=_W*.50, fullImageY=_H*.60, fullImageW=280, fullImageH=350,
+     character=2, occasion=3, value=25}
 }
 
 local tbl_icons = {
     {name="shirt",   icon="assets/images/dressup/icon_shirt.png", iconX=300, iconY=90,  iconW=35, iconH=35},
     {name="pants",   icon="assets/images/dressup/icon_pants.png", iconX=300, iconY=150, iconW=35, iconH=48},
-    {name="accs",   icon="assets/images/dressup/icon_socks.png", iconX=300, iconY=210, iconW=35, iconH=46},
+    {name="accs",   icon="assets/images/dressup/icon_socks.png",  iconX=300, iconY=210, iconW=35, iconH=46},
     {name="hair",    icon="assets/images/dressup/icon_hair.png",  iconX=300, iconY=270, iconW=35, iconH=39},
     {name="shoes",   icon="assets/images/dressup/icon_shoes.png", iconX=300, iconY=320, iconW=35, iconH=23},
-    {name="no-sign", icon="assets/images/dressup/no-sign.png",    iconX=300, iconY=380, iconW=35, iconH=35}
+    {name="no-sign", icon="assets/images/dressup/no-sign.png",    iconX=300, iconY=390, iconW=35, iconH=35}
 }
 
 local function resetCharacter(event)
     if (characterObjOnTable.shirt) then
-        characterGroup:remove(characterObjOnTable.shirt)
+        char3Group:remove(characterObjOnTable.shirt)
         characterObjOnTable.shirt = nil
     end
     if (characterObjOnTable.pants) then
-        characterGroup:remove(characterObjOnTable.pants)
+        char4Group:remove(characterObjOnTable.pants)
         characterObjOnTable.pants = nil
     end
     if (characterObjOnTable.accs) then
-        characterGroup:remove(characterObjOnTable.accs)
+        char1Group:remove(characterObjOnTable.accs)
         characterObjOnTable.accs = nil
     end
     if (characterObjOnTable.hair) then
-        characterGroup:remove(characterObjOnTable.hair)
+        char2Group:remove(characterObjOnTable.hair)
         characterObjOnTable.hair = nil
     end
     if (characterObjOnTable.shoes) then
-        characterGroup:remove(characterObjOnTable.shoes)
+        char5Group:remove(characterObjOnTable.shoes)
         characterObjOnTable.shoes = nil
     end
 end
@@ -318,7 +476,7 @@ local function ShirtTouch(event)
         if (t.id == 1) then
             if (characterObjOnTable.shirt) then
                 gamePoints = gamePoints - characterObjOnTable.shirt.value
-                characterGroup:remove(characterObjOnTable.shirt)
+                char3Group:remove(characterObjOnTable.shirt)
                 characterObjOnTable.shirt = nil
             end
         else
@@ -327,16 +485,16 @@ local function ShirtTouch(event)
                 characterObjOnTable.shirt.x = tbl_shirts[t.id].fullImageX; characterObjOnTable.shirt.y = tbl_shirts[t.id].fullImageY
                 characterObjOnTable.shirt.value = tbl_shirts[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.shirt.value
-                characterGroup:insert(characterObjOnTable.shirt)
+                char3Group:insert(characterObjOnTable.shirt)
             else
                 gamePoints = gamePoints - characterObjOnTable.shirt.value
-                characterGroup:remove(characterObjOnTable.shirt)
+                char3Group:remove(characterObjOnTable.shirt)
                 characterObjOnTable.shirt = nil
                 characterObjOnTable.shirt = display.newImageRect(tbl_shirts[t.id].fullImage, tbl_shirts[t.id].fullImageW, tbl_shirts[t.id].fullImageH)
                 characterObjOnTable.shirt.x = tbl_shirts[t.id].fullImageX; characterObjOnTable.shirt.y = tbl_shirts[t.id].fullImageY
                 characterObjOnTable.shirt.value = tbl_shirts[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.shirt.value
-                characterGroup:insert(characterObjOnTable.shirt)
+                char3Group:insert(characterObjOnTable.shirt)
             end
         end
     end
@@ -349,7 +507,7 @@ local function PantsTouch(event)
         if (t.id == 1) then
             if (characterObjOnTable.pants) then
                 gamePoints = gamePoints - characterObjOnTable.pants.value
-                characterGroup:remove(characterObjOnTable.pants)
+                char4Group:remove(characterObjOnTable.pants)
                 characterObjOnTable.pants = nil
             end
         else
@@ -358,16 +516,16 @@ local function PantsTouch(event)
                 characterObjOnTable.pants.x = tbl_pants[t.id].fullImageX; characterObjOnTable.pants.y = tbl_pants[t.id].fullImageY
                 characterObjOnTable.pants.value = tbl_pants[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.pants.value
-                characterGroup:insert(characterObjOnTable.pants)
+                char4Group:insert(characterObjOnTable.pants)
             else
                 gamePoints = gamePoints - characterObjOnTable.pants.value
-                characterGroup:remove(characterObjOnTable.pants)
+                char4Group:remove(characterObjOnTable.pants)
                 characterObjOnTable.pants = nil
                 characterObjOnTable.pants = display.newImageRect(tbl_pants[t.id].fullImage, tbl_pants[t.id].fullImageW, tbl_pants[t.id].fullImageH)
                 characterObjOnTable.pants.x = tbl_pants[t.id].fullImageX; characterObjOnTable.pants.y = tbl_pants[t.id].fullImageY
                 characterObjOnTable.pants.value = tbl_pants[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.pants.value
-                characterGroup:insert(characterObjOnTable.pants)
+                char4Group:insert(characterObjOnTable.pants)
             end
         end
     end
@@ -380,7 +538,7 @@ local function accsTouch(event)
         if (t.id == 1) then
             if (characterObjOnTable.accs) then
                 gamePoints = gamePoints - characterObjOnTable.accs.value
-                characterGroup:remove(characterObjOnTable.accs)
+                char1Group:remove(characterObjOnTable.accs)
                 characterObjOnTable.accs = nil
             end
         else
@@ -389,16 +547,16 @@ local function accsTouch(event)
                 characterObjOnTable.accs.x = tbl_accs[t.id].fullImageX; characterObjOnTable.accs.y = tbl_accs[t.id].fullImageY
                 characterObjOnTable.accs.value = tbl_accs[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.accs.value
-                characterGroup:insert(characterObjOnTable.accs)
+                char1Group:insert(characterObjOnTable.accs)
             else
                 gamePoints = gamePoints - characterObjOnTable.accs.value
-                characterGroup:remove(characterObjOnTable.accs)
+                char1Group:remove(characterObjOnTable.accs)
                 characterObjOnTable.accs = nil
                 characterObjOnTable.accs = display.newImageRect(tbl_accs[t.id].fullImage, tbl_accs[t.id].fullImageW, tbl_accs[t.id].fullImageH)
                 characterObjOnTable.accs.x = tbl_accs[t.id].fullImageX; characterObjOnTable.accs.y = tbl_accs[t.id].fullImageY
                 characterObjOnTable.accs.value = tbl_accs[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.accs.value
-                characterGroup:insert(characterObjOnTable.accs)
+                char1Group:insert(characterObjOnTable.accs)
             end
         end
     end
@@ -411,7 +569,7 @@ local function HairTouch(event)
         if (t.id == 1) then
             if (characterObjOnTable.hair) then
                 gamePoints = gamePoints - characterObjOnTable.hair.value
-                characterGroup:remove(characterObjOnTable.hair)
+                char2Group:remove(characterObjOnTable.hair)
                 characterObjOnTable.hair = nil
             end
         else
@@ -420,16 +578,16 @@ local function HairTouch(event)
                 characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
                 characterObjOnTable.hair.value = tbl_hair[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.hair.value
-                characterGroup:insert(characterObjOnTable.hair)
+                char2Group:insert(characterObjOnTable.hair)
             else
                 gamePoints = gamePoints - characterObjOnTable.hair.value
-                characterGroup:remove(characterObjOnTable.hair)
+                char2Group:remove(characterObjOnTable.hair)
                 characterObjOnTable.hair = nil
                 characterObjOnTable.hair = display.newImageRect(tbl_hair[t.id].fullImage, tbl_hair[t.id].fullImageW, tbl_hair[t.id].fullImageH)
                 characterObjOnTable.hair.x = tbl_hair[t.id].fullImageX; characterObjOnTable.hair.y = tbl_hair[t.id].fullImageY
                 characterObjOnTable.hair.value = tbl_hair[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.hair.value
-                characterGroup:insert(characterObjOnTable.hair)
+                char2Group:insert(characterObjOnTable.hair)
             end
         end
     end
@@ -442,7 +600,7 @@ local function ShoesTouch(event)
         if (t.id == 1) then
             if (characterObjOnTable.shoes) then
                 gamePoints = gamePoints - characterObjOnTable.shoes.value
-                characterGroup:remove(characterObjOnTable.shoes)
+                char5Group:remove(characterObjOnTable.shoes)
                 characterObjOnTable.shoes = nil
             end
         else
@@ -451,16 +609,16 @@ local function ShoesTouch(event)
                 characterObjOnTable.shoes.x = tbl_shoes[t.id].fullImageX; characterObjOnTable.shoes.y = tbl_shoes[t.id].fullImageY
                 characterObjOnTable.shoes.value = tbl_shoes[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.shoes.value
-                characterGroup:insert(characterObjOnTable.shoes)
+                char5Group:insert(characterObjOnTable.shoes)
             else
                 gamePoints = gamePoints - characterObjOnTable.shoes.value
-                characterGroup:remove(characterObjOnTable.shoes)
+                char5Group:remove(characterObjOnTable.shoes)
                 characterObjOnTable.shoes = nil
                 characterObjOnTable.shoes = display.newImageRect(tbl_shoes[t.id].fullImage, tbl_shoes[t.id].fullImageW, tbl_shoes[t.id].fullImageH)
                 characterObjOnTable.shoes.x = tbl_shoes[t.id].fullImageX; characterObjOnTable.shoes.y = tbl_shoes[t.id].fullImageY
                 characterObjOnTable.shoes.value = tbl_shoes[t.id].value
                 gamePoints = gamePoints + characterObjOnTable.shoes.value
-                characterGroup:insert(characterObjOnTable.shoes)
+                char5Group:insert(characterObjOnTable.shoes)
             end
         end
     end
@@ -549,7 +707,16 @@ function quitOverlay(event)
     messageGroup:insert(btnMessage5)
 end
 
+local function saveFinalScore(event)
+    scoreTable.dressup.round  = scoreTable.dressup.round + 1
+    scoreTable.dressup.score  = scoreTable.dressup.score + gamePoints
+    saveTable(scoreTable, "scoreTable.json")
+    
+    local postResult = insertScore(2, setupTable.tbl_index, gamePoints)
+end
+
 function scoreOverlay(event)
+    saveFinalScore()
     local messageOverlay = display.newRoundedRect(0, 0, 220, 190, 10)
     messageOverlay:setFillColor(0, 0, 0)
     messageOverlay.alpha = .75
@@ -560,7 +727,8 @@ function scoreOverlay(event)
     messageTitle:setReferencePoint(display.CenterReferencePoint)
     messageTitle.x = _W*.50; messageTitle.y = _H*.20
 
-    local messageText = display.newText(tbl_labels[setupTable.lg_index].text2..gamePoints..tbl_labels[setupTable.lg_index].text3, 0, 0, 200, 0, native.systemFont, 16)
+    local messageText = display.newText(tbl_labels[setupTable.lg_index].text2..gamePoints..
+                            tbl_labels[setupTable.lg_index].text3..ocassionValue, 0, 0, 200, 0, native.systemFont, 16)
     messageText:setReferencePoint(display.CenterReferencePoint)
     messageText.x = _W*.50; messageText.y = _H*.33
 
@@ -840,12 +1008,14 @@ function setOcassion(event)
             duo.char1 = 2
         end
         duo_idx = duo.char1
+        ocassionValue = tbl_occasions[duo_idx].char1Value
     else
         duo.char2 = duo.char2 + 1
         if (duo.char2 > 3) then
             duo.char2 = 1
         end
         duo_idx = duo.char2
+        ocassionValue = tbl_occasions[duo_idx].char2Value
     end
     
     background = display.newImage(tbl_occasions[duo_idx].fullImage)
@@ -861,6 +1031,12 @@ function scene:createScene( event )
     
     occasionGroup = display.newGroup()
     characterGroup = display.newGroup()
+    char1Group = display.newGroup()
+    char2Group = display.newGroup()
+    char3Group = display.newGroup()
+    char4Group = display.newGroup()
+    char5Group = display.newGroup()
+    
     overlayGroup = display.newGroup() -- create overlay group to control objects selection
 
     setOcassion(tbl_params)
@@ -869,6 +1045,11 @@ function scene:createScene( event )
         tbl_characters[params.pCharacter].fullImageW, tbl_characters[params.pCharacter].fullImageH)
     character.x = _W*.50; character.y = _H*.60
     characterGroup:insert(character)
+    characterGroup:insert(char5Group)
+    characterGroup:insert(char4Group)
+    characterGroup:insert(char3Group)
+    characterGroup:insert(char2Group)
+    characterGroup:insert(char1Group)
     
     obj1 = display.newText(tbl_characters[params.pCharacter].name, 0, 0, "Zapfino Linotype One", 40)
     obj1:setTextColor(255)

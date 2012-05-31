@@ -38,7 +38,7 @@ local boardTile = {}
 local savedWords = {}
 local playerLetters = {}
 local p1Score = 0
-local secs, count = 180, 181
+local secs, count = 120, 121
 local secondsText = 0
 local minutesText = 0
 --local setupTable.lg_index = 2
@@ -52,7 +52,7 @@ local tbl_labels = {
     {title1="Let's See!",
      title2="Time's Up!",
      title3="Alert!",
-     text1 ="You have 3 minutes to find as many words and with the greatest possible value.",
+     text1 ="You have 2 minutes to find as many words and with the greatest possible value.",
      text2="You found ",
      text3=" words with a grand total of ",
      text4=" points, Try again!",
@@ -66,7 +66,7 @@ local tbl_labels = {
     {title1="¡Vamos a Ver!",
      title2="¡Se Acabó el Tiempo!",
      title3="¡Alerta!",
-     text1 ="Tienes 3 minutos para encontrar la mayor cantidad de palabras con el mayor valor posible.",
+     text1 ="Tienes 2 minutos para encontrar la mayor cantidad de palabras con el mayor valor posible.",
      text2="Encontraste ",
      text3=" palabras con un gran total de ",
      text4=" puntos, ¡Intenta otra vez!",
@@ -103,6 +103,14 @@ local function onButtonRelease(event)
             {tbl_labels[setupTable.lg_index].btn1, tbl_labels[setupTable.lg_index].btn2}, onCompleteAlert)
 end
 
+local function saveFinalScore(event)
+    scoreTable.words.round  = scoreTable.words.round + 1
+    scoreTable.words.score  = scoreTable.words.score + p1Score
+    saveTable(scoreTable, "scoreTable.json")
+    
+    local postResult = insertScore(3, setupTable.tbl_index, p1Score)
+end
+
 --Updates timer / gameover when time expires
 function updateTimer(event)
     
@@ -126,6 +134,7 @@ function updateTimer(event)
     if (event.count == count) then
         timer.cancel(gameTimer)
         audio.stop()
+        saveFinalScore()
         removeListenerPlayerLetters()
         local alert = native.showAlert(tbl_labels[setupTable.lg_index].title2,
             tbl_labels[setupTable.lg_index].text2..wordsGroup.numChildren..tbl_labels[setupTable.lg_index].text3..
@@ -422,7 +431,9 @@ function scene:createScene(event)
 
         function removeListenerPlayerLetters()
             for i=1, 14 do
-                playerLetters[i]:removeEventListener("touch", moveLetter)
+                if(playerLetters[i]._functionListeners.touch)then
+                    playerLetters[i]:removeEventListener("touch", moveLetter)
+                end
             end 
         end
 

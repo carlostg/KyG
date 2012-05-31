@@ -12,6 +12,7 @@ Wrapper = require("wrapper")
 TableSorter = require( "TableSorter" )
 json = require ("dkjson")
 LoadSave = require("loadsave")
+PostScore = require("PostScores")
 
 --  global variables
 _H = display.contentHeight
@@ -22,9 +23,8 @@ math.randomseed(os.time())
 duo= {} -- DressUp Occasion Index
 duo.char1 = 1 -- for Character 1 (Karla)
 duo.char2 = 0 -- for Character 2 (Guillermo)
-lg_index  = 1 -- for laguage control (1=English, 2=Español)
-tbl_index = 1 -- for Table number definition
-local scoreTable = {}
+firstRun = true
+scoreTable = {}
 setupTable = {}
 
 local function Init()
@@ -32,18 +32,27 @@ local function Init()
     scoreTable = loadTable("scoreTable.json")
     if not scoreTable then
         scoreTable = {
-            {game1="Trivia",  rounds=0, score=0},
-            {game2="DressUp", rounds=0, score=0},
-            {game3="Words",   rounds=0, score=0}
+            trivia = {},
+            dressup = {},
+            words = {},
+            ring = {}
         }
+        scoreTable.trivia.round  = 0
+        scoreTable.trivia.score  = 0
+        scoreTable.dressup.round = 0
+        scoreTable.dressup.score = 0
+        scoreTable.words.round   = 0
+        scoreTable.words.score   = 0
+        scoreTable.ring.round    = 0
+        scoreTable.ring.score    = 0
         saveTable(scoreTable, "scoreTable.json")
     end
     
     setupTable = loadTable("setupTable.json")
     if not setupTable then
         setupTable = {}
-        setupTable.lg_index  = 1
-        setupTable.tbl_index = 1
+        setupTable.lg_index  = 1 -- for laguage control (1=English, 2=Español)
+        setupTable.tbl_index = 1 -- for table control   (1-20 are valid table numbers)
         saveTable(setupTable, "setupTable.json")
     end
     

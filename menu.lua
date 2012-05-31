@@ -37,6 +37,7 @@ local btnGame1, btnGame2, btnGame3, btnGame4, btnPost
 
 local tbl_labels = {
     {title1="",
+     text1="Thanks for participating of our wedding day.  We will never forget that you were here to celebrate this crucial moment of our lives.  We hope that you enjoy this day and that through this app you get to discover some interesting details about our lives!                          Karla & Guillermo",
      btn1="Trivia",
      btn2="DressUp",
      btn3="Words",
@@ -44,6 +45,7 @@ local tbl_labels = {
      btn5="Post"
     },
     {title1="",
+     text1="Gracias por ser partícipe de nuestra boda.  Nunca olvidaremos que estuviste aquí para celebrar junto a nosotros este momento tan crucial.  Esperamos que disfrutes y que a través de esta aplicación puedas descubrir detalles interesantes sobre nuestras vidas.                      Karla & Guillermo",
      btn1="Trivia",
      btn2="Vísteme",
      btn3="Palabras",
@@ -66,11 +68,11 @@ local function OrbitCharacter(objCharacter,objStar)
     objStar.angle = objStar.angle + angleStep
 end
 
--- activate post icon
-local function ActivatePostIcon(obj)
-    transition.to(btnPost, {time=750, alpha=.10, onComplete=""})
-    transition.to(btnPost, {time=600, alpha=1, delay=750, onComplete=""})
-end
+---- activate post icon
+--local function ActivatePostIcon(obj)
+--    transition.to(btnPost, {time=750, alpha=.10, onComplete=""})
+--    transition.to(btnPost, {time=600, alpha=1, delay=750, onComplete=""})
+--end
 
 -- swap stars to touched character
 local function SwapStarsCharacter(objCharacter)
@@ -217,111 +219,88 @@ function scene:createScene( event )
     -- assign stars to selected character object
     CreateStars(characters[selectedCharacter])
     
+    -- get game scores
+    local game1 = scoreTable.trivia.score
+    local game2 = scoreTable.dressup.score
+    local game3 = scoreTable.words.score
+    local game4 = scoreTable.ring.score
+    
     -- create game menu buttons
     local btnGame1 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
     btnGame1.x = _W*.30; btnGame1.y = _H*.30
     btnGame1.name = "btnGame1"
     btnGame1.alpha = .50
     btnGame1:addEventListener("touch", btnGameTouch)
-    
---    local btnGame1Txt = Wrapper:newParagraph({
---	text = "Do You Know Us?",
---	width = 70,
---	height =70,                     -- fontSize will be calculated automatically if set 
---	font = native.systemFontBold,
---	lineSpace = 0,
---	alignment  = "center",
---	-- Parameters for auto font-sizing
---	fontSizeMin = 8,
---	fontSizeMax = 48,
---	incrementSize = 2
---    })
     local btnGame1Txt = display.newText(tbl_labels[setupTable.lg_index].btn1, 0, 0, "Zapfino Linotype One", 36)
     btnGame1Txt:setReferencePoint( display.CenterReferencePoint )
-    btnGame1Txt.x = btnGame1.x; btnGame1Txt.y = btnGame1.y
+    btnGame1Txt.x = btnGame1.x; btnGame1Txt.y = btnGame1.y-10
     btnGame1Txt:setTextColor(200,100,50)
+    local btnGame1Score = display.newText(game1, 0, 0, "Helvetica", 20)
+    btnGame1Score:setReferencePoint( display.CenterReferencePoint )
+    btnGame1Score.x = btnGame1.x; btnGame1Score.y = btnGame1.y+20
+    btnGame1Score:setTextColor(200,100,50)
     
     local btnGame2 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
     btnGame2.x = _W*.70; btnGame2.y = _H*.30
     btnGame2.name = "btnGame2"
     btnGame2.alpha = .50
     btnGame2:addEventListener("touch", btnGameTouch)
-    
---    local btnGame2Txt = Wrapper:newParagraph({
---	text = "Guess Our Styles",
---	width = 70,
---	height =70,                     -- fontSize will be calculated automatically if set 
---	font = native.systemFontBold,
---	lineSpace = 0,
---	alignment  = "center",
---	-- Parameters for auto font-sizing
---	fontSizeMin = 8,
---	fontSizeMax = 48,
---	incrementSize = 2
---    })
     local btnGame2Txt = display.newText(tbl_labels[setupTable.lg_index].btn2, 0, 0, "Zapfino Linotype One", 36)
     btnGame2Txt:setReferencePoint( display.CenterReferencePoint )
-    btnGame2Txt.x = btnGame2.x; btnGame2Txt.y = btnGame2.y 
+    btnGame2Txt.x = btnGame2.x; btnGame2Txt.y = btnGame2.y-10
     btnGame2Txt:setTextColor(200,100,50)
+    local btnGame2Score = display.newText(game2, 0, 0, "Helvetica", 20)
+    btnGame2Score:setReferencePoint( display.CenterReferencePoint )
+    btnGame2Score.x = btnGame2.x; btnGame2Score.y = btnGame2.y+20
+    btnGame2Score:setTextColor(200,100,50)
     
     local btnGame3 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
-    btnGame3.x = _W*.30; btnGame3.y = _H*.55
+    btnGame3.x = _W*.50; btnGame3.y = _H*.55
     btnGame3.name = "btnGame3"
     btnGame3.alpha = .50
     btnGame3:addEventListener("touch", btnGameTouch)
-    
---    local btnGame3Txt = Wrapper:newParagraph({
---	text = "Scrabble Our Names",
---	width = 70,
---	height =70,                     -- fontSize will be calculated automatically if set 
---	font = native.systemFontBold,
---	lineSpace = 0,
---	alignment  = "center",
---	-- Parameters for auto font-sizing
---	fontSizeMin = 8,
---	fontSizeMax = 20,
---	incrementSize = 2
---    })
     local btnGame3Txt = display.newText(tbl_labels[setupTable.lg_index].btn3, 0, 0, "Zapfino Linotype One", 36)
     btnGame3Txt:setReferencePoint( display.CenterReferencePoint )
-    btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y 
+    btnGame3Txt.x = btnGame3.x; btnGame3Txt.y = btnGame3.y-10
     btnGame3Txt:setTextColor(200,100,50)
+    local btnGame3Score = display.newText(game3, 0, 0, "Helvetica", 20)
+    btnGame3Score:setReferencePoint( display.CenterReferencePoint )
+    btnGame3Score.x = btnGame3.x; btnGame3Score.y = btnGame3.y+20
+    btnGame3Score:setTextColor(200,100,50)
     
-    local btnGame4 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
-    btnGame4.x = _W*.70; btnGame4.y = _H*.55
-    btnGame4.name = "btnGame4"
-    btnGame4.alpha = .50
-    btnGame4:addEventListener("touch", btnGameTouch)
+--    local btnGame4 = display.newImageRect("assets/images/ball_orange.png", 100, 100)
+--    btnGame4.x = _W*.70; btnGame4.y = _H*.55
+--    btnGame4.name = "btnGame4"
+--    btnGame4.alpha = .50
+--    btnGame4:addEventListener("touch", btnGameTouch)
+--    local btnGame4Txt = display.newText(tbl_labels[setupTable.lg_index].btn4, 0, 0, "Zapfino Linotype One", 30)
+--    btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
+--    btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y-10
+--    btnGame4Txt:setTextColor(200,100,50)
+--    local btnGame4Score = display.newText(game4, 0, 0, "Helvetica", 20)
+--    btnGame4Score:setReferencePoint( display.CenterReferencePoint )
+--    btnGame4Score.x = btnGame4.x; btnGame4Score.y = btnGame4.y+20
+--    btnGame4Score:setTextColor(200,100,50)
     
---    local btnGame4Txt = Wrapper:newParagraph({
---	text = "Shoot Me Not",
---	width = 70,
---	height =70,                     -- fontSize will be calculated automatically if set 
---	font = native.systemFontBold,
---	lineSpace = 0,
---	alignment  = "center",
---	-- Parameters for auto font-sizing
---	fontSizeMin = 8,
---	fontSizeMax = 48,
---	incrementSize = 2
---    })
-    local btnGame4Txt = display.newText(tbl_labels[setupTable.lg_index].btn4, 0, 0, "Zapfino Linotype One", 30)
-    btnGame4Txt:setReferencePoint( display.CenterReferencePoint )
-    btnGame4Txt.x = btnGame4.x; btnGame4Txt.y = btnGame4.y 
-    btnGame4Txt:setTextColor(200,100,50)
-    
-    btnPost = display.newImageRect("assets/images/postIcon.png", 35, 35)
-    btnPost.x = _W*.10; btnPost.y = _H*.936
-    btnPost.name = "btnPost"
-    btnPost.alpha = 1
-    btnPost:addEventListener("touch", btnGameTouch)
-    ActivatePostIcon(btnPost)
-    btnPostTimer = timer.performWithDelay(1500, function() ActivatePostIcon(btnPost) end, 0)
+--    btnPost = display.newImageRect("assets/images/postIcon.png", 35, 35)
+--    btnPost.x = _W*.10; btnPost.y = _H*.936
+--    btnPost.name = "btnPost"
+--    btnPost.alpha = 1
+--    btnPost:addEventListener("touch", btnGameTouch)
+--    ActivatePostIcon(btnPost)
+--    btnPostTimer = timer.performWithDelay(1500, function() ActivatePostIcon(btnPost) end, 0)
     
     local btnConfig = display.newImageRect("assets/images/settings.png", 35, 35)
     btnConfig.x = _W*.91; btnConfig.y = _H*.94
     btnConfig.name = "btnConfig"
     btnConfig:addEventListener("touch", btnGameTouch)
+    
+    local function onComplete()
+        firstRun = false
+    end
+    if firstRun then
+        local alert = native.showAlert(tbl_labels[setupTable.lg_index].title1,tbl_labels[setupTable.lg_index].text1,{"OK"}, onComplete)
+    end
     
     -----------------------------------------------------------------------------
     
@@ -334,13 +313,17 @@ function scene:createScene( event )
     group:insert(title_txt)
     group:insert(btnGame1)
     group:insert(btnGame1Txt)
+    group:insert(btnGame1Score)
     group:insert(btnGame2)
     group:insert(btnGame2Txt)
+    group:insert(btnGame2Score)
     group:insert(btnGame3)
     group:insert(btnGame3Txt)
-    group:insert(btnGame4)
-    group:insert(btnGame4Txt)
-    group:insert(btnPost)
+    group:insert(btnGame3Score)
+--    group:insert(btnGame4)
+--    group:insert(btnGame4Txt)
+--    group:insert(btnGame4Score)
+--    group:insert(btnPost)
     group:insert(btnConfig)
     group:insert(charactersGroup)
     group:insert(starsGroup)
