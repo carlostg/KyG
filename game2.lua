@@ -43,7 +43,7 @@ local ocassionValue = 0
 --local setupTable.lg_index = 1
 local btnFont = native.systemFontBold
 local photoSound = audio.loadSound("assets/sounds/camera.wav")
-local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.m4a")
+local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.wav")
 
 local onButtonRelease, setOcassion, loadObjectsTables, scoreOverlay
 

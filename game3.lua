@@ -24,8 +24,8 @@ local scene = storyboard.newScene()
 local setupPlayerLetters, clearPressed, displaySavedWords, updateTimer, removeListenerPlayerLetters
 local tileClick = audio.loadSound("assets/sounds/tileClick.wav")
 local winSound = audio.loadSound("assets/sounds/wordWin.wav")
-local failSound = audio.loadSound("assets/sounds/wordError.aiff")
-local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.m4a")
+local failSound = audio.loadSound("assets/sounds/wordError.wav")
+local bgMusic = audio.loadStream("assets/sounds/KyG Loop1.wav")
 -------------------------------------------
 -- *** Setup the variables and sprites we will use ***
 -------------------------------------------

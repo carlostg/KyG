@@ -17,7 +17,12 @@ settings = {
 			{
 				"Zapfino Linotype One.ttf",
 			},
-
+                        CFBundleIconFile = "Icon.png",
+                        CFBundleIconFiles = {
+                        "Icon.png", 
+                        "Icon@2x.png", 
+                        "Icon-72.png", 
+                        },
             --[[
             -- iOS app URL schemes:
             CFBundleURLTypes =

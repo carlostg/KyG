@@ -29,7 +29,7 @@ local nextTriviaId = 1
 local p1Score = 0
 
 local winSound = audio.loadSound("assets/sounds/wordWin.wav")
-local failSound = audio.loadSound("assets/sounds/wordError.aiff")
+local failSound = audio.loadSound("assets/sounds/wordError.wav")
 
 local displayTrivia --function
 
